@@ -3,6 +3,9 @@
 namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Passport\HasApiTokens;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
  * @property integer $id
@@ -21,8 +24,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property Service[] $services
  * @property Vendor[] $vendors
  */
-class User extends Model
+class User extends Authenticatable
 {
+    use HasApiTokens, Notifiable;
+
     /**
      * The table associated with the model.
      *
