@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class productsCategory extends Model
 {
+    protected $table = 'products_category';
     /**
      * The "type" of the auto-incrementing ID.
      *

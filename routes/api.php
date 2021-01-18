@@ -22,3 +22,10 @@ Route::group(['prefix' => 'auth'], function () {
         Route::get('user', [Api\AuthController::class,'user']);
     });
 });
+
+Route::get('categories',[Api\CategoryController::class,'index']);
+Route::post('categories',[Api\CategoryController::class,'store']);
+Route::get('products',[Api\ProductController::class,'index']);
+Route::post('products',[Api\ProductController::class,'store']);
+Route::patch('products/{id}',[Api\ProductController::class,'update']);
+Route::delete('products/{id}',[Api\ProductController::class,'destroy']);

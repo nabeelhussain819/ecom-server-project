@@ -20,11 +20,11 @@ class CreateProductsTable extends Migration
             $table->longText('description')->nullable();
             $table->float('price',36);
             $table->float('sale_price',36)->nullable();
-            $table->string('location');
-            $table->mediumText('google_address');
-            $table->mediumText('postal_address');
-            $table->decimal('longitude',10,7);
-            $table->decimal('latitude',10,7);
+            $table->string('location')->nullable();
+            $table->mediumText('google_address')->nullable();
+            $table->mediumText('postal_address')->nullable();
+            $table->decimal('longitude',10,7)->nullable();
+            $table->decimal('latitude',10,7)->nullable();
             $table->boolean('active')->default(false);
             $table->uuid('guid')->unique();
             $table->timestamps();
