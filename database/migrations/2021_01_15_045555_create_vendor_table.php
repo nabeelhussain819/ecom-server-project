@@ -20,13 +20,11 @@ class CreateVendorTable extends Migration
             $table->unsignedBigInteger('rating_id');
             $table->timestamps();
         });
-
         Schema::table('vendor', function (Blueprint $table){
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('rating_id')->references('id')->on('ratings')->onDelete('cascade')->onUpdate('cascade');
         });
     }
-
     /**
      * Reverse the migrations.
      *

@@ -29,12 +29,10 @@ class CreateServicesTable extends Migration
             $table->uuid('guid')->unique();
             $table->timestamps();
         });
-
         Schema::table('services', function (Blueprint $table){
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });
     }
-
     /**
      * Reverse the migrations.
      *

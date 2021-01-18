@@ -29,13 +29,6 @@ class User extends Authenticatable
     use HasApiTokens, Notifiable;
 
     /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'users';
-
-    /**
      * The "type" of the auto-incrementing ID.
      *
      * @var string

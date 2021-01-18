@@ -19,7 +19,6 @@ class CreateListingTable extends Migration
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      *

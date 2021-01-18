@@ -18,14 +18,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Rating extends Model
 {
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'ratings';
 
-    /**
+     /**
      * The "type" of the auto-incrementing ID.
      *
      * @var string

@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api;
 
@@ -14,7 +13,6 @@ use App\Http\Controllers\Api;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
 Route::group(['prefix' => 'auth'], function () {
     Route::post('login', [Api\AuthController::class,'login']);
     Route::post('register', [Api\AuthController::class,'register']);
@@ -24,5 +22,3 @@ Route::group(['prefix' => 'auth'], function () {
         Route::get('user', [Api\AuthController::class,'user']);
     });
 });
-
-

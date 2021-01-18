@@ -19,13 +19,11 @@ class CreateProductsCategoryTable extends Migration
             $table->unsignedBigInteger('category_id');
             $table->timestamps();
         });
-
         Schema::table('products_category', function (Blueprint $table){
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('category_id')->references('id')->on('category')->onDelete('cascade')->onUpdate('cascade');
         });
     }
-
     /**
      * Reverse the migrations.
      *

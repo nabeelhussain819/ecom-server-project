@@ -21,13 +21,11 @@ class CreateRatingsTable extends Migration
             $table->string('rating');
             $table->timestamps();
         });
-
         Schema::table('ratings', function (Blueprint $table){
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('service_id')->references('id')->on('services')->onDelete('cascade')->onUpdate('cascade');
         });
     }
-
     /**
      * Reverse the migrations.
      *

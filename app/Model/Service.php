@@ -22,18 +22,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $updated_at
  * @property User $user
  * @property Rating[] $ratings
- * @property ServicesCategory[] $servicesCategories
+ * @property servicesCategory[] $servicesCategories
  */
 class Service extends Model
 {
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'services';
-
-    /**
+       /**
      * The "type" of the auto-incrementing ID.
      *
      * @var string
@@ -66,6 +59,6 @@ class Service extends Model
      */
     public function servicesCategories()
     {
-        return $this->hasMany('App\Model\ServicesCategory');
+        return $this->hasMany('App\Model\servicesCategory');
     }
 }

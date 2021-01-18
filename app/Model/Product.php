@@ -21,18 +21,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $created_at
  * @property string $updated_at
  * @property User $user
- * @property ProductsCategory[] $productsCategories
+ * @property productsCategory[] $productsCategories
  * @property Rating[] $ratings
  */
 class Product extends Model
 {
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'products';
-
     /**
      * The "type" of the auto-incrementing ID.
      *
@@ -58,7 +51,7 @@ class Product extends Model
      */
     public function productsCategories()
     {
-        return $this->hasMany('App\Model\ProductsCategory');
+        return $this->hasMany('App\Model\productsCategory');
     }
 
     /**

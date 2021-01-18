@@ -17,13 +17,6 @@ use Illuminate\Database\Eloquent\Model;
 class Vendor extends Model
 {
     /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'vendor';
-
-    /**
      * The "type" of the auto-incrementing ID.
      *
      * @var string

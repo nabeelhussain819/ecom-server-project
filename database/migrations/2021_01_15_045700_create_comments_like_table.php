@@ -26,7 +26,6 @@ class CreateCommentsLikeTable extends Migration
             $table->foreign('comment_id')->references('id')->on('comments')->onDelete('cascade')->onUpdate('cascade');
         });
     }
-
     /**
      * Reverse the migrations.
      *

@@ -22,7 +22,6 @@ class CreateCategoryTable extends Migration
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      *

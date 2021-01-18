@@ -19,13 +19,11 @@ class CreateServicesCategoryTable extends Migration
             $table->unsignedBigInteger('category_id');
             $table->timestamps();
         });
-
         Schema::table('services_category', function (Blueprint $table){
             $table->foreign('service_id')->references('id')->on('services')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('category_id')->references('id')->on('category')->onDelete('cascade')->onUpdate('cascade');
         });
     }
-
     /**
      * Reverse the migrations.
      *

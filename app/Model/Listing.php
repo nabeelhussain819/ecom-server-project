@@ -13,13 +13,6 @@ use Illuminate\Database\Eloquent\Model;
 class Listing extends Model
 {
     /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'listing';
-
-    /**
      * The "type" of the auto-incrementing ID.
      *
      * @var string

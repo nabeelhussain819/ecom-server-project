@@ -17,13 +17,6 @@ use Illuminate\Database\Eloquent\Model;
 class CommentsLike extends Model
 {
     /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'comments_like';
-
-    /**
      * The "type" of the auto-incrementing ID.
      *
      * @var string

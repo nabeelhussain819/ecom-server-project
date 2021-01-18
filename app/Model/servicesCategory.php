@@ -13,15 +13,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property Category $category
  * @property Service $service
  */
-class ServicesCategory extends Model
+class servicesCategory extends Model
 {
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'services_category';
-
     /**
      * The "type" of the auto-incrementing ID.
      *
