@@ -16,7 +16,7 @@ class CategoryController extends Controller
     public function index()
     {
         //
-        return Category::select(['id','name','description'])->get();
+        return Category::where('active', 1)->select(['id','name','description'])->get();
     }
 
     /**

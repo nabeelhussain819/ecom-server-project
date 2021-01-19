@@ -18,7 +18,7 @@ class CreateCategoryTable extends Migration
             $table->string('name',50);
             $table->longText('description')->nullable();
             $table->string('type',8);
-            $table->boolean('other')->default(false);
+            $table->boolean('active')->default(false);
             $table->timestamps();
         });
     }

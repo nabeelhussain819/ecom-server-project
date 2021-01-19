@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,4 +14,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+Auth::routes();
+Route::get('/home', 'HomeController@index')->name('home');
+Route::group(['prefix'=>'admin','middleware' => 'auth'], function(){
+    Route::Resources([
+       'category' => CategoryController::class,
+       'products' => ProductController::class
+    ]);
+    Route::get('category','CategoryController@search')->name('category.search');
+    Route::get('products','ProductController@search')->name('products.search');
 });

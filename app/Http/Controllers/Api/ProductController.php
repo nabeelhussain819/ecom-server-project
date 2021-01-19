@@ -32,6 +32,7 @@ class ProductController extends Controller
         //
     }
 
+
     /**
      * Store a newly created resource in storage.
      *
@@ -42,7 +43,6 @@ class ProductController extends Controller
     {
         //
         $productCat = new productsCategory();
-
         $product = new Product();
         $request['guid'] = \Illuminate\Support\Str::uuid();
         //temporary 1, for testing
@@ -90,6 +90,7 @@ class ProductController extends Controller
         //
        $product = Product::find($id);
        $product->fill($request->all())->update();
+       productsCategory::where('product_id',$product->id)->update(['category_id' => $request->category_id]);
        return response()->json(['message'=> 'Product Updated Successfully']);
     }
 
