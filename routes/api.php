@@ -14,8 +14,8 @@ use App\Http\Controllers\Api;
 |
 */
 Route::group(['prefix' => 'auth'], function () {
-    Route::post('login', [Api\AuthController::class,'login']);
-    Route::post('register', [Api\AuthController::class,'register']);
+//    Route::post('login', [Api\AuthController::class,'login']);
+//    Route::post('register', [Api\AuthController::class,'register']);
 
     Route::group(['middleware' => 'auth:api'], function() {
         Route::get('logout', [Api\AuthController::class,'logout']);
@@ -29,3 +29,10 @@ Route::get('products',[Api\ProductController::class,'index']);
 Route::post('products',[Api\ProductController::class,'store']);
 Route::patch('products/{id}',[Api\ProductController::class,'update']);
 Route::delete('products/{id}',[Api\ProductController::class,'destroy']);
+
+
+//
+Route::group(['prefix'=>'/auth',['middleware'=>'throttle:20,5']],function (){
+    Route::post('/register',[Api\Auth\RegisterController::class,'register']);
+    Route::post('/login',[Api\Auth\RegisterController::class,'login']);
+});

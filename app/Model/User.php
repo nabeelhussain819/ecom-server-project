@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Tymon\JWTAuth\Contracts\JWTSubject;
+use Tymon\JWTAuth\Contracts\Providers\JWT;
 
 /**
  * @property integer $id
@@ -24,7 +26,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property Service[] $services
  * @property Vendor[] $vendors
  */
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, Notifiable;
 
@@ -40,6 +42,7 @@ class User extends Authenticatable
      */
     protected $fillable = ['name', 'email', 'email_verified_at', 'password', 'guid', 'remember_token', 'created_at', 'updated_at'];
 
+    protected $hidden = ['password'];
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -86,5 +89,15 @@ class User extends Authenticatable
     public function vendors()
     {
         return $this->hasMany('App\Model\Vendor');
+    }
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+     return [];
     }
 }
