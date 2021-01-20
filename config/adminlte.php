@@ -239,15 +239,39 @@ return [
             'url'         => '/home',
             'icon'        => 'fa fa-tachometer-alt',
         ],
+        ['header' => 'Categories'],
         [
-            'text' => ' Check Categories',
+            'text' => ' Active Categories',
             'url' => 'admin/category ',
             'icon' => 'fa fa-list-alt'
         ],
         [
-            'text' => 'Check Products',
+            'text' => ' In-Active Categories',
+            'url' => 'admin/in-active-category ',
+            'icon' => 'fa fa-times'
+        ],
+        ['header' => 'Products'],
+        [
+            'text' => 'Active Products',
             'url' => 'admin/products ',
             'icon' => 'fab fa-product-hunt'
+        ],
+        [
+            'text' => 'In-Active Products',
+            'url' => 'admin/in-active-products',
+            'icon' => 'fa fa-times'
+        ],
+
+        ['header' => 'Services'],
+        [
+            'text' => 'Active Services',
+            'url' => 'admin/services',
+            'icon' => 'fa fa-bars'
+        ],
+        [
+            'text' => 'In-Active Services',
+            'url' => 'admin/in-active-services',
+            'icon' => 'fa fa-times'
         ],
         ['header' => 'account_settings'],
         [

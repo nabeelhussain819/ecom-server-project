@@ -16,9 +16,19 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return view('category.index',['category' => Category::paginate(10)]);
+        return view('category.index',['category' =>
+            Category::where('active',1)
+                ->orderBy('created_at','ASC')
+                ->paginate(10)]);
     }
 
+    public function inActive()
+    {
+        return view('category.in-active',['category' =>
+            Category::where('active', 0)
+                ->orderBy('created_at','ASC')
+                ->paginate(10)]);
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -31,8 +41,17 @@ class CategoryController extends Controller
     public function search(Request $request)
     {
         $search = $request->get('search');
-        $category = Category::where('name','like','%' . $search . '%')->paginate(10);
-        return view('category.index',['category' => $category]);
+        return view('category.index',['category' =>
+            Category::where('active',1)
+                ->where('name','like','%' . $search . '%')
+                ->paginate(10)]);
+    }
+    public function searchInActive(Request $request)
+    {
+        $search = $request->get('search');
+        return view('category.in-active',['category' => Category::where('active',0)
+            ->where('name','like','%' . $search . '%')
+            ->paginate(10)]);
     }
     /**
      * Store a newly created resource in storage.
@@ -56,7 +75,6 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        //
         return view('category.show', ['category' => Category::findOrFail($id)]);
     }
 
@@ -80,7 +98,6 @@ class CategoryController extends Controller
      */
     public function update(CategoryRequest $request, Category $category)
     {
-        //
         $category->fill($request->all())->update();
         return back()->with('success','Category Updated');
     }
@@ -93,7 +110,6 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
         $category = Category::findOrFail($id);
         $category->delete();
         return back()->with('success','Category deleted');

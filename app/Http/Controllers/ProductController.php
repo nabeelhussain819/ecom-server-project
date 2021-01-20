@@ -17,10 +17,19 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
         return view('products.index',[
-            'products'=> productsCategory::with('product','category')->paginate(10)
+            'products'=> productsCategory::with('product')->whereHas('product',function ($query){
+                $query->where('active',1);
+            })->orderBy('created_at','ASC')->paginate(10)
         ]);
+    }
+
+    public function inActive()
+    {
+        $inActiveProduct= productsCategory::with('product')->whereHas('product',function ($query){
+            $query->where('active',0);
+        })->orderBy('created_at','ASC')->paginate(10);
+        return view('products.in-active',['products' => $inActiveProduct]);
     }
 
     /**
@@ -30,17 +39,26 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
         return view('products.create',['category' => Category::where('active',1)->get()]);
     }
+
     public function search(Request $request)
     {
         $search = $request->get('search');
         $products = productsCategory::with('product')->whereHas('product', function ($query) use ($search){
-           $query->where('name','like','%' . $search . '%');
+            $query->where('active',1)->where('name','like','%' . $search . '%');
         })->paginate(10);
         return view('products.index',['products' => $products]);
     }
+    public function searchInActive(Request $request)
+    {
+        $search = $request->get('search');
+        $products = productsCategory::with('product')->whereHas('product', function ($query) use ($search){
+            $query->where('active',0)->where('name','like','%' . $search . '%');
+        })->paginate(10);
+        return view('products.in-active',['products' => $products]);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -49,7 +67,6 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request)
     {
-        //
         $productCat = new productsCategory();
         $product = new Product();
         $product->guid = \Illuminate\Support\Str::uuid();
@@ -69,7 +86,6 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        //
     }
 
     /**
@@ -80,7 +96,6 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        //
         return view('products.edit',[
             'product'=>Product::with('productsCategories')->findOrFail($id),
             'category' => Category::where('active',1)->get()
@@ -96,7 +111,6 @@ class ProductController extends Controller
      */
     public function update(ProductRequest $request, $id)
     {
-        //
         $product = Product::find($id);
         $product->fill($request->all())->update();
         productsCategory::where('product_id',$product->id)->update(['category_id' => $request->category_id]);
@@ -112,7 +126,6 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
         $product = Product::findOrFail($id);
         $product->delete();
         return back()->with('success','Product Deleted');

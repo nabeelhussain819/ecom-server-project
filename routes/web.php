@@ -20,8 +20,17 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::group(['prefix'=>'admin','middleware' => 'auth'], function(){
     Route::Resources([
        'category' => CategoryController::class,
-       'products' => ProductController::class
+       'products' => ProductController::class,
+       'services' => ServiceController::class
     ]);
     Route::get('category','CategoryController@search')->name('category.search');
+    Route::get('in-active-category','CategoryController@inActive')->name('category.in-active');
+    Route::get('in-active-category','CategoryController@searchInActive')->name('category.inactive.search');
     Route::get('products','ProductController@search')->name('products.search');
+    Route::get('in-active-products','ProductController@inActive')->name('products.in-active');
+    Route::get('in-active-products','ProductController@searchInActive')->name('products.inactive.search');
+    Route::get('services','ServiceController@search')->name('services.search');
+    Route::get('in-active-services','ServiceController@inActive')->name('services.in-active');
+    Route::get('in-active-services','ServiceController@searchInActive')->name('services.in-active.search');
+
 });
