@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property boolean $other
  * @property string $created_at
  * @property string $updated_at
- * @property productsCategory[] $productsCategories
+ * @property ProductsCategory[] $productsCategories
  * @property servicesCategory[] $servicesCategories
  */
 class Category extends Model
@@ -35,7 +35,7 @@ class Category extends Model
      */
     public function productsCategories()
     {
-        return $this->hasMany('App\Model\productsCategory');
+        return $this->hasMany('App\Model\ProductsCategory');
     }
 
     /**

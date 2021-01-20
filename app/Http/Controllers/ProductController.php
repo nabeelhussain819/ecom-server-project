@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProductRequest;
 use App\Model\Category;
 use App\Model\Product;
-use App\Model\productsCategory;
+use App\Model\ProductsCategory;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -18,7 +18,7 @@ class ProductController extends Controller
     public function index()
     {
         return view('products.index',[
-            'products'=> productsCategory::with('product')->whereHas('product',function ($query){
+            'products'=> ProductsCategory::with('product')->whereHas('product',function ($query){
                 $query->where('active',1);
             })->orderBy('created_at','ASC')->paginate(10)
         ]);
@@ -26,7 +26,7 @@ class ProductController extends Controller
 
     public function inActive()
     {
-        $inActiveProduct= productsCategory::with('product')->whereHas('product',function ($query){
+        $inActiveProduct= ProductsCategory::with('product')->whereHas('product',function ($query){
             $query->where('active',0);
         })->orderBy('created_at','ASC')->paginate(10);
         return view('products.in-active',['products' => $inActiveProduct]);
@@ -45,7 +45,7 @@ class ProductController extends Controller
     public function search(Request $request)
     {
         $search = $request->get('search');
-        $products = productsCategory::with('product')->whereHas('product', function ($query) use ($search){
+        $products = ProductsCategory::with('product')->whereHas('product', function ($query) use ($search){
             $query->where('active',1)->where('name','like','%' . $search . '%');
         })->paginate(10);
         return view('products.index',['products' => $products]);
@@ -53,7 +53,7 @@ class ProductController extends Controller
     public function searchInActive(Request $request)
     {
         $search = $request->get('search');
-        $products = productsCategory::with('product')->whereHas('product', function ($query) use ($search){
+        $products = ProductsCategory::with('product')->whereHas('product', function ($query) use ($search){
             $query->where('active',0)->where('name','like','%' . $search . '%');
         })->paginate(10);
         return view('products.in-active',['products' => $products]);
@@ -67,7 +67,7 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request)
     {
-        $productCat = new productsCategory();
+        $productCat = new ProductsCategory();
         $product = new Product();
         $product->guid = \Illuminate\Support\Str::uuid();
         $request['user_id'] = auth()->user()->getAuthIdentifier();
@@ -113,7 +113,7 @@ class ProductController extends Controller
     {
         $product = Product::find($id);
         $product->fill($request->all())->update();
-        productsCategory::where('product_id',$product->id)->update(['category_id' => $request->category_id]);
+        ProductsCategory::where('product_id',$product->id)->update(['category_id' => $request->category_id]);
         return redirect('admin/products')->with('success','Product Updated');
 
     }

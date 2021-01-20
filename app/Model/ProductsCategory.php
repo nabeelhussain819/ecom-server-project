@@ -13,16 +13,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property Category $category
  * @property Product $product
  */
-class productsCategory extends Model
+class ProductsCategory extends Model
 {
-    protected $table = 'products_category';
-    /**
-     * The "type" of the auto-incrementing ID.
-     *
-     * @var string
-     */
-    protected $keyType = 'integer';
-
     /**
      * @var array
      */
@@ -31,16 +23,16 @@ class productsCategory extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function category()
+    public function categories()
     {
-        return $this->belongsTo('App\Model\Category');
+        return $this->belongsTo(Category::class,"category_id");
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function product()
+    public function products()
     {
-        return $this->belongsTo('App\Model\Product');
+        return $this->belongsTo(Product::class,"product_id");
     }
 }

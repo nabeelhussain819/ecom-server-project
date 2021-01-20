@@ -4,22 +4,19 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Model\Product;
-use App\Model\productsCategory;
+use App\Model\ProductsCategory;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Psy\Util\Str;
 
 class ProductController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
      */
     public function index()
     {
         //
-        return productsCategory::with('product','category')->whereHas('product', function($query){
+        return ProductsCategory::with('product','category')
+            ->whereHas('product', function($query){
             $query->where('active',1);
         })->get();
     }
@@ -43,8 +40,8 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        $productCat = new productsCategory();
+        //@todo MNN make it proper
+        $productCat = new ProductsCategory();
         $product = new Product();
         $request['guid'] = \Illuminate\Support\Str::uuid();
         //temporary 1, for testing
@@ -92,7 +89,7 @@ class ProductController extends Controller
         //
        $product = Product::find($id);
        $product->fill($request->all())->update();
-       productsCategory::where('product_id',$product->id)->update(['category_id' => $request->category_id]);
+       ProductsCategory::where('product_id',$product->id)->update(['category_id' => $request->category_id]);
        return response()->json(['message'=> 'Product Updated Successfully']);
     }
 

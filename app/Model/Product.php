@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $created_at
  * @property string $updated_at
  * @property User $user
- * @property productsCategory[] $productsCategories
+ * @property ProductsCategory[] $productsCategories
  * @property Rating[] $ratings
  */
 class Product extends Model
@@ -57,9 +57,9 @@ class Product extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function productsCategories()
+    public function categories()
     {
-        return $this->hasMany('App\Model\productsCategory');
+        return $this->hasMany(ProductsCategory::class,product_id);
     }
 
     /**
@@ -67,6 +67,6 @@ class Product extends Model
      */
     public function ratings()
     {
-        return $this->hasMany('App\Model\Rating');
+        return $this->hasMany(Rating::class);
     }
 }
