@@ -27,13 +27,12 @@ class AuthController extends Controller
             'email' => 'required|string|email|unique:users',
             'password' => 'required|string|confirmed'
         ]);
-        $user = new User([
+        User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'guid' => \Illuminate\Support\Str::uuid()
         ]);
-        $user->save();
         return response()->json([
             'message' => 'Successfully created user!'
         ], 201);
@@ -56,7 +55,12 @@ class AuthController extends Controller
             'password' => 'required|string',
             'remember_me' => 'boolean'
         ]);
-        if(Auth::attempt(['email' => request('email'), 'password' => request('password')])){
+        if(!Auth::attempt(['email' => request('email'), 'password' => request('password')])){
+            return response()->json([
+                'message' => 'Login failed please try again with correct email and password.',
+            ]);
+        }
+        else{
             $user = Auth::user();
             $tokenResult = $user->createToken('Personal Access Token')->accessToken;
             return response()->json([
@@ -64,11 +68,6 @@ class AuthController extends Controller
                 'access_token' => $tokenResult,
                 'token_type' => 'Bearer',
             ],201);
-        }
-        else{
-            return response()->json([
-                'message' => 'Login failed please try again with correct email and password.',
-            ]);
         }
     }
 
