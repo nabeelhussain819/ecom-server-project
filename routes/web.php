@@ -21,7 +21,8 @@ Route::group(['prefix'=>'admin','middleware' => 'auth'], function(){
     Route::Resources([
        'category' => CategoryController::class,
        'products' => ProductController::class,
-       'services' => ServiceController::class
+       'services' => ServiceController::class,
+        'media' => MediaController::class,
     ]);
     Route::get('category','CategoryController@search')->name('category.search');
     Route::get('in-active-category','CategoryController@inActive')->name('category.in-active');
@@ -32,5 +33,7 @@ Route::group(['prefix'=>'admin','middleware' => 'auth'], function(){
     Route::get('services','ServiceController@search')->name('services.search');
     Route::get('in-active-services','ServiceController@inActive')->name('services.in-active');
     Route::get('in-active-services','ServiceController@searchInActive')->name('services.in-active.search');
-
+    Route::get('/create', 'MediaController@create')->name('media.create');
+    Route::delete('/{media}', 'MediaController@destroy')->name('media.destroy');
+    Route::get('/edit/{media}', 'MediaController@edit')->name('media.edit');
 });

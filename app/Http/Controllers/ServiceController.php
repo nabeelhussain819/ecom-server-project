@@ -116,6 +116,11 @@ class ServiceController extends Controller
         return redirect('admin/services')->with('success','Service Updated');
     }
 
+//    public function active(Service $service)
+//    {
+//        $service->update(['active' => 1]);
+//        return back()->with('success', "{$service->name} is active now");
+//    }
     /**
      * Remove the specified resource from storage.
      *

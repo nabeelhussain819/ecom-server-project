@@ -273,6 +273,12 @@ return [
             'url' => 'admin/in-active-services',
             'icon' => 'fa fa-times'
         ],
+        ['header' => 'Media'],
+        [
+            'text' => 'Media',
+            'url'  => 'admin/media',
+            'icon' => 'fa fa-image',
+        ],
         ['header' => 'account_settings'],
         [
             'text' => 'profile',

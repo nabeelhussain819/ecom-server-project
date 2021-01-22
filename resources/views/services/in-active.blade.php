@@ -48,6 +48,13 @@
                     <td>{{$item->category->name}}</td>
                     <td>{{$item->created_at}}</td>
                     <td>
+                        <form class="d-inline"
+                              action="{{route('.active',$item->id)}}"
+                              method="POST">
+                            <input type="hidden" name="active"  value="true">
+                            @csrf
+                            <button type="submit" class="btn btn-success">Active</button>
+                        </form>
                         <a href="{{route('services.edit', $item->service->id)}}" class="btn btn-info"><i class="fa fa-pen"></i></a>
                         <form action="{{ route('services.destroy', $item->service->id) }}" method="POST" style="display: unset">
                             <input type="hidden" name="_method" value="DELETE">
