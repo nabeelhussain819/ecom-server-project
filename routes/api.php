@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,5 +34,5 @@ Route::delete('products/{id}',[Api\ProductController::class,'destroy']);
 //
 Route::group(['prefix'=>'/auth',['middleware'=>'throttle:20,5']],function (){
     Route::post('/register',[Api\Auth\RegisterController::class,'register']);
-    Route::post('/login',[Api\Auth\RegisterController::class,'login']);
+    Route::post('/login', [Api\Auth\LoginController::class, 'login']);
 });
