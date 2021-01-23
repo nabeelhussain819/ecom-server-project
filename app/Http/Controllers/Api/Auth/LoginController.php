@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
-use Tymon\JWTAuth\Exceptions\JWTException;
+use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\JWTAuth;
 
 class LoginController extends Controller
@@ -48,11 +48,16 @@ class LoginController extends Controller
      *
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
-     *
+     * @todo right now simple JWT TOKEN after move to passport soon
      * @throws \Illuminate\Validation\ValidationException
      */
     public function login(Request $request)
     {
+        $request->validate([
+            'email' => 'required|string|email',
+            'password' => 'required|string',
+            'remember_me' => 'boolean'
+        ]);
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
         // the login attempts for this application. We'll key this by the username and
         // the IP address of the client making these requests into this application.
@@ -66,12 +71,8 @@ class LoginController extends Controller
                 ]]);
         }
 
-        try {
-            if (!$token = $this->auth->attempt($request->only('email', 'password'))) {
-                return $this->unProcessEntityResponse('invalid data');
-            }
-        } catch (JWTException $exception) {
-            return $this->unProcessEntityResponse($exception->getMessage());
+        if (!Auth::attempt(['email' => request('email'), 'password' => request('password')])) {
+            return $this->unProcessEntityResponse('invalid data');
         }
 
 
@@ -79,10 +80,11 @@ class LoginController extends Controller
         // to login and redirect the user back to the login form. Of course, when this
         // user surpasses their maximum number of attempts they will get locked out.
         $this->incrementLoginAttempts($request);
-
+        $user = Auth::user();
+        $tokenResult = $user->createToken('Personal Access Token')->accessToken;
         return $this->genericResponse(true, 'Successful login',
             200, ['data' => $request->user(),
-                'token' => $token
+                'token' => $tokenResult
             ]);
     }
 

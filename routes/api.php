@@ -36,3 +36,8 @@ Route::group(['prefix'=>'/auth',['middleware'=>'throttle:20,5']],function (){
     Route::post('/register',[Api\Auth\RegisterController::class,'register']);
     Route::post('/login', [Api\Auth\LoginController::class, 'login']);
 });
+
+//Secure routes
+Route::group(['middleware' => 'auth:api'], function () {
+    Route::get('categories-secure', [Api\CategoryController::class, 'index']);
+});

@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Model\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\JWTAuth;
@@ -85,7 +86,8 @@ class RegisterController extends Controller
            // dd(ArrayHelper::merge($request->all(),['guid'=>GuidHelper::getGuid()]));
             $user = $this->create(ArrayHelper::merge($request->all(),['guid'=>GuidHelper::getGuid()]));
 
-            $token = $this->auth->attempt($request->only('email', 'password'));
+            $user = Auth::user();
+            $token = $user->createToken('Personal Access Token')->accessToken;
             return response()->json([
                 'success' => true,
                 'data' => $user,
