@@ -17,7 +17,7 @@ class CategoryController extends Controller
     public function index()
     {
         return view('category.index',['category' =>
-            Category::where('active',1)
+            Category::where('active',true)
                 ->orderBy('created_at','ASC')
                 ->paginate(10)]);
     }
