@@ -19,7 +19,7 @@ class ProductController extends Controller
     {
         return view('products.index',[
             'products'=> ProductsCategory::with('product')->whereHas('product',function ($query){
-                $query->where('active',1);
+                $query->where('active',true);
             })->orderBy('created_at','ASC')->paginate(10)
         ]);
     }
@@ -27,7 +27,7 @@ class ProductController extends Controller
     public function inActive()
     {
         $inActiveProduct= ProductsCategory::with('product')->whereHas('product',function ($query){
-            $query->where('active',0);
+            $query->where('active',false);
         })->orderBy('created_at','ASC')->paginate(10);
         return view('products.in-active',['products' => $inActiveProduct]);
     }
@@ -46,7 +46,7 @@ class ProductController extends Controller
     {
         $search = $request->get('search');
         $products = ProductsCategory::with('product')->whereHas('product', function ($query) use ($search){
-            $query->where('active',1)->where('name','like','%' . $search . '%');
+            $query->where('active',true)->where('name','like','%' . $search . '%');
         })->paginate(10);
         return view('products.index',['products' => $products]);
     }
@@ -54,7 +54,7 @@ class ProductController extends Controller
     {
         $search = $request->get('search');
         $products = ProductsCategory::with('product')->whereHas('product', function ($query) use ($search){
-            $query->where('active',0)->where('name','like','%' . $search . '%');
+            $query->where('active',false)->where('name','like','%' . $search . '%');
         })->paginate(10);
         return view('products.in-active',['products' => $products]);
     }
@@ -98,7 +98,7 @@ class ProductController extends Controller
     {
         return view('products.edit',[
             'product'=>Product::with('productsCategories')->findOrFail($id),
-            'category' => Category::where('active',1)->get()
+            'category' => Category::where('active',true)->get()
         ]);
     }
 

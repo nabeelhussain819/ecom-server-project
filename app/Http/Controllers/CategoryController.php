@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CategoryRequest;
 use App\Model\Category;
-use App\Model\ProductsCategory;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -25,7 +24,7 @@ class CategoryController extends Controller
     public function inActive()
     {
         return view('category.in-active',['category' =>
-            Category::where('active', 0)
+            Category::where('active', false)
                 ->orderBy('created_at','ASC')
                 ->paginate(10)]);
     }
@@ -42,7 +41,7 @@ class CategoryController extends Controller
     {
         $search = $request->get('search');
         return view('category.index',['category' =>
-            Category::where('active',1)
+            Category::where('active',true)
                 ->where('name','like','%' . $search . '%')
                 ->paginate(10)]);
     }
