@@ -12,12 +12,12 @@ class AttributeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('category.index', ['category' =>
-            Attribute::where('active', true)
+        return view('attributes.index', ['attributes' =>
+            Attribute::where($this->applyFilters($request))
                 ->orderBy('created_at', 'ASC')
-                ->paginate(10)]);
+                ->paginate($this->getPageSize())]);
     }
 
     /**
@@ -27,7 +27,7 @@ class AttributeController extends Controller
      */
     public function create()
     {
-        //
+        return view('attributes.create');
     }
 
     /**
@@ -38,7 +38,10 @@ class AttributeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $attribute = new Attribute();
+        $attribute->fill($request->all())->save();
+        return redirect('admin/attribute')
+            ->with('success', 'Attribute Added');
     }
 
     /**

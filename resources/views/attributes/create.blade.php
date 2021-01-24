@@ -2,34 +2,23 @@
 
 @section('content')
 <div class="container">
-    <form action="{{route('category.store')}}" method="POST">
+    <form action="{{route('attribute.store')}}" method="POST">
         @csrf
         <div class="form-group">
             <label>Name</label>
-            <input type="text" name="name" class="form-control"placeholder="Enter Category Name" >
+            <input type="text" name="name" class="form-control" placeholder="Enter Attribute Name">
         </div>
 
-        <div class="form-group">
-            <label>Type</label>
-        <select name="type" class="form-control">
-            <option value="" selected >Please select...</option>
-            <option value="Product">Product</option>
-            <option value="Service">Service</option>
-        </select>
-        </div>
-        <div class="form-group">
-            <label>Status</label>
-            <select name="active" class="form-control">
-                <option value="" selected >Please select...</option>
-                <option value=1>Active</option>
-                <option value=0>In-Active</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>Description</label>
-            <textarea type="text" rows="5" cols="5" class="form-control" name="description" placeholder="Enter Description" >
-            </textarea>
-        </div>
+
+        {{--<div class="form-group">--}}
+        {{--<label>Status</label>--}}
+        {{--<select name="active" class="form-control">--}}
+        {{--<option value="" selected >Please select...</option>--}}
+        {{--<option value=1>Active</option>--}}
+        {{--<option value=0>In-Active</option>--}}
+        {{--</select>--}}
+        {{--</div>--}}
+
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
     <br>

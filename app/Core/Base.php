@@ -1,12 +1,8 @@
 <?php
 
-namespace App\app\Core;
+namespace App\Core;
 
-use App\Helpers\GuidHelper;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
-
-class BaseModel extends Model
+class Base
 {
     protected $autoBlame = true;
     protected $hasGuid = true;
