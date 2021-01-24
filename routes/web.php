@@ -21,7 +21,8 @@ Route::group(['prefix'=>'admin','middleware' => 'auth'], function(){
     Route::Resources([
        'category' => CategoryController::class,
        'products' => ProductController::class,
-       'services' => ServiceController::class
+        'services' => ServiceController::class,
+        'attribute' => AttributeController::class
     ]);
     Route::get('category','CategoryController@search')->name('category.search');
     Route::get('in-active-category','CategoryController@inActive')->name('category.in-active');

@@ -2,7 +2,8 @@
 
 namespace App\Models;
 
-use App\Core\BaseModel;
+use Illuminate\Database\Eloquent\Model;
+use App\app\Core\BaseModel;
 
 /**
  * App\Models\Attribute
@@ -18,7 +19,7 @@ use App\Core\BaseModel;
  * @method static \Illuminate\Database\Eloquent\Builder|Attribute whereName($value)
  * @mixin \Eloquent
  */
-class Attribute extends BaseModel
+class Attribute extends Model
 {
     /**
      * The "type" of the auto-incrementing ID.
