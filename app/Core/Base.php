@@ -6,6 +6,13 @@ use App\Helpers\GuidHelper;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * @property integer $id
+ * @property string $name
+ * @properties AttributesValue[] $attributesValues
+ * @properties ProductAttribute[] $productAttributes
+ * @mixin Builder
+ */
 
 class Base extends Model
 {

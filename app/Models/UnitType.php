@@ -1,22 +1,15 @@
 <?php
 
-namespace App\Models;;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * App\Models\UnitType
- *
  * @property integer $id
  * @property string $name
- * @property AttributesValue[] $attributesValues
- * @property ProductAttribute[] $productAttributes
- * @method static \Illuminate\Database\Eloquent\Builder|UnitType newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|UnitType newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|UnitType query()
- * @method static \Illuminate\Database\Eloquent\Builder|UnitType whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|UnitType whereName($value)
- * @mixin \Eloquent
+ * @properties AttributesValue[] $attributesValues
+ * @properties ProductAttribute[] $productAttributes
+ *  @mixin Builder
  */
 class UnitType extends Model
 {

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Attribute;
+use App\Models\UnitType;
 use Illuminate\Http\Request;
 
-class AttributeController extends Controller
+class UnitTypeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +14,8 @@ class AttributeController extends Controller
      */
     public function index(Request $request)
     {
-        return view('attributes.index', ['attributes' =>
-            Attribute::where($this->applyFilters($request))
+        return view('unit-types.index', ['unitTypes' =>
+            UnitType::where($this->applyFilters($request))
                 ->orderBy('created_at', 'ASC')
                 ->paginate($this->getPageSize())]);
     }
@@ -27,7 +27,7 @@ class AttributeController extends Controller
      */
     public function create()
     {
-        return view('attributes.create');
+        //
     }
 
     /**
@@ -38,14 +38,7 @@ class AttributeController extends Controller
      */
     public function store(Request $request)
     {
-        $attribute = new Attribute();
-
-        $attribute = $attribute->fill(['name' => $request->get('name')]);
-
-        $attribute->save();
-
-        return redirect()->back()
-            ->with('success', 'Attribute Added');
+        //
     }
 
     /**

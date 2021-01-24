@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,7 +23,8 @@ Route::group(['prefix'=>'admin','middleware' => 'auth'], function(){
        'category' => CategoryController::class,
        'products' => ProductController::class,
         'services' => ServiceController::class,
-        'attribute' => AttributeController::class
+        'attribute' => AttributeController::class,
+        'unit-type' => UnitTypeController::class
     ]);
     Route::get('category','CategoryController@search')->name('category.search');
     Route::get('in-active-category','CategoryController@inActive')->name('category.in-active');

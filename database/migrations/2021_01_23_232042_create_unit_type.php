@@ -16,6 +16,9 @@ class CreateUnitType extends Migration
         Schema::create('unit_types', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->boolean('active')->default(false);
+            $table->uuid('guid')->unique();
+            $table->timestamps();
         });
 
         Schema::table('attributes_values', function (Blueprint $table) {
