@@ -1,23 +1,20 @@
 <?php
 
-namespace App\Model;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property integer $id
  * @property integer $user_id
- * @property string $name
- * @property string $extension
- * @property string $type
- * @property boolean $active
- * @property boolean $system
- * @property string $guid
+ * @property integer $comment_id
  * @property string $created_at
  * @property string $updated_at
+ * @property string $deleted_at
+ * @property Comment $comment
  * @property User $user
  */
-class Media extends Model
+class CommentsLike extends Model
 {
     /**
      * The "type" of the auto-incrementing ID.
@@ -29,7 +26,15 @@ class Media extends Model
     /**
      * @var array
      */
-    protected $fillable = ['user_id', 'name', 'extension', 'type', 'active', 'system', 'guid', 'created_at', 'updated_at'];
+    protected $fillable = ['user_id', 'comment_id', 'created_at', 'updated_at', 'deleted_at'];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function comment()
+    {
+        return $this->belongsTo('App\Model\Comment');
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
