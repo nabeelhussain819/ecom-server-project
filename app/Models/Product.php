@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * App\Models\Product
+ *
  * @property integer $id
  * @property integer $user_id
  * @property string $name
@@ -23,6 +25,26 @@ use Illuminate\Database\Eloquent\Model;
  * @property User $user
  * @property ProductsCategories[] $productsCategories
  * @property Rating[] $ratings
+ * @property-read int|null $ratings_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Product newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Product newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Product query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereGoogleAddress($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereGuid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereLatitude($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereLocation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereLongitude($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product wherePostalAddress($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product wherePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereSalePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereUserId($value)
+ * @mixin \Eloquent
  */
 class Product extends Model
 {

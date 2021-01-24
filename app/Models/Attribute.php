@@ -6,12 +6,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * App\Models\Attribute
+ *
  * @property integer $id
  * @property string $name
  * @properties AttributesValue[] $attributesValues
  * @properties ProductAttribute[] $productAttributes
+ * @method static \Illuminate\Database\Eloquent\Builder|Attribute newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Attribute newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Attribute query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Attribute whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Attribute whereName($value)
+ * @mixin \Eloquent
  */
-class Attributes extends Model
+class Attribute extends Model
 {
     /**
      * The "type" of the auto-incrementing ID.

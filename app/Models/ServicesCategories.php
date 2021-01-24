@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * App\Models\ServicesCategories
+ *
  * @property integer $id
  * @property integer $service_id
  * @property integer $category_id
@@ -12,6 +14,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $updated_at
  * @property Category $category
  * @property Service $service
+ * @method static \Illuminate\Database\Eloquent\Builder|ServicesCategories newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ServicesCategories newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ServicesCategories query()
+ * @mixin \Eloquent
  */
 class ServicesCategories extends Model
 {

@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * App\Models\Category
+ *
  * @property integer $id
  * @property string $name
  * @property string $description
@@ -14,6 +16,20 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $updated_at
  * @property ProductsCategories[] $productsCategories
  * @property ServicesCategories[] $servicesCategories
+ * @property bool $active
+ * @property bool $self_active
+ * @method static \Illuminate\Database\Eloquent\Builder|Category newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Category newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Category query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Category whereActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Category whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Category whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Category whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Category whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Category whereSelfActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Category whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Category whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class Category extends Model
 {

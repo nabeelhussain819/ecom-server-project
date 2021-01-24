@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * App\Models\CommentsLike
+ *
  * @property integer $id
  * @property integer $user_id
  * @property integer $comment_id
@@ -13,6 +15,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $deleted_at
  * @property Comment $comment
  * @property User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|CommentsLike newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CommentsLike newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CommentsLike query()
+ * @mixin \Eloquent
  */
 class CommentsLike extends Model
 {
