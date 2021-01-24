@@ -41,7 +41,7 @@
                     <td>{{$count++}}</td>
                     <td>{{$attribute->name}}</td>
                     <td>{{$attribute->description}}</td>
-                    <td><span class="{{$attribute->active == 0 ? 'badge badge-danger' : 'badge badge-success'}}">{{$item->active == 0 ? 'IN-ACTIVE' : 'ACTIVE' }}</span></td>
+                    <td><span class="{{$attribute->active == 0 ? 'badge badge-danger' : 'badge badge-success'}}">{{$attribute->active == 0 ? 'IN-ACTIVE' : 'ACTIVE' }}</span></td>
                     <td>{{$attribute->created_at}}</td>
                     <td>
                         <a href="{{route('category.edit', $attribute->id)}}" class="btn btn-info"><i class="fa fa-pen"></i></a>

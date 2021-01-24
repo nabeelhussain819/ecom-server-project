@@ -15,7 +15,10 @@ class CreateAttributes extends Migration
     {
         Schema::create('attributes', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->unique();
+            $table->boolean('active')->default(false);
+            $table->uuid('guid')->unique();
+            $table->timestamps();
         });
     }
 

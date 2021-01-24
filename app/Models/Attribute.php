@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Core\Base;
 
 
-
 /**
  * App\Models\Attribute
  *
@@ -27,7 +26,8 @@ class Attribute extends Base
      *
      * @var string
      */
-    protected $keyType = 'integer';
+
+//    protected $hasGuid = false;
     protected $autoBlame = false;
     /**
      * @var array

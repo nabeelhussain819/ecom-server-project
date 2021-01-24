@@ -39,7 +39,11 @@ class AttributeController extends Controller
     public function store(Request $request)
     {
         $attribute = new Attribute();
-        $attribute->fill($request->all())->save();
+
+        $attribute = $attribute->fill(['name' => $request->get('name')]);
+
+        $attribute->save();
+
         return redirect('admin/attribute')
             ->with('success', 'Attribute Added');
     }
