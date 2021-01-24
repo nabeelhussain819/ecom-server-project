@@ -1,28 +1,28 @@
 <?php
 
-namespace App\Models;
+namespace App\Models;;
 
-use App\Core\BaseModel;
+use Illuminate\Database\Eloquent\Model;
 
 /**
- * App\Models\Attribute
+ * App\Models\UnitType
  *
  * @property integer $id
  * @property string $name
- * @properties AttributesValue[] $attributesValues
- * @properties ProductAttribute[] $productAttributes
- * @method static \Illuminate\Database\Eloquent\Builder|Attribute newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Attribute newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Attribute query()
- * @method static \Illuminate\Database\Eloquent\Builder|Attribute whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Attribute whereName($value)
+ * @property AttributesValue[] $attributesValues
+ * @property ProductAttribute[] $productAttributes
+ * @method static \Illuminate\Database\Eloquent\Builder|UnitType newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|UnitType newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|UnitType query()
+ * @method static \Illuminate\Database\Eloquent\Builder|UnitType whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UnitType whereName($value)
  * @mixin \Eloquent
  */
-class Attribute extends BaseModel
+class UnitType extends Model
 {
     /**
      * The "type" of the auto-incrementing ID.
-     *
+     * 
      * @var string
      */
     protected $keyType = 'integer';
