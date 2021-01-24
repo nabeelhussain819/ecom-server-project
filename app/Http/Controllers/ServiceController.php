@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Model\Category;
 use App\Model\Service;
-use App\Model\servicesCategory;
+use App\Model\ServicesCategories;
 use Illuminate\Http\Request;
 
 class ServiceController extends Controller
@@ -17,7 +17,7 @@ class ServiceController extends Controller
     public function index()
     {
         return view('services.index',['services' =>
-            servicesCategory::with('service')
+            ServicesCategories::with('service')
                 ->whereHas('service',function ($query){
                     $query->where('active',1);
                 })->orderBy('created_at','ASC')->paginate(10)]);
@@ -26,7 +26,7 @@ class ServiceController extends Controller
     public function inActive()
     {
         return view('services.in-active',['services' =>
-            servicesCategory::with('service')
+            ServicesCategories::with('service')
                 ->whereHas('service',function ($query){
                     $query->where('active',0);
                 })->orderBy('created_at','ASC')->paginate(10)]);
@@ -45,7 +45,7 @@ class ServiceController extends Controller
     public function search(Request $request)
     {
         $search = $request->get('search');
-        $services = servicesCategory::with('service')->whereHas('service', function ($query) use ($search){
+        $services = ServicesCategories::with('service')->whereHas('service', function ($query) use ($search){
             $query->where('active',1)->where('name','like','%' . $search . '%');
         })->paginate(10);
         return view('services.index',['services' => $services]);
@@ -53,7 +53,7 @@ class ServiceController extends Controller
     public function searchInActive(Request $request)
     {
         $search = $request->get('search');
-        $services = servicesCategory::with('service')->whereHas('service', function ($query) use ($search){
+        $services = ServicesCategories::with('service')->whereHas('service', function ($query) use ($search){
             $query->where('active',0)->where('name','like','%' . $search . '%');
         })->paginate(10);
         return view('services.in-active',['services' => $services]);
@@ -66,7 +66,7 @@ class ServiceController extends Controller
      */
     public function store(Request $request)
     {
-        $serviceCat = new servicesCategory();
+        $serviceCat = new ServicesCategories();
         $service = new Service();
         $service->guid = \Illuminate\Support\Str::uuid();
         $request['user_id'] = auth()->user()->getAuthIdentifier();
@@ -112,7 +112,7 @@ class ServiceController extends Controller
     {
         $service = Service::find($id);
         $service->fill($request->all())->update();
-        servicesCategory::where('service_id',$service->id)->update(['category_id' => $request->category_id]);
+        ServicesCategories::where('service_id',$service->id)->update(['category_id' => $request->category_id]);
         return redirect('admin/services')->with('success','Service Updated');
     }
 

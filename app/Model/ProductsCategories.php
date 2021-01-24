@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Category $category
  * @property Product $product
  */
-class ProductsCategory extends Model
+class ProductsCategories extends Model
 {
     /**
      * @var array

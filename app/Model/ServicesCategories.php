@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Category $category
  * @property Service $service
  */
-class servicesCategory extends Model
+class ServicesCategories extends Model
 {
     protected $table = 'services_category';
 

@@ -13,15 +13,15 @@ class CreateServicesCategoryTable extends Migration
      */
     public function up()
     {
-        Schema::create('services_category', function (Blueprint $table) {
+        Schema::create('services_categories', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('service_id');
             $table->unsignedBigInteger('category_id');
             $table->timestamps();
         });
-        Schema::table('services_category', function (Blueprint $table){
+        Schema::table('services_categories', function (Blueprint $table) {
             $table->foreign('service_id')->references('id')->on('services')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('category_id')->references('id')->on('category')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade')->onUpdate('cascade');
         });
     }
     /**

@@ -22,7 +22,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $updated_at
  * @property User $user
  * @property Rating[] $ratings
- * @property servicesCategory[] $servicesCategories
+ * @property ServicesCategories[] $servicesCategories
  */
 class Service extends Model
 {
@@ -59,6 +59,6 @@ class Service extends Model
      */
     public function servicesCategories()
     {
-        return $this->hasMany('App\Model\servicesCategory');
+        return $this->hasMany('App\Model\ServicesCategories');
     }
 }

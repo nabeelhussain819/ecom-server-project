@@ -12,12 +12,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property boolean $other
  * @property string $created_at
  * @property string $updated_at
- * @property ProductsCategory[] $productsCategories
- * @property servicesCategory[] $servicesCategories
+ * @property ProductsCategories[] $productsCategories
+ * @property ServicesCategories[] $servicesCategories
  */
 class Category extends Model
 {
-    protected $table = 'category';
     /**
      * The "type" of the auto-incrementing ID.
      *
@@ -35,7 +34,7 @@ class Category extends Model
      */
     public function productsCategories()
     {
-        return $this->hasMany('App\Model\ProductsCategory');
+        return $this->hasMany('App\Model\ProductsCategories');
     }
 
     /**
@@ -43,6 +42,6 @@ class Category extends Model
      */
     public function servicesCategories()
     {
-        return $this->hasMany('App\Model\servicesCategory');
+        return $this->hasMany('App\Model\ServicesCategories');
     }
 }
