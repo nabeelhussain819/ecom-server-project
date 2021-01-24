@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Model\Category;
-use App\Model\Service;
-use App\Model\ServicesCategories;
+use App\Models\Category;
+use App\Models\Service;
+use App\Models\ServicesCategories;
 use Illuminate\Http\Request;
 
 class ServiceController extends Controller
