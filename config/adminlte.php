@@ -273,6 +273,17 @@ return [
             'url' => 'admin/in-active-services',
             'icon' => 'fa fa-times'
         ],
+        ['header' => 'Attributes'],
+        [
+            'text' => 'Attributes',
+            'url' => 'admin/attribute',
+            'icon' => 'fa fa-bars'
+        ],
+        [
+            'text' => 'Unit Type',
+            'url' => 'admin/unit-type',
+            'icon' => 'fa fa-bars'
+        ],
         ['header' => 'account_settings'],
         [
             'text' => 'profile',

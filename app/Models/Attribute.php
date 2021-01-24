@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Core\Base;
-
+use App\Helpers\StringHelper;
 
 /**
  * App\Models\Attribute
@@ -40,6 +40,11 @@ class Attribute extends Base
     public function attributesValues()
     {
         return $this->hasMany('App\AttributesValue');
+    }
+
+    public function setNameAttribute($name)
+    {
+        $this->attributes['name'] = StringHelper::trimLower($name);
     }
 
     /**
