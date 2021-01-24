@@ -16,7 +16,7 @@ class ProductController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {  dd("asd");
+    {
         return view('products.index',[
             'products' => ProductsCategories::with('products')
                 ->whereHas('products', function ($query) {
@@ -27,7 +27,6 @@ class ProductController extends Controller
 
     public function inActive()
     {
-        dd("asd");
         $inActiveProduct = ProductsCategories::with('products')
             ->whereHas('products', function ($query) {
             $query->where('active',0);
@@ -47,6 +46,7 @@ class ProductController extends Controller
 
     public function search(Request $request)
     {
+       
         $search = $request->get('search');
         $products = ProductsCategories::with('products')
             ->whereHas('products', function ($query) use ($search) {
@@ -103,7 +103,7 @@ class ProductController extends Controller
     public function edit($id)
     {
         return view('products.edit',[
-            'product'=>Product::with('productsCategories')->findOrFail($id),
+            'product'=>Product::with('categories')->findOrFail($id),
             'category' => Category::where('active', 1)->get()
         ]);
     }
