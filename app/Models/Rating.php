@@ -49,7 +49,7 @@ class Rating extends Model
      */
     public function user()
     {
-        return $this->belongsTo('App\Model\User');
+        return $this->belongsTo('App\Models\User');
     }
 
     /**
@@ -57,7 +57,7 @@ class Rating extends Model
      */
     public function product()
     {
-        return $this->belongsTo('App\Model\Product');
+        return $this->belongsTo('App\Models\Product');
     }
 
     /**
@@ -65,7 +65,7 @@ class Rating extends Model
      */
     public function service()
     {
-        return $this->belongsTo('App\Model\Service');
+        return $this->belongsTo('App\Models\Service');
     }
 
     /**
@@ -73,6 +73,6 @@ class Rating extends Model
      */
     public function vendors()
     {
-        return $this->hasMany('App\Model\Vendor');
+        return $this->hasMany('App\Models\Vendor');
     }
 }

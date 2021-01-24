@@ -64,7 +64,7 @@ class Service extends Model
      */
     public function user()
     {
-        return $this->belongsTo('App\Model\User');
+        return $this->belongsTo('App\Models\User');
     }
 
     /**
@@ -72,7 +72,7 @@ class Service extends Model
      */
     public function ratings()
     {
-        return $this->hasMany('App\Model\Rating');
+        return $this->hasMany('App\Models\Rating');
     }
 
     /**
@@ -80,6 +80,6 @@ class Service extends Model
      */
     public function servicesCategories()
     {
-        return $this->hasMany('App\Model\ServicesCategories');
+        return $this->hasMany('App\Models\ServicesCategories');
     }
 }

@@ -39,7 +39,7 @@ class Vendor extends Model
      */
     public function rating()
     {
-        return $this->belongsTo('App\Model\Rating');
+        return $this->belongsTo('App\Models\Rating');
     }
 
     /**
@@ -47,6 +47,6 @@ class Vendor extends Model
      */
     public function user()
     {
-        return $this->belongsTo('App\Model\User');
+        return $this->belongsTo('App\Models\User');
     }
 }

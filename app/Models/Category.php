@@ -50,7 +50,7 @@ class Category extends Model
      */
     public function productsCategories()
     {
-        return $this->hasMany('App\Model\ProductsCategories');
+        return $this->hasMany('App\Models\ProductsCategories');
     }
 
     /**
@@ -58,6 +58,6 @@ class Category extends Model
      */
     public function servicesCategories()
     {
-        return $this->hasMany('App\Model\ServicesCategories');
+        return $this->hasMany('App\Models\ServicesCategories');
     }
 }

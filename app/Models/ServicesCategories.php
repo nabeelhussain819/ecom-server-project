@@ -40,7 +40,7 @@ class ServicesCategories extends Model
      */
     public function category()
     {
-        return $this->belongsTo('App\Model\Category');
+        return $this->belongsTo('App\Models\Category');
     }
 
     /**
@@ -48,6 +48,6 @@ class ServicesCategories extends Model
      */
     public function service()
     {
-        return $this->belongsTo('App\Model\Service');
+        return $this->belongsTo('App\Models\Service');
     }
 }

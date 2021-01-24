@@ -53,7 +53,7 @@ class Comment extends Model
      */
     public function user()
     {
-        return $this->belongsTo('App\Model\User');
+        return $this->belongsTo('App\Models\User');
     }
 
     /**
@@ -61,6 +61,6 @@ class Comment extends Model
      */
     public function commentsLikes()
     {
-        return $this->hasMany('App\Model\CommentsLike');
+        return $this->hasMany('App\Models\CommentsLike');
     }
 }

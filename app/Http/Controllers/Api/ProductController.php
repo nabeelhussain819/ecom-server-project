@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Model\Product;
-use App\Model\ProductsCategories;
+use App\Models\Product;
+use App\Models\ProductsCategories;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
