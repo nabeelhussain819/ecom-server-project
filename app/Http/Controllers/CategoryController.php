@@ -41,7 +41,7 @@ class CategoryController extends Controller
     {
         $search = $request->get('search');
         return view('category.index',['category' =>
-            Category::where('active', 1)
+            Category::where('active', true)
                 ->where('name','like','%' . $search . '%')
                 ->paginate(10)]);
     }

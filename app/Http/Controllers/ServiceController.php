@@ -19,7 +19,7 @@ class ServiceController extends Controller
         return view('services.index',['services' =>
             ServicesCategories::with('service')
                 ->whereHas('service',function ($query){
-                    $query->where('active',1);
+                    $query->where('active',true);
                 })->orderBy('created_at','ASC')->paginate(10)]);
     }
 
@@ -28,7 +28,7 @@ class ServiceController extends Controller
         return view('services.in-active',['services' =>
             ServicesCategories::with('service')
                 ->whereHas('service',function ($query){
-                    $query->where('active',0);
+                    $query->where('active',false);
                 })->orderBy('created_at','ASC')->paginate(10)]);
     }
 
@@ -46,7 +46,7 @@ class ServiceController extends Controller
     {
         $search = $request->get('search');
         $services = ServicesCategories::with('service')->whereHas('service', function ($query) use ($search){
-            $query->where('active',1)->where('name','like','%' . $search . '%');
+            $query->where('active',true)->where('name','like','%' . $search . '%');
         })->paginate(10);
         return view('services.index',['services' => $services]);
     }
@@ -54,7 +54,7 @@ class ServiceController extends Controller
     {
         $search = $request->get('search');
         $services = ServicesCategories::with('service')->whereHas('service', function ($query) use ($search){
-            $query->where('active',0)->where('name','like','%' . $search . '%');
+            $query->where('active',false)->where('name','like','%' . $search . '%');
         })->paginate(10);
         return view('services.in-active',['services' => $services]);
     }
