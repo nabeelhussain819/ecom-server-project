@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\StringHelper;
 use App\Http\Requests\ProductRequest;
 use App\Models\Category;
 use App\Models\Product;
@@ -17,11 +18,11 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return view('products.index',[
+        return view('products.index', [
             'products' => ProductsCategories::with('products')
                 ->whereHas('products', function ($query) {
-                $query->where('active',true);
-            })->orderBy('created_at','ASC')->paginate(10)
+                    $query->where('active', true);
+                })->orderBy('created_at', 'ASC')->paginate(10)
         ]);
     }
 
@@ -29,9 +30,9 @@ class ProductController extends Controller
     {
         $inActiveProduct = ProductsCategories::with('products')
             ->whereHas('products', function ($query) {
-            $query->where('active',false);
-        })->orderBy('created_at','ASC')->paginate(10);
-        return view('products.in-active',['products' => $inActiveProduct]);
+                $query->where('active', false);
+            })->orderBy('created_at', 'ASC')->paginate(10);
+        return view('products.in-active', ['products' => $inActiveProduct]);
     }
 
     /**
@@ -41,7 +42,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('products.create', ['categories' => Category::where('active', 1)->get()]);
+        return view('products.create', ['categories' => Category::where('active', true)->get()]);
     }
 
     public function search(Request $request)
@@ -50,25 +51,25 @@ class ProductController extends Controller
         $search = $request->get('search');
         $products = ProductsCategories::with('products')
             ->whereHas('products', function ($query) use ($search) {
-            $query->where('active',true)->where('name','like','%' . $search . '%');
-        })->paginate(10);
-        return view('products.index',['products' => $products]);
+                $query->where('active', true)->where('name', 'like', '%' . $search . '%');
+            })->paginate(10);
+        return view('products.index', ['products' => $products]);
     }
+
     public function searchInActive(Request $request)
     {
         $search = $request->get('search');
         $products = ProductsCategories::with('products')
             ->whereHas('products', function ($query) use ($search) {
-            $query->where('active',false)->where('name','like','%' . $search . '%');
-        })->paginate(10);
-
-        return view('products.in-active',['products' => $products]);
+                $query->where('active', false)->where('name', 'like', '%' . $search . '%');
+            })->paginate(10);
+        return view('products.in-active', ['products' => $products]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(ProductRequest $request)
@@ -81,13 +82,13 @@ class ProductController extends Controller
         $productCat->product_id = $product->id;
         $productCat->category_id = $request->category_id;
         $productCat->save();
-        return redirect('admin/products')->with('success','Product Added');
+        return redirect('admin/products')->with('success', 'Product Added');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -97,13 +98,13 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        return view('products.edit',[
-            'product'=>Product::with('categories')->findOrFail($id),
+        return view('products.edit', [
+            'product' => Product::with('categories')->findOrFail($id),
             'category' => Category::where('active', true)->get()
         ]);
     }
@@ -111,29 +112,38 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ProductRequest $request, $id)
+    public function update(Request $request, Product $product)
     {
-        $product = Product::find($id);
-        $product->fill($request->all())->update();
-        ProductsCategories::where('product_id', $product->id)->update(['category_id' => $request->category_id]);
-        return redirect('admin/products')->with('success','Product Updated');
-
+        if($request->get('activateOne') == "activateOnlyOne"){
+            $product->update(['active' => $request->get('checkbox')]);
+            return back()->with('success', "{$product->name} Status Changed Successfully.");
+        }
+        else{
+            $product->fill($request->all())->update();
+            ProductsCategories::where('product_id', $product->id)->update(['category_id' => $request->category_id]);
+            return redirect('admin/products')->with('success', 'Product Updated');
+        }
     }
 
+    public function activateAll()
+    {
+        Product::query()->update(['active' => 1]);
+        return back()->with('success','All Products Activated');
+    }
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         $product = Product::findOrFail($id);
         $product->delete();
-        return back()->with('success','Product Deleted');
+        return back()->with('success', 'Product Deleted');
     }
 }

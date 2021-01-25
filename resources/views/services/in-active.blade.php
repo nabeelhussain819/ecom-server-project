@@ -10,6 +10,12 @@
         <div class="row">
             <div class="col-md-8">
                 <a href="{{route('services.create')}}" class="btn btn-primary">Add New</a>
+                <form id="form-submit" role="form" action="{{route('services.active-all')}}" method="POST">
+                    {{ csrf_field()}}
+                    <button class="btn btn-success"><i class="fa fa-key"></i> Activate
+                        All Services
+                    </button>
+                </form>
             </div>
             <div class="col-md-4 text-right">
                 <form action="{{route('services.in-active.search')}}" method="GET">
@@ -27,11 +33,12 @@
             <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">Name</th>
+                <th scope="col">Service Name</th>
                 <th scope="col">Status</th>
                 <th scope="col">Price</th>
-                <th scope="col">Category</th>
-                <th scope="col">Created At</th>
+                <th scope="col">Created By</th>
+{{--                <th scope="col">Category</th>--}}
+{{--                <th scope="col">Created At</th>--}}
                 <th scope="col">Action</th>
             </tr>
             </thead>
@@ -45,21 +52,24 @@
                     <td>{{$item->service->name}}</td>
                     <td><span class="{{$item->service->active == 0 ? 'badge badge-danger' : 'badge badge-success'}}">{{$item->service->active == 0 ? 'IN-ACTIVE' : 'ACTIVE' }}</span></td>
                     <td>$ {{$item->service->price}}</td>
-                    <td>{{$item->category->name}}</td>
-                    <td>{{$item->created_at}}</td>
+                    <td><a href="{{route('customer.services',$item->service->user->id)}}">{{$item->service->user->name}}</a></td>
+                    {{--                    <td>{{$item->category->name}}</td>--}}
+{{--                    <td>{{$item->created_at}}</td>--}}
                     <td>
-                        <form class="d-inline"
-                              action="{{route('.active',$item->id)}}"
-                              method="POST">
-                            <input type="hidden" name="active"  value="true">
-                            @csrf
-                            <button type="submit" class="btn btn-success">Active</button>
-                        </form>
                         <a href="{{route('services.edit', $item->service->id)}}" class="btn btn-info"><i class="fa fa-pen"></i></a>
-                        <form action="{{ route('services.destroy', $item->service->id) }}" method="POST" style="display: unset">
+                        <form id="form-submit" action="{{ route('services.destroy', $item->service->id) }}" method="POST">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             <button class="btn btn-danger" type="submit"><i class="fa fa-trash" style="color: white"></i></button>
+                        </form>
+                        <form action="{{route('services.update',$item->service->id)}}"
+                              method="POST" id="form-submit">
+                            {{ method_field('PATCH') }}
+                            {{ csrf_field()}}
+                            <input type="hidden" name="activateOne" value="activateOnlyOne">
+                            <input type="hidden" name="active" value="true">
+                            @csrf
+                            <button type="submit" class="btn btn-success"><i class="fa fa-key"></i></button>
                         </form>
                     </td>
                 </tr>
@@ -69,3 +79,9 @@
         {{$services->links()}}
     </div>
 @endsection
+{{--public css was not rendering properly this is the reason why i put this here--}}
+<style>
+    #form-submit {
+        display: unset;
+    }
+</style>

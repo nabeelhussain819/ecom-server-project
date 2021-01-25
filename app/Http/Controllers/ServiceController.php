@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\StringHelper;
 use App\Models\Category;
 use App\Models\Service;
 use App\Models\ServicesCategories;
@@ -16,20 +17,20 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        return view('services.index',['services' =>
+        return view('services.index', ['services' =>
             ServicesCategories::with('service')
-                ->whereHas('service',function ($query){
-                    $query->where('active',true);
-                })->orderBy('created_at','ASC')->paginate(10)]);
+                ->whereHas('service', function ($query) {
+                    $query->where('active', true);
+                })->paginate(10)]);
     }
 
     public function inActive()
     {
-        return view('services.in-active',['services' =>
+        return view('services.in-active', ['services' =>
             ServicesCategories::with('service')
-                ->whereHas('service',function ($query){
-                    $query->where('active',false);
-                })->orderBy('created_at','ASC')->paginate(10)]);
+                ->whereHas('service', function ($query) {
+                    $query->where('active', false);
+                })->orderBy('created_at', 'ASC')->paginate(10)]);
     }
 
     /**
@@ -39,29 +40,31 @@ class ServiceController extends Controller
      */
     public function create()
     {
-        return view('services.create',['category' => Category::where('active',1)->get()]);
+        return view('services.create', ['category' => Category::where('active', 1)->get()]);
     }
 
     public function search(Request $request)
     {
         $search = $request->get('search');
-        $services = ServicesCategories::with('service')->whereHas('service', function ($query) use ($search){
-            $query->where('active',true)->where('name','like','%' . $search . '%');
+        $services = ServicesCategories::with('service')->whereHas('service', function ($query) use ($search) {
+            $query->where('active', true)->where('name', 'like', '%' . $search . '%');
         })->paginate(10);
-        return view('services.index',['services' => $services]);
+        return view('services.index', ['services' => $services]);
     }
+
     public function searchInActive(Request $request)
     {
         $search = $request->get('search');
-        $services = ServicesCategories::with('service')->whereHas('service', function ($query) use ($search){
-            $query->where('active',false)->where('name','like','%' . $search . '%');
+        $services = ServicesCategories::with('service')->whereHas('service', function ($query) use ($search) {
+            $query->where('active', false)->where('name', 'like', '%' . $search . '%');
         })->paginate(10);
-        return view('services.in-active',['services' => $services]);
+        return view('services.in-active', ['services' => $services]);
     }
+
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -74,13 +77,13 @@ class ServiceController extends Controller
         $serviceCat->service_id = $service->id;
         $serviceCat->category_id = $request->category_id;
         $serviceCat->save();
-        return redirect('admin/services')->with('success','Service Added');
+        return redirect('admin/services')->with('success', 'Service Added');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -90,42 +93,52 @@ class ServiceController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        return view('services.edit',[
+        return view('services.edit', [
             'service' => Service::findOrFail($id),
-            'category' => Category::where('active',1)->get()
+            'category' => Category::where('active', 1)->get()
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Service $service)
     {
-        $service = Service::find($id);
-        $service->fill($request->all())->update();
-        ServicesCategories::where('service_id',$service->id)->update(['category_id' => $request->category_id]);
-        return redirect('admin/services')->with('success','Service Updated');
+        if ($request->get('activateOne') == "activateOnlyOne") {
+            $service->update(['active' => $request->get('checkbox')]);
+            return back()->with('success', "{$service->name} Activated Successfully.");
+        } else {
+            $service->fill($request->all())->update();
+            ServicesCategories::where('service_id', $service->id)->update(['category_id' => $request->category_id]);
+            return redirect('admin/services')->with('success', 'Service Updated');
+        }
+    }
+
+    public function activateAll()
+    {
+        Service::query()->update(['active' => 1]);
+        return back()->with('success', 'All Services Activated');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         $service = Service::findOrFail($id);
         $service->delete();
-        return back()->with('success','Service Deleted');
+        return back()->with('success', 'Service Deleted');
     }
 }

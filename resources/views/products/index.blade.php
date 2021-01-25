@@ -27,9 +27,10 @@
             <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">Name</th>
+                <th scope="col">Product Name</th>
                 <th scope="col">Status</th>
                 <th scope="col">Price</th>
+                <th scope="col">Created By</th>
                 {{--<th scope="col">Category</th>--}}
                 {{--<th scope="col">Created At</th>--}}
                 <th scope="col">Action</th>
@@ -45,6 +46,7 @@
                     <td>{{$item->products->name}}</td>
                     <td><span class="{{$item->products->active == 0 ? 'badge badge-danger' : 'badge badge-success'}}">{{$item->products->active == 0 ? 'IN-ACTIVE' : 'ACTIVE' }}</span></td>
                     <td>$ {{$item->products->price}}</td>
+                    <td><a href="{{route('customer.products',$item->products->user->id)}}">{{$item->products->user->name}}</a></td>
                     {{--<td>{{$item->category->name}}</td>--}}
                     {{--<td>{{$item->created_at}}</td>--}}
                     <td>
