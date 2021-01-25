@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\StringHelper;
-use App\Model\Media;
+use App\Models\Media;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Ramsey\Uuid\Uuid;
 use Illuminate\Support\Str;
 
 class MediaController extends Controller

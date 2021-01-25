@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Model;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * App\Models\Rating
+ *
  * @property integer $id
  * @property integer $service_id
  * @property integer $product_id
@@ -15,6 +17,17 @@ use Illuminate\Database\Eloquent\Model;
  * @property Product $product
  * @property Service $service
  * @property Vendor[] $vendors
+ * @method static \Illuminate\Database\Eloquent\Builder|Rating newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Rating newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Rating query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Rating whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Rating whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Rating whereProductId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Rating whereRating($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Rating whereServiceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Rating whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Rating whereUserId($value)
+ * @mixin \Eloquent
  */
 class Rating extends Model
 {
@@ -36,7 +49,7 @@ class Rating extends Model
      */
     public function user()
     {
-        return $this->belongsTo('App\Model\User');
+        return $this->belongsTo('App\Models\User');
     }
 
     /**
@@ -44,7 +57,7 @@ class Rating extends Model
      */
     public function product()
     {
-        return $this->belongsTo('App\Model\Product');
+        return $this->belongsTo('App\Models\Product');
     }
 
     /**
@@ -52,7 +65,7 @@ class Rating extends Model
      */
     public function service()
     {
-        return $this->belongsTo('App\Model\Service');
+        return $this->belongsTo('App\Models\Service');
     }
 
     /**
@@ -60,6 +73,6 @@ class Rating extends Model
      */
     public function vendors()
     {
-        return $this->hasMany('App\Model\Vendor');
+        return $this->hasMany('App\Models\Vendor');
     }
 }

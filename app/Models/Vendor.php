@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Model;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * App\Models\Vendor
+ *
  * @property integer $id
  * @property integer $user_id
  * @property integer $rating_id
@@ -13,6 +15,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $updated_at
  * @property Rating $rating
  * @property User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|Vendor newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Vendor newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Vendor query()
+ * @mixin \Eloquent
  */
 class Vendor extends Model
 {
@@ -33,7 +39,7 @@ class Vendor extends Model
      */
     public function rating()
     {
-        return $this->belongsTo('App\Model\Rating');
+        return $this->belongsTo('App\Models\Rating');
     }
 
     /**
@@ -41,6 +47,6 @@ class Vendor extends Model
      */
     public function user()
     {
-        return $this->belongsTo('App\Model\User');
+        return $this->belongsTo('App\Models\User');
     }
 }

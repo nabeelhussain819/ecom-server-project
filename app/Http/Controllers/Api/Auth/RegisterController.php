@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\Auth;
 use App\Helpers\ArrayHelper;
 use App\Helpers\GuidHelper;
 use App\Http\Controllers\Controller;
-use App\Model\User;
+use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -66,7 +66,7 @@ class RegisterController extends Controller
      * Create a new user instance after a valid registration.
      *
      * @param  array $data
-     * @return \App\Model\User
+     * @return \App\Models\User
      */
     protected function create(array $data)
     {

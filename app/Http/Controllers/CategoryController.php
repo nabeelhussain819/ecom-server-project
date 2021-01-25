@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CategoryRequest;
-use App\Model\Category;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -16,7 +16,7 @@ class CategoryController extends Controller
     public function index()
     {
         return view('category.index',['category' =>
-            Category::where('active',true)
+            Category::where('active', true)
                 ->orderBy('created_at','ASC')
                 ->paginate(10)]);
     }
@@ -41,14 +41,14 @@ class CategoryController extends Controller
     {
         $search = $request->get('search');
         return view('category.index',['category' =>
-            Category::where('active',true)
+            Category::where('active', 1)
                 ->where('name','like','%' . $search . '%')
                 ->paginate(10)]);
     }
     public function searchInActive(Request $request)
     {
         $search = $request->get('search');
-        return view('category.in-active',['category' => Category::where('active',0)
+        return view('category.in-active', ['category' => Category::where('active', 0)
             ->where('name','like','%' . $search . '%')
             ->paginate(10)]);
     }

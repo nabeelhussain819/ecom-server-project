@@ -30,8 +30,8 @@
                 <th scope="col">Name</th>
                 <th scope="col">Status</th>
                 <th scope="col">Price</th>
-                <th scope="col">Category</th>
-                <th scope="col">Created At</th>
+                {{--<th scope="col">Category</th>--}}
+                {{--<th scope="col">Created At</th>--}}
                 <th scope="col">Action</th>
             </tr>
             </thead>
@@ -42,14 +42,14 @@
             @foreach($products as $item)
                 <tr>
                     <td>{{$count++}}</td>
-                    <td>{{$item->product->name}}</td>
-                    <td><span class="{{$item->product->active == 0 ? 'badge badge-danger' : 'badge badge-success'}}">{{$item->product->active == 0 ? 'IN-ACTIVE' : 'ACTIVE' }}</span></td>
-                    <td>$ {{$item->product->price}}</td>
-                    <td>{{$item->category->name}}</td>
-                    <td>{{$item->created_at}}</td>
+                    <td>{{$item->products->name}}</td>
+                    <td><span class="{{$item->products->active == 0 ? 'badge badge-danger' : 'badge badge-success'}}">{{$item->products->active == 0 ? 'IN-ACTIVE' : 'ACTIVE' }}</span></td>
+                    <td>$ {{$item->products->price}}</td>
+                    {{--<td>{{$item->category->name}}</td>--}}
+                    {{--<td>{{$item->created_at}}</td>--}}
                     <td>
-                        <a href="{{route('products.edit', $item->product->id)}}" class="btn btn-info"><i class="fa fa-pen"></i></a>
-                        <form action="{{ route('products.destroy', $item->product->id) }}" method="POST" style="display: unset">
+                        <a href="{{route('products.edit', $item->products->id)}}" class="btn btn-info"><i class="fa fa-pen"></i></a>
+                        <form action="{{ route('products.destroy', $item->products->id) }}" method="POST" style="display: unset">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <button class="btn btn-danger" type="submit"><i class="fa fa-trash" style="color: white"></i></button>

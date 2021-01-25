@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Traits\AppliesQueryParams;
 use App\Traits\Paginates;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -10,9 +11,9 @@ use Illuminate\Routing\Controller as BaseController;
 
 class Controller extends BaseController
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests, Paginates;
+    use AuthorizesRequests, DispatchesJobs, ValidatesRequests, AppliesQueryParams, Paginates;
 
-    public function genericResponse(bool $success, string $message = '', $statusCode = null, array ...$params)
+    public function genericResponse(bool $success, string $message = NULL, $statusCode = null, array ...$params)
     {
         $response = [
             'success' => $success,

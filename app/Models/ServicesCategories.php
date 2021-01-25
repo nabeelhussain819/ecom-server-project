@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Model;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * App\Models\ServicesCategories
+ *
  * @property integer $id
  * @property integer $service_id
  * @property integer $category_id
@@ -12,8 +14,12 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $updated_at
  * @property Category $category
  * @property Service $service
+ * @method static \Illuminate\Database\Eloquent\Builder|ServicesCategories newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ServicesCategories newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ServicesCategories query()
+ * @mixin \Eloquent
  */
-class servicesCategory extends Model
+class ServicesCategories extends Model
 {
     protected $table = 'services_category';
 
@@ -34,7 +40,7 @@ class servicesCategory extends Model
      */
     public function category()
     {
-        return $this->belongsTo('App\Model\Category');
+        return $this->belongsTo('App\Models\Category');
     }
 
     /**
@@ -42,6 +48,6 @@ class servicesCategory extends Model
      */
     public function service()
     {
-        return $this->belongsTo('App\Model\Service');
+        return $this->belongsTo('App\Models\Service');
     }
 }

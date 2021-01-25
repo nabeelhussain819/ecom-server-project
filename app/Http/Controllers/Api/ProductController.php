@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Model\Product;
-use App\Model\ProductsCategory;
+use App\Models\Product;
+use App\Models\ProductsCategories;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -15,8 +15,8 @@ class ProductController extends Controller
     public function index()
     {
         //
-        return ProductsCategory::with('product','category')
-            ->whereHas('product', function($query){
+        return ProductsCategories::with('products','category')
+            ->whereHas('products', function($query){
             $query->where('active',1);
         })->get();
     }
@@ -41,7 +41,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         //@todo MNN make it proper
-        $productCat = new ProductsCategory();
+        $productCat = new ProductsCategories();
         $product = new Product();
         $request['guid'] = \Illuminate\Support\Str::uuid();
         //temporary 1, for testing
@@ -89,7 +89,7 @@ class ProductController extends Controller
         //
        $product = Product::find($id);
        $product->fill($request->all())->update();
-       ProductsCategory::where('product_id',$product->id)->update(['category_id' => $request->category_id]);
+       ProductsCategories::where('product_id',$product->id)->update(['category_id' => $request->category_id]);
        return response()->json(['message'=> 'Product Updated Successfully']);
     }
 

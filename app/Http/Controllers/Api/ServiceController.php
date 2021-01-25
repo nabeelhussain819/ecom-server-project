@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Model\Service;
-use App\Model\servicesCategory;
+use App\Model\ServicesCategories;
 use Illuminate\Http\Request;
 
 class ServiceController extends Controller
@@ -17,7 +17,7 @@ class ServiceController extends Controller
     public function index()
     {
         //
-        return servicesCategory::with('service','category')->whereHas('service',function($query){
+        return ServicesCategories::with('service','category')->whereHas('service',function($query){
            $query->where('active',1);
         })->get();
     }
@@ -41,7 +41,7 @@ class ServiceController extends Controller
     public function store(Request $request)
     {
         //
-        $serviceCat = new servicesCategory();
+        $serviceCat = new ServicesCategories();
         $service = new Service();
         $service->guid = \Illuminate\Support\Str::uuid();
         //temporary 1
@@ -89,7 +89,7 @@ class ServiceController extends Controller
         //
         $service = Service::find($id);
         $service->fill($request->all())->update();
-        servicesCategory::where('service_id',$service->id)->update(['category_id' => $request->category_id]);
+        ServicesCategories::where('service_id',$service->id)->update(['category_id' => $request->category_id]);
         return response()->json(['message','Service Updated']);
     }
 

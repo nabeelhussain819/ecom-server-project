@@ -9,10 +9,10 @@
         @endif
         <div class="row">
             <div class="col-md-8">
-                <a href="{{route('products.create')}}" class="btn btn-primary">Add New</a>
+                <a href="{{route('attribute.create')}}" class="btn btn-primary">Add New</a>
             </div>
             <div class="col-md-4 text-right">
-                <form action="{{route('products.inactive.search')}}" method="GET">
+                <form action="{{route('category.search')}}" method="GET">
                     <div class="input-group">
                         <input type="search" name="search" class="form-control" placeholder="Search"/>
                         <span class="input-group-btn">
@@ -28,38 +28,40 @@
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Name</th>
-                <th scope="col">Status</th>
-                <th scope="col">Price</th>
-                {{--<th scope="col">Category</th>--}}
-
+                <th scope="col">status</th>
                 <th scope="col">Action</th>
             </tr>
             </thead>
             <tbody>
             @php
                 $count = 1;
+
             @endphp
 
-            @foreach($products as $item)
+            @foreach($unitTypes as $unitType )
                 <tr>
                     <td>{{$count++}}</td>
-                    <td>{{$item->products->name}}</td>
-                    <td><span class="{{$item->products->active == 0 ? 'badge badge-danger' : 'badge badge-success'}}">{{$item->products->active == 0 ? 'IN-ACTIVE' : 'ACTIVE' }}</span></td>
-                    <td>$ {{$item->products->price}}</td>
-                    {{--<td>{{$item->category->name}}</td>--}}
-                    {{--<td>{{$item->created_at}}</td>--}}
+                    <td>{{$unitType->name}}</td>
+
                     <td>
-                        <a href="{{route('products.edit', $item->products->id)}}" class="btn btn-info"><i class="fa fa-pen"></i></a>
-                        <form action="{{ route('products.destroy', $item->products->id) }}" method="POST" style="display: unset">
+                        <span class="{{$unitType->active == 0 ? 'badge badge-danger' : 'badge badge-success'}}">{{$unitType->active == 0 ? 'IN-ACTIVE' : 'ACTIVE' }}</span>
+                    </td>
+
+                    <td>
+                        <a href="{{route('category.edit', $unitType->id)}}" class="btn btn-info"><i
+                                    class="fa fa-pen"></i></a>
+                        <form action="{{ route('category.destroy', $unitType->id) }}" method="POST"
+                              style="display: unset">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                            <button class="btn btn-danger" type="submit"><i class="fa fa-trash" style="color: white"></i></button>
+                            <button class="btn btn-danger" type="submit"><i class="fa fa-trash"
+                                                                            style="color: white"></i></button>
                         </form>
                     </td>
                 </tr>
             @endforeach
             </tbody>
         </table>
-        {{$products->links()}}
+        {{$unitTypes->links()}}
     </div>
 @endsection

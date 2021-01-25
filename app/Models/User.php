@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Model;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
@@ -10,6 +10,8 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 use Tymon\JWTAuth\Contracts\Providers\JWT;
 
 /**
+ * App\Models\User
+ *
  * @property integer $id
  * @property string $name
  * @property string $email
@@ -25,6 +27,25 @@ use Tymon\JWTAuth\Contracts\Providers\JWT;
  * @property Product[] $products
  * @property Service[] $services
  * @property Vendor[] $vendors
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Passport\Client[] $clients
+ * @property-read int|null $clients_count
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
+ * @property-read int|null $notifications_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Passport\Token[] $tokens
+ * @property-read int|null $tokens_count
+ * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|User query()
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereEmailVerifiedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereGuid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class User extends Authenticatable implements JWTSubject
 {
@@ -48,7 +69,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function comments()
     {
-        return $this->hasMany('App\Model\Comment');
+        return $this->hasMany('App\Models\Comment');
     }
 
     /**
@@ -56,7 +77,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function commentsLikes()
     {
-        return $this->hasMany('App\Model\CommentsLike');
+        return $this->hasMany('App\Models\CommentsLike');
     }
 
     /**
@@ -64,7 +85,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function media()
     {
-        return $this->hasMany('App\Model\Medium');
+        return $this->hasMany('App\Models\Medium');
     }
 
     /**
@@ -72,7 +93,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function products()
     {
-        return $this->hasMany('App\Model\Product');
+        return $this->hasMany('App\Models\Product');
     }
 
     /**
@@ -80,7 +101,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function services()
     {
-        return $this->hasMany('App\Model\Service');
+        return $this->hasMany('App\Models\Service');
     }
 
     /**
@@ -88,7 +109,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function vendors()
     {
-        return $this->hasMany('App\Model\Vendor');
+        return $this->hasMany('App\Models\Vendor');
     }
 
     public function getJWTIdentifier()

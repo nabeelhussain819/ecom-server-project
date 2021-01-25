@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductRequest;
-use App\Model\Category;
-use App\Model\Product;
-use App\Model\ProductsCategory;
+use App\Models\Category;
+use App\Models\Product;
+use App\Models\ProductsCategories;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -18,16 +18,18 @@ class ProductController extends Controller
     public function index()
     {
         return view('products.index',[
-            'products'=> ProductsCategory::with('product')->whereHas('product',function ($query){
-                $query->where('active',true);
+            'products' => ProductsCategories::with('products')
+                ->whereHas('products', function ($query) {
+                $query->where('active',1);
             })->orderBy('created_at','ASC')->paginate(10)
         ]);
     }
 
     public function inActive()
     {
-        $inActiveProduct= ProductsCategory::with('product')->whereHas('product',function ($query){
-            $query->where('active',false);
+        $inActiveProduct = ProductsCategories::with('products')
+            ->whereHas('products', function ($query) {
+            $query->where('active',0);
         })->orderBy('created_at','ASC')->paginate(10);
         return view('products.in-active',['products' => $inActiveProduct]);
     }
@@ -39,23 +41,27 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('products.create',['category' => Category::where('active',1)->get()]);
+        return view('products.create', ['categories' => Category::where('active', 1)->get()]);
     }
 
     public function search(Request $request)
     {
+       
         $search = $request->get('search');
-        $products = ProductsCategory::with('product')->whereHas('product', function ($query) use ($search){
-            $query->where('active',true)->where('name','like','%' . $search . '%');
+        $products = ProductsCategories::with('products')
+            ->whereHas('products', function ($query) use ($search) {
+            $query->where('active',1)->where('name','like','%' . $search . '%');
         })->paginate(10);
         return view('products.index',['products' => $products]);
     }
     public function searchInActive(Request $request)
     {
         $search = $request->get('search');
-        $products = ProductsCategory::with('product')->whereHas('product', function ($query) use ($search){
-            $query->where('active',false)->where('name','like','%' . $search . '%');
+        $products = ProductsCategories::with('products')
+            ->whereHas('products', function ($query) use ($search) {
+            $query->where('active',0)->where('name','like','%' . $search . '%');
         })->paginate(10);
+
         return view('products.in-active',['products' => $products]);
     }
 
@@ -67,7 +73,7 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request)
     {
-        $productCat = new ProductsCategory();
+        $productCat = new ProductsCategories();
         $product = new Product();
         $product->guid = \Illuminate\Support\Str::uuid();
         $request['user_id'] = auth()->user()->getAuthIdentifier();
@@ -97,8 +103,8 @@ class ProductController extends Controller
     public function edit($id)
     {
         return view('products.edit',[
-            'product'=>Product::with('productsCategories')->findOrFail($id),
-            'category' => Category::where('active',true)->get()
+            'product'=>Product::with('categories')->findOrFail($id),
+            'category' => Category::where('active', 1)->get()
         ]);
     }
 
@@ -113,7 +119,7 @@ class ProductController extends Controller
     {
         $product = Product::find($id);
         $product->fill($request->all())->update();
-        ProductsCategory::where('product_id',$product->id)->update(['category_id' => $request->category_id]);
+        ProductsCategories::where('product_id', $product->id)->update(['category_id' => $request->category_id]);
         return redirect('admin/products')->with('success','Product Updated');
 
     }

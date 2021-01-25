@@ -1,20 +1,23 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\Category;
+use App\Models\Attribute;
 use Illuminate\Http\Request;
 
-class CategoryController extends Controller
+class AttributeController extends Controller
 {
     /**
-     * @return \Illuminate\Support\Collection
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
-        return Category::select(['id','name','description'])->get();
+        return view('attributes.index', ['attributes' =>
+            Attribute::where($this->applyFilters($request))
+                ->orderBy('created_at', 'ASC')
+                ->paginate($this->getPageSize())]);
     }
 
     /**
@@ -24,29 +27,31 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('attributes.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        //
-        $category = new Category();
-        $category->fill($request->all())->save();
-        return response()->json([
-            'message' => 'Category added'
-        ]);
+        $attribute = new Attribute();
+
+        $attribute = $attribute->fill(['name' => $request->get('name')]);
+
+        $attribute->save();
+
+        return redirect()->back()
+            ->with('success', 'Attribute Added');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -57,7 +62,7 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -68,8 +73,8 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -80,7 +85,7 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
