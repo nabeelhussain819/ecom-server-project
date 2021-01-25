@@ -37,8 +37,8 @@
                 <th scope="col">Status</th>
                 <th scope="col">Price</th>
                 <th scope="col">Created By</th>
-{{--                <th scope="col">Category</th>--}}
-{{--                <th scope="col">Created At</th>--}}
+                {{--                <th scope="col">Category</th>--}}
+                {{--                <th scope="col">Created At</th>--}}
                 <th scope="col">Action</th>
             </tr>
             </thead>
@@ -50,17 +50,24 @@
                 <tr>
                     <td>{{$count++}}</td>
                     <td>{{$item->service->name}}</td>
-                    <td><span class="{{$item->service->active == 0 ? 'badge badge-danger' : 'badge badge-success'}}">{{$item->service->active == 0 ? 'IN-ACTIVE' : 'ACTIVE' }}</span></td>
+                    <td><span
+                            class="{{$item->service->active == 0 ? 'badge badge-danger' : 'badge badge-success'}}">{{$item->service->active == 0 ? 'IN-ACTIVE' : 'ACTIVE' }}</span>
+                    </td>
                     <td>$ {{$item->service->price}}</td>
-                    <td><a href="{{route('customer.services',$item->service->user->id)}}">{{$item->service->user->name}}</a></td>
-                    {{--                    <td>{{$item->category->name}}</td>--}}
-{{--                    <td>{{$item->created_at}}</td>--}}
                     <td>
-                        <a href="{{route('services.edit', $item->service->id)}}" class="btn btn-info"><i class="fa fa-pen"></i></a>
-                        <form id="form-submit" action="{{ route('services.destroy', $item->service->id) }}" method="POST">
+                        <a href="{{route('customer.services',$item->service->user->id)}}">{{$item->service->user->name}}</a>
+                    </td>
+                    {{--                    <td>{{$item->category->name}}</td>--}}
+                    {{--                    <td>{{$item->created_at}}</td>--}}
+                    <td>
+                        <a href="{{route('services.edit', $item->service->id)}}" class="btn btn-info"><i
+                                class="fa fa-pen"></i></a>
+                        <form id="form-submit" action="{{ route('services.destroy', $item->service->id) }}"
+                              method="POST">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                            <button class="btn btn-danger" type="submit"><i class="fa fa-trash" style="color: white"></i></button>
+                            <button class="btn btn-danger" type="submit"><i class="fa fa-trash"
+                                                                            style="color: white"></i></button>
                         </form>
                         <form action="{{route('services.update',$item->service->id)}}"
                               method="POST" id="form-submit">

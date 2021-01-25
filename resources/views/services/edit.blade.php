@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
 
-    @if(session('success'))
+        @if(session('success'))
             <div class="alert alert-success" role="alert">
                 {{ session('success') }}
             </div>
@@ -13,11 +13,13 @@
             @csrf
             <div class="form-group">
                 <label>Name</label>
-                <input type="text" name="name" class="form-control"placeholder="Enter Service Name" value="{{$service->name}}" >
+                <input type="text" name="name" class="form-control" placeholder="Enter Service Name"
+                       value="{{$service->name}}">
             </div>
             <div class="form-group">
                 <label>Price</label>
-                <input type="number" step="0.00" min="0" name="price" class="form-control"placeholder="Enter Service Price $" value="{{$service->price}}" required>
+                <input type="number" step="0.00" min="0" name="price" class="form-control"
+                       placeholder="Enter Service Price $" value="{{$service->price}}" required>
             </div>
             <div class="form-group">
                 <label>Category</label>
@@ -30,14 +32,15 @@
             <div class="form-group">
                 <label>Status</label>
                 <select name="active" class="form-control">
-                    <option value="" selected >Please select...</option>
+                    <option value="" selected>Please select...</option>
                     <option value="1" {{$service->active == 1 ? 'selected' : ''}}>Active</option>
                     <option value="0" {{$service->active == 0 ? 'selected': ''}}>In-Active</option>
                 </select>
             </div>
             <div class="form-group">
                 <label>Description</label>
-                <textarea type="text" rows="5" cols="5" class="form-control" name="description" placeholder="Enter Service Description" >{{$service->description}}</textarea>
+                <textarea type="text" rows="5" cols="5" class="form-control" name="description"
+                          placeholder="Enter Service Description">{{$service->description}}</textarea>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>

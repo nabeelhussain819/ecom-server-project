@@ -118,11 +118,10 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        if($request->get('activateOne') == "activateOnlyOne"){
+        if ($request->get('activateOne') == "activateOnlyOne") {
             $product->update(['active' => $request->get('checkbox')]);
             return back()->with('success', "{$product->name} Status Changed Successfully.");
-        }
-        else{
+        } else {
             $product->fill($request->all())->update();
             ProductsCategories::where('product_id', $product->id)->update(['category_id' => $request->category_id]);
             return redirect('admin/products')->with('success', 'Product Updated');
@@ -132,8 +131,9 @@ class ProductController extends Controller
     public function activateAll()
     {
         Product::query()->update(['active' => 1]);
-        return back()->with('success','All Products Activated');
+        return back()->with('success', 'All Products Activated');
     }
+
     /**
      * Remove the specified resource from storage.
      *

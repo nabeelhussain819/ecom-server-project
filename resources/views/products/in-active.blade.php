@@ -51,10 +51,13 @@
                 <tr>
                     <td>{{$count++}}</td>
                     <td>{{$item->products->name}}</td>
-                    <td><span class="{{$item->products->active == 0 ? 'badge badge-danger' : 'badge badge-success'}}">{{$item->products->active == 0 ? 'IN-ACTIVE' : 'ACTIVE' }}</span>
+                    <td><span
+                            class="{{$item->products->active == 0 ? 'badge badge-danger' : 'badge badge-success'}}">{{$item->products->active == 0 ? 'IN-ACTIVE' : 'ACTIVE' }}</span>
                     </td>
                     <td>$ {{$item->products->price}}</td>
-                    <td><a href="{{route('customer.products',$item->products->user->id)}}">{{$item->products->user->name}}</a></td>
+                    <td>
+                        <a href="{{route('customer.products',$item->products->user->id)}}">{{$item->products->user->name}}</a>
+                    </td>
                     {{--<td>{{$item->category->name}}</td>--}}
                     {{--<td>{{$item->created_at}}</td>--}}
                     <td>

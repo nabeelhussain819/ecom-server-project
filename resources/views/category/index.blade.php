@@ -7,21 +7,21 @@
                 {{ session('success') }}
             </div>
         @endif
-            <div class="row">
-                <div class="col-md-8">
-                    <a href="{{route('category.create')}}" class="btn btn-primary">Add New</a>
-                </div>
-                <div class="col-md-4 text-right">
-                    <form action="{{route('category.search')}}" method="GET">
-                        <div class="input-group">
-                            <input type="search" name="search" class="form-control" placeholder="Search"/>
-                            <span class="input-group-btn">
+        <div class="row">
+            <div class="col-md-8">
+                <a href="{{route('category.create')}}" class="btn btn-primary">Add New</a>
+            </div>
+            <div class="col-md-4 text-right">
+                <form action="{{route('category.search')}}" method="GET">
+                    <div class="input-group">
+                        <input type="search" name="search" class="form-control" placeholder="Search"/>
+                        <span class="input-group-btn">
                             <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
                         </span>
-                        </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
+        </div>
         <table class="table">
             <br>
             <thead>
@@ -44,18 +44,22 @@
                     <td>{{$count++}}</td>
                     <td>{{$item->name}}</td>
                     <td>{{$item->description}}</td>
-                    <td><span class="{{$item->active == 0 ? 'badge badge-danger' : 'badge badge-success'}}">{{$item->active == 0 ? 'IN-ACTIVE' : 'ACTIVE' }}</span></td>
+                    <td><span
+                            class="{{$item->active == 0 ? 'badge badge-danger' : 'badge badge-success'}}">{{$item->active == 0 ? 'IN-ACTIVE' : 'ACTIVE' }}</span>
+                    </td>
                     <td><span class="badge badge-primary">{{$item->type}}</span></td>
                     <td>{{$item->created_at}}</td>
                     <td>
-                        <a href="{{route('category.edit', $item->id)}}" class="btn btn-info"><i class="fa fa-pen"></i></a>
+                        <a href="{{route('category.edit', $item->id)}}" class="btn btn-info"><i
+                                class="fa fa-pen"></i></a>
                         <form action="{{ route('category.destroy', $item->id) }}" method="POST" style="display: unset">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                        <button class="btn btn-danger" type="submit"><i class="fa fa-trash" style="color: white"></i></button>
+                            <button class="btn btn-danger" type="submit"><i class="fa fa-trash"
+                                                                            style="color: white"></i></button>
                         </form>
                     </td>
-                  </tr>
+                </tr>
             @endforeach
             </tbody>
         </table>
