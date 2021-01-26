@@ -115,7 +115,7 @@ class ServiceController extends Controller
     {
         if ($request->get('activateOne') == "activateOnlyOne") {
             $service->update(['active' => $request->get('checkbox')]);
-            return back()->with('success', "{$service->name} Activated Successfully.");
+            return back()->with('success', "{$service->name} Status Changed Successfully.");
         } else {
             $service->fill($request->all())->update();
             ServicesCategories::where('service_id', $service->id)->update(['category_id' => $request->category_id]);

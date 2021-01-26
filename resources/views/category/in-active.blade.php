@@ -45,7 +45,7 @@
             @php
                 $count = 1;
             @endphp
-            @foreach($category as $item)
+            @forelse($category as $item)
                 <tr>
                     <td>{{$count++}}</td>
                     <td>{{$item->name}}</td>
@@ -71,7 +71,9 @@
                         </form>
                     </td>
                 </tr>
-            @endforeach
+            @empty
+                <p>No In-Active Categories</p>
+            @endforelse
             </tbody>
         </table>
         {{$category->links()}}

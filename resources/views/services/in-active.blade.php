@@ -46,12 +46,21 @@
             @php
                 $count = 1;
             @endphp
-            @foreach($services as $item)
+            @forelse($services as $item)
                 <tr>
                     <td>{{$count++}}</td>
                     <td>{{$item->service->name}}</td>
-                    <td><span
-                            class="{{$item->service->active == 0 ? 'badge badge-danger' : 'badge badge-success'}}">{{$item->service->active == 0 ? 'IN-ACTIVE' : 'ACTIVE' }}</span>
+                    <td>{{$item->service->active == 1 ? 'Active' : 'Un-Active'}}
+                        <form style="display: unset" action="{{route('services.update',$item->service->id)}}"
+                              method="POST" id="form-submit{{$item->id}}">
+                            {{ method_field('PATCH') }}
+                            {{ csrf_field()}}
+                            <input type="hidden" name="activateOne" value="activateOnlyOne">
+                            @csrf
+                            <input type="checkbox" value="1" {{$item->service->active == 1 ? 'checked' : ''}} name="checkbox"
+                                   onchange="document.getElementById('form-submit{{$item->id}}').submit()"
+                            />
+                        </form>
                     </td>
                     <td>$ {{$item->service->price}}</td>
                     <td>
@@ -69,18 +78,11 @@
                             <button class="btn btn-danger" type="submit"><i class="fa fa-trash"
                                                                             style="color: white"></i></button>
                         </form>
-                        <form action="{{route('services.update',$item->service->id)}}"
-                              method="POST" id="form-submit">
-                            {{ method_field('PATCH') }}
-                            {{ csrf_field()}}
-                            <input type="hidden" name="activateOne" value="activateOnlyOne">
-                            <input type="hidden" name="active" value="true">
-                            @csrf
-                            <button type="submit" class="btn btn-success"><i class="fa fa-key"></i></button>
-                        </form>
                     </td>
                 </tr>
-            @endforeach
+                @empty
+                <p>No In-Active Services</p>
+            @endforelse
             </tbody>
         </table>
         {{$services->links()}}
