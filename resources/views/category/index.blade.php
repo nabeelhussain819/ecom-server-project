@@ -52,7 +52,7 @@
                     <td>
                         <a href="{{route('category.edit', $item->id)}}" class="btn btn-info"><i
                                 class="fa fa-pen"></i></a>
-                        <a href="{{route('category.add-properties', $item->guid)}}" class="btn btn-info"><i
+                        <a href="{{route('category.show-list', $item->guid)}}" class="btn btn-info"><i
                                     class="fa fa-pen"></i>add properties</a>
                         <form action="{{ route('category.destroy', $item->id) }}" method="POST" style="display: unset">
                             <input type="hidden" name="_method" value="DELETE">
@@ -70,3 +70,4 @@
         {{$category->links()}}
     </div>
 @endsection
+

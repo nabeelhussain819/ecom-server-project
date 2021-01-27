@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Core\Base;
 use App\Helpers\StringHelper;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * App\Models\Attribute
@@ -53,5 +54,10 @@ class Attribute extends Base
     public function productAttributes()
     {
         return $this->hasMany('App\ProductAttribute');
+    }
+
+    public static function getAll(): Builder
+    {
+        return self::where("active", true);
     }
 }

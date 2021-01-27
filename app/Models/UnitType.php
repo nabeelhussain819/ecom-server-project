@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -39,5 +40,10 @@ class UnitType extends Model
     public function productAttributes()
     {
         return $this->hasMany('App\ProductAttribute');
+    }
+
+    public static function getAll(): Builder
+    {
+        return self::where("active", true);
     }
 }

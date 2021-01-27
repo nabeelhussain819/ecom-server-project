@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\StringHelper;
 use App\Http\Requests\CategoryRequest;
+use App\Models\Attribute;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
@@ -132,8 +133,23 @@ class CategoryController extends Controller
      * showing the view of add properties
      * @param Category $category
      */
-    public function addProperties(Category $category)
+    public function showAttributes(Category $category)
     {
-        dd($category);
+        return view('category.add-properties',
+            ['category' => $category,
+                'attributes' => Attribute::getAll()->get()
+            ]
+        );
+    }
+
+    public function addAttributes(Category $category, Request $request)
+    {
+        dd($request->all());
+        dd("add into DB");
+    }
+
+    public function showAttributesList(Category $category)
+    {
+        return view('category.show-properties', ['category' => $category]);
     }
 }

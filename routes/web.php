@@ -48,8 +48,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::post('in-activate-products/customer/{user}','UserController@activateAllProducts')->name('customer.products.active-all');
     Route::post('in-activate-services/customer/{user}','UserController@activateAllServices')->name('customer.services.active-all');
 
-    Route::group(['prefix' => 'category'], function () {
-        Route::get('add-properties/{category:guid}', 'CategoryController@addProperties')->name('category.add-properties');
-
+    Route::group(['prefix' => 'category/properties'], function () {
+        Route::get('show-list/{category:guid}', 'CategoryController@showAttributesList')->name('category.show-list');
+        Route::get('show/{category:guid}', 'CategoryController@showAttributes')->name('category.show-attributes');
+        Route::post('add/{category:guid}', 'CategoryController@addAttributes')->name('category.add-attributes');
     });
 });
