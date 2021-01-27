@@ -26,8 +26,13 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         'attribute' => AttributeController::class,
         'unit-type' => UnitTypeController::class
     ]);
+
+
     Route::get('category', 'CategoryController@search')->name('category.search');
-    Route::get('in-active-category', 'CategoryController@inActive')->name('category.in-active');
+
+    //let me know when  we move that in1 view and 1 route
+    // @todo add the some comment's on the route why you need it
+    Route::get('in-active-category', 'CategoryController@inActive')->name('category.in-active'); //@todo move that route in category prefix and other as well
     Route::get('in-active-category', 'CategoryController@searchInActive')->name('category.inactive.search');
     Route::post('in-activate-category/all','CategoryController@activateAll')->name('categories.active-all');
     Route::get('products', 'ProductController@search')->name('products.search');
@@ -42,4 +47,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('services/customer/{user}','UserController@showUserServices')->name('customer.services');
     Route::post('in-activate-products/customer/{user}','UserController@activateAllProducts')->name('customer.products.active-all');
     Route::post('in-activate-services/customer/{user}','UserController@activateAllServices')->name('customer.services.active-all');
+
+    Route::group(['prefix' => 'category'], function () {
+        Route::get('add-properties/{category:guid}', 'CategoryController@addProperties')->name('category.add-properties');
+
+    });
 });

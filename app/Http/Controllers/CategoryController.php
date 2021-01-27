@@ -117,15 +117,23 @@ class CategoryController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
+     * @todo check the change please this is how would you bind the model
+     * @param Category $category
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
      */
-    public function destroy($id)
+    public function destroy(Category $category)
     {
-        $category = Category::findOrFail($id);
         $category->delete();
         return back()->with('success', 'Category deleted');
+    }
+
+    /**
+     * showing the view of add properties
+     * @param Category $category
+     */
+    public function addProperties(Category $category)
+    {
+        dd($category);
     }
 }

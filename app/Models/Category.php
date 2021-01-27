@@ -41,9 +41,10 @@ class Category extends Model
     protected $keyType = 'integer';
 
     /**
+     * @todo views:GUID not in migration ??
      * @var array
      */
-    protected $fillable = ['name', 'description', 'type', 'active', 'created_at', 'updated_at'];
+    protected $fillable = ['name', 'guid', 'description', 'type', 'active', 'created_at', 'updated_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
