@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\GuidHelper;
 use App\Helpers\StringHelper;
 use App\Http\Requests\ProductRequest;
 use App\Models\Category;
@@ -76,7 +77,7 @@ class ProductController extends Controller
     {
         $productCat = new ProductsCategories();
         $product = new Product();
-        $product->guid = \Illuminate\Support\Str::uuid();
+        $product->guid = GuidHelper::getGuid();
         $request['user_id'] = auth()->user()->getAuthIdentifier();
         $product->fill($request->all())->save();
         $productCat->product_id = $product->id;
@@ -140,9 +141,8 @@ class ProductController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Product $product)
     {
-        $product = Product::findOrFail($id);
         $product->delete();
         return back()->with('success', 'Product Deleted');
     }

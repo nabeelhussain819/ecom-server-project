@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\GuidHelper;
 use App\Helpers\StringHelper;
 use App\Models\Category;
 use App\Models\Service;
@@ -71,7 +72,7 @@ class ServiceController extends Controller
     {
         $serviceCat = new ServicesCategories();
         $service = new Service();
-        $service->guid = \Illuminate\Support\Str::uuid();
+        $service->guid = GuidHelper::getGuid();
         $request['user_id'] = auth()->user()->getAuthIdentifier();
         $service->fill($request->all())->save();
         $serviceCat->service_id = $service->id;
@@ -135,9 +136,8 @@ class ServiceController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Service $service)
     {
-        $service = Service::findOrFail($id);
         $service->delete();
         return back()->with('success', 'Service Deleted');
     }

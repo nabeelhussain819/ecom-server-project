@@ -46,9 +46,9 @@
                     </td>
                     <td>{{$attribute->created_at}}</td>
                     <td>
-                        <a href="{{route('category.edit', $attribute->id)}}" class="btn btn-info"><i
+                        <a href="{{route('attribute.edit', $attribute->id)}}" class="btn btn-info"><i
                                 class="fa fa-pen"></i></a>
-                        <form action="{{ route('category.destroy', $attribute->id) }}" method="POST"
+                        <form action="{{ route('attribute.destroy', $attribute->id) }}" method="POST"
                               style="display: unset">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">

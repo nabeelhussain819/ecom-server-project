@@ -50,17 +50,12 @@
                 <tr>
                     <td>{{$count++}}</td>
                     <td>{{$item->service->name}}</td>
-                    <td>{{$item->service->active == 1 ? 'Active' : 'Un-Active'}}
-                        <form style="display: unset" action="{{route('services.update',$item->service->id)}}"
-                              method="POST" id="form-submit{{$item->id}}">
-                            {{ method_field('PATCH') }}
-                            {{ csrf_field()}}
-                            <input type="hidden" name="activateOne" value="activateOnlyOne">
-                            @csrf
-                            <input type="checkbox" value="1" {{$item->service->active == 1 ? 'checked' : ''}} name="checkbox"
-                                   onchange="document.getElementById('form-submit{{$item->id}}').submit()"
-                            />
-                        </form>
+                    <td>
+                        <button type="button"
+                                class="{{$item->service->active  == 1 ? "btn btn-success" : "btn btn-danger"}}"
+                                data-toggle="modal" data-target="#products{{$item->service->id}}">
+                            {{$item->service->active == 1 ? 'Active' : 'Un-Active'}}
+                        </button>
                     </td>
                     <td>$ {{$item->service->price}}</td>
                     <td>
@@ -80,7 +75,8 @@
                         </form>
                     </td>
                 </tr>
-                @empty
+                @include('partials.status-modal',['data' => $item->service,'route' => "services"])
+            @empty
                 <p>No In-Active Services</p>
             @endforelse
             </tbody>

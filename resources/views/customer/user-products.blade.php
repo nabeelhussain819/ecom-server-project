@@ -2,7 +2,7 @@
 
 @section('content')
 
-@include('partials.tables', ['data' => $customerProduct, 'customer' => $customer])
+@include('partials.tables', ['data' => $customerProduct, 'customer' => $customer,'route' => "products",'name' => "Product",'routeActivateAll' => "customer.services.active-all"])
 
 @endsection
 

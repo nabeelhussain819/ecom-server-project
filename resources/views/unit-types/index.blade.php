@@ -9,7 +9,7 @@
         @endif
         <div class="row">
             <div class="col-md-8">
-                <a href="{{route('attribute.create')}}" class="btn btn-primary">Add New</a>
+                <a href="{{route('unit-type.create')}}" class="btn btn-primary">Add New</a>
             </div>
             <div class="col-md-4 text-right">
                 <form action="{{route('category.search')}}" method="GET">
@@ -38,7 +38,7 @@
 
             @endphp
 
-            @foreach($unitTypes as $unitType )
+            @foreach($unitTypes as $unitType)
                 <tr>
                     <td>{{$count++}}</td>
                     <td>{{$unitType->name}}</td>
@@ -48,9 +48,9 @@
                     </td>
 
                     <td>
-                        <a href="{{route('category.edit', $unitType->id)}}" class="btn btn-info"><i
+                        <a href="{{route('unit-type.edit', $unitType->id)}}" class="btn btn-info"><i
                                     class="fa fa-pen"></i></a>
-                        <form action="{{ route('category.destroy', $unitType->id) }}" method="POST"
+                        <form action="{{ route('unit-type.destroy', $unitType->id) }}" method="POST"
                               style="display: unset">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">

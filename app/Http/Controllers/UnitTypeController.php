@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\GuidHelper;
 use App\Models\UnitType;
 use Illuminate\Http\Request;
 
@@ -28,6 +29,7 @@ class UnitTypeController extends Controller
     public function create()
     {
         //
+        return view('unit-types.create');
     }
 
     /**
@@ -39,6 +41,12 @@ class UnitTypeController extends Controller
     public function store(Request $request)
     {
         //
+        $unitType = new UnitType();
+        $unitType->guid = GuidHelper::getGuid();
+        $unitType = $unitType->fill(['name' => $request->get('name')]);
+        $unitType->save();
+        return redirect('admin/unit-type')
+            ->with('success', 'Unit Type Added');
     }
 
     /**
@@ -61,6 +69,7 @@ class UnitTypeController extends Controller
     public function edit($id)
     {
         //
+        return view('unit-types.edit',['unitType' => UnitType::find($id)]);
     }
 
     /**
@@ -70,9 +79,12 @@ class UnitTypeController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, UnitType $unitType)
     {
         //
+        $unitType->active = $request->active;
+        $unitType->update($request->all());
+        return back()->with('success',"{$unitType->name} Updated");
     }
 
     /**
@@ -81,8 +93,10 @@ class UnitTypeController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(UnitType $unitType)
     {
         //
+        $unitType->delete();
+        return back()->with('success',"{$unitType->name} Deleted");
     }
 }

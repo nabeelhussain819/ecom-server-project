@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\GuidHelper;
 use App\Models\Attribute;
 use Illuminate\Http\Request;
 
@@ -39,12 +40,10 @@ class AttributeController extends Controller
     public function store(Request $request)
     {
         $attribute = new Attribute();
-
+        $attribute->guid = GuidHelper::getGuid();
         $attribute = $attribute->fill(['name' => $request->get('name')]);
-
         $attribute->save();
-
-        return redirect()->back()
+        return redirect('admin/attribute')
             ->with('success', 'Attribute Added');
     }
 
@@ -68,6 +67,7 @@ class AttributeController extends Controller
     public function edit($id)
     {
         //
+        return view('attributes.edit',['attribute' => Attribute::find($id)]);
     }
 
     /**
@@ -77,9 +77,12 @@ class AttributeController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Attribute $attribute)
     {
         //
+        $attribute->active = $request->active;
+        $attribute->update($request->all());
+        return back()->with('success',"{$attribute->name} Updated");
     }
 
     /**
@@ -88,8 +91,10 @@ class AttributeController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Attribute $attribute)
     {
         //
+        $attribute->delete();
+        return back()->with('success',"{$attribute->name} Deleted");
     }
 }

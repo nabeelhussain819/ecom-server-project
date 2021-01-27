@@ -2,11 +2,11 @@
 
 @section('content')
 <div class="container">
-    <form action="{{route('attribute.store')}}" method="POST">
+    <form action="{{route('unit-type.store')}}" method="POST">
         @csrf
         <div class="form-group">
             <label>Name</label>
-            <input type="text" name="name" class="form-control" placeholder="Enter Attribute Name">
+            <input type="text" name="name" class="form-control" placeholder="Enter Unit Type Name">
         </div>
 
 

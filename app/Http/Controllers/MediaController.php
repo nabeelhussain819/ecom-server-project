@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\GuidHelper;
 use App\Helpers\StringHelper;
 use App\Models\Media;
 use Illuminate\Http\Request;
@@ -42,7 +43,7 @@ class MediaController extends Controller
     {
         $file = $request->file('file');
         $extension = StringHelper::lower($file->getClientOriginalExtension());
-        $guid = Str::uuid();
+        $guid = GuidHelper::getGuid();
         $name = "site-content/{$guid}.{$extension}";
         $media = new Media();
         $media->fill([
