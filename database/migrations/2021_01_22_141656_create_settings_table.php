@@ -13,6 +13,7 @@ class CreateSettingsTable extends Migration
      */
     public function up()
     {
+        //settings
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
             $table->string('category')->index();
