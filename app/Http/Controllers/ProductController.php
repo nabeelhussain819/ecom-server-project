@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductsCategories;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -75,14 +76,16 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request)
     {
-        $productCat = new ProductsCategories();
-        $product = new Product();
-        $product->guid = GuidHelper::getGuid();
-        $request['user_id'] = auth()->user()->getAuthIdentifier();
-        $product->fill($request->all())->save();
-        $productCat->product_id = $product->id;
-        $productCat->category_id = $request->category_id;
-        $productCat->save();
+        DB::transaction(function () use ($request) {
+            $productCat = new ProductsCategories();
+            $product = new Product();
+            $product->guid = GuidHelper::getGuid();
+            $request['user_id'] = auth()->user()->getAuthIdentifier();
+            $product->fill($request->all())->save();
+            $productCat->product_id = $product->id;
+            $productCat->category_id = $request->category_id;
+            $productCat->save();
+        });
         return redirect('admin/products')->with('success', 'Product Added');
     }
 
