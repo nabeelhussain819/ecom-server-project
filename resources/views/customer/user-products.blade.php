@@ -1,8 +1,8 @@
 @extends('adminlte::page')
 
 @section('content')
-
-@include('partials.tables', ['data' => $customerProduct, 'customer' => $customer,'route' => "products",'name' => "Product",'routeActivateAll' => "customer.services.active-all"])
+<h3 class="text-center mb-5">USER-PRODUCTS</h3>
+@include('partials.tables', ['data' => $customerProduct, 'customer' => $customer,'route' => "products",'name' => "Product",'routeActivateAll' => "customer.products.active-all", 'active' => $active])
 
 @endsection
 

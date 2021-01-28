@@ -7,14 +7,9 @@
     <div class="row">
         <div class="col-md-8">
             <p>From Customer <strong>{{$customer->name}}</strong></p>
-            {{--                <form id="form-submit" role="form" action="{{route('customer.products.active-all',$customer->id)}}" method="POST">--}}
-            {{--                    {{ csrf_field()}}--}}
-            {{--                    <button class="btn btn-success"><i class="fa fa-key"></i> Activate All Products Associated With this user </button>--}}
-            {{--                </form>--}}
-            {{-- <a href="{{route('products.create')}}" class="btn btn-primary">Add New</a>--}}
         </div>
         <div class="col-md-4 text-right">
-            <form action="{{route('products.search')}}" method="GET">
+            <form action="{{route("{$route}.search")}}" method="GET">
                 <div class="input-group">
                     <input type="search" name="search" class="form-control" placeholder="Search"/>
                     <span class="input-group-btn">
@@ -35,7 +30,7 @@
                       action="{{route("{$routeActivateAll}",$customer->id)}}"
                       method="POST" id="form_submit_all">
                     {{ csrf_field()}}
-                    <input type="checkbox" name="checkbox" value="0" onClick="toggle(this)"
+                    <input type="checkbox" name="checkbox" {{$active->active == 1 ? 'checked' : ''}} value="0" onClick="toggle(this)"
                            onchange="document.getElementById('form_submit_all').submit()"/>
                     <input type="checkbox" name="checkbox" hidden value="1"/>
                 </form>

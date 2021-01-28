@@ -89,13 +89,15 @@ class UserController extends Controller
     public function showUserProducts(User $user, Request $request)
     {
         $userProducts = User::with('products')->where('id', $user->id)->first();
-        return view('customer.user-products', ['customer' => User::where('id', $user->id)->first(), 'customerProduct' => $userProducts->products]);
+        return view('customer.user-products', ['customer' => User::where('id', $user->id)->first(), 'customerProduct' => $userProducts->products,
+            'active' => Product::where('user_id', $user->id)->select(['active'])->first()]);
     }
 
     public function showUserServices(User $user, Request $request)
     {
         $userServices = User::with('services')->where('id', $user->id)->first();
-        return view('customer.user-services', ['customer' => User::where('id', $user->id)->first(), 'customerServices' => $userServices->services]);
+        return view('customer.user-services', ['customer' => User::where('id', $user->id)->first(), 'customerServices' => $userServices->services,
+            'active' => Service::where('user_id', $user->id)->select(['active'])->first()]);
     }
 
     public function activateAllProducts(Request $request, User $user)

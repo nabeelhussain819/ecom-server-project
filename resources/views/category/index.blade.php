@@ -1,7 +1,11 @@
 @extends('adminlte::page')
 
 @section('content')
+
     <div class="container">
+
+        <h3 class="text-center mb-5">CATEGORIES</h3>
+
         @if(session('success'))
             <div class="alert alert-success" role="alert">
                 {{ session('success') }}
