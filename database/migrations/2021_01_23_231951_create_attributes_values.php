@@ -15,10 +15,9 @@ class CreateAttributesValues extends Migration
     {
         Schema::create('attributes_values', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('attribute_id');
+            $table->unsignedBigInteger('category_attribute_id')
+                ->comment("category Attribute");
             $table->longText('value');
-            $table->unsignedBigInteger('unit_type_id');
-            $table->unsignedBigInteger('category_id');
             $table->timestamps();
         });
     }

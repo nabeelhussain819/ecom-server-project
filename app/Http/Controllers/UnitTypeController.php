@@ -73,15 +73,12 @@ class UnitTypeController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param UnitType $unitType
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, UnitType $unitType)
     {
-        //
         $unitType->active = $request->active;
         $unitType->update($request->all());
         return back()->with('success',"{$unitType->name} Updated");
