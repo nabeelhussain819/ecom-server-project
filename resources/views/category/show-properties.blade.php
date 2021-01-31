@@ -24,20 +24,44 @@
             </div>
         </div>
         <table class="table">
-            <br>
             <thead>
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Name</th>
-                <th scope="col">Description</th>
-                <th scope="col">Status</th>
+                {{--<th scope="col">Description</th>--}}
+                {{--<th scope="col">Status</th>--}}
                 <th scope="col">Type</th>
                 <th scope="col">Created At</th>
                 <th scope="col">Action</th>
             </tr>
             </thead>
             <tbody>
+            @php
+                $count = 1;
+            @endphp
+            @forelse($category->categoryAttributes as $item)
+                <tr>
+                    <td>{{$count++}}</td>
+                    <td>{{$item->attribute->name}}</td>
+                    <td>{{$item->unitType->name}}</td>
 
+                    <td>{{$item->created_at}}</td>
+                    <td>
+                        <a href="{{route('category.edit', $item->id)}}" class="btn btn-info"><i
+                                    class="fa fa-pen"></i></a>
+                        <a href="{{route('category.show-list', $category->guid)}}" class="btn btn-info"><i
+                                    class="fa fa-pen"></i>add properties</a>
+                        <form action="{{ route('category.destroy', $item->id) }}" method="POST" style="display: unset">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                            <button class="btn btn-danger" type="submit"><i class="fa fa-trash"
+                                                                            style="color: white"></i></button>
+                        </form>
+                    </td>
+                </tr>
+            @empty
+                <p>No Active Categories</p>
+            @endforelse
             </tbody>
         </table>
 

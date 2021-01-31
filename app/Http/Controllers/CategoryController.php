@@ -7,6 +7,7 @@ use App\Helpers\StringHelper;
 use App\Http\Requests\CategoryRequest;
 use App\Models\Attribute;
 use App\Models\Category;
+use App\Models\CategoryAttributes;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -146,8 +147,10 @@ class CategoryController extends Controller
 
     public function addAttributes(Category $category, Request $request)
     {
-        dd($request->all());
-        dd("add into DB");
+        $categoryAttributes = new CategoryAttributes($request->all());
+
+        $category->categoryAttributes()->saveMany([$categoryAttributes]);
+        return back()->with('success', 'All Categories Activated');
     }
 
     public function showAttributesList(Category $category)

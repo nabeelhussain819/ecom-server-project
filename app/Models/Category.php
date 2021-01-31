@@ -61,4 +61,9 @@ class Category extends Model
     {
         return $this->hasMany('App\Models\ServicesCategories');
     }
+
+    public function categoryAttributes()
+    {
+        return $this->hasMany('App\Models\CategoryAttributes');
+    }
 }

@@ -8,10 +8,10 @@
                 <label for="properties">Property</label>
                 @include('attributes.lookup')
             </div>
-            <div class="form-group">
-                <label for="properties">Category</label>
-                @include('category.lookup')
-            </div>
+            {{--<div class="form-group">--}}
+                {{--<label for="properties">Category</label>--}}
+                {{--@include('category.lookup')--}}
+            {{--</div>--}}
             <div class="form-group">
                 <label for="properties">Unit Type</label>
                 @include('unit-types.lookup')
