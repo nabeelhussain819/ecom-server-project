@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'list category')
+@section('title', 'List Media')
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
@@ -14,7 +14,7 @@
                     <ul class="list-group">
                         @foreach($media as $medium)
                             <li class="border clearfix list-group-ite">
-                                <img class="border img-fluid" width="200px" src="{{asset($medium->name)}}"/>
+                                <img class="border img-fluid" width="200px" src="{{asset('storage/'.$medium->name)}}"/>
                                 <b>{{$medium->url}}</b>
                                 <div class="float-right">
                                     <form class="d-inline"

@@ -1,6 +1,9 @@
 @extends('adminlte::page')
 
 @section('content')
+    <h3 class="text-center mb-5">UNIT TYPES</h3>
+
+
     <div class="container">
         @if(session('success'))
             <div class="alert alert-success" role="alert">

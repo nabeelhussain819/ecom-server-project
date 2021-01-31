@@ -7,7 +7,7 @@
                 {{ session('success') }}
             </div>
         @endif
-        <form action="{{route('category.update',$unitType->id)}}" method="POST">
+        <form action="{{route('unit-type.update',$unitType->id)}}" method="POST">
             <input type="hidden" name="_method" value="PUT">
             @csrf
             <div class="form-group">

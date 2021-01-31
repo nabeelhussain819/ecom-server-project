@@ -8,7 +8,6 @@ use App\Http\Requests\CategoryRequest;
 use App\Models\Attribute;
 use App\Models\Category;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
@@ -88,9 +87,9 @@ class CategoryController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     * @todo add route model bind ad in delete and remove Category::findOrFail($id) and all other methods
      * @param int $id
      * @return \Illuminate\Http\Response
+     * @todo add route model bind ad in delete and remove Category::findOrFail($id) and all other methods
      */
     public function edit($id)
     {
@@ -121,10 +120,10 @@ class CategoryController extends Controller
     }
 
     /**
-     * @todo check the change please this is how would you bind the model
      * @param Category $category
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Exception
+     * @todo check the change please this is how would you bind the model
      */
     public function destroy(Category $category)
     {

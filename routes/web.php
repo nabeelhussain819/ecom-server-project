@@ -24,7 +24,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         'products' => ProductController::class,
         'services' => ServiceController::class,
         'attribute' => AttributeController::class,
-        'unit-type' => UnitTypeController::class
+        'unit-type' => UnitTypeController::class,
+        'media' => MediaController::class
     ]);
 
 

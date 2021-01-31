@@ -34,7 +34,7 @@ class AttributeController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -43,14 +43,14 @@ class AttributeController extends Controller
         $attribute->guid = GuidHelper::getGuid();
         $attribute = $attribute->fill(['name' => $request->get('name')]);
         $attribute->save();
-        return redirect('admin/attribute')
+        return redirect()->back()
             ->with('success', 'Attribute Added');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -61,20 +61,20 @@ class AttributeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
         //
-        return view('attributes.edit',['attribute' => Attribute::find($id)]);
+        return view('attributes.edit', ['attribute' => Attribute::find($id)]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Attribute $attribute)
@@ -82,19 +82,19 @@ class AttributeController extends Controller
         //
         $attribute->active = $request->active;
         $attribute->update($request->all());
-        return back()->with('success',"{$attribute->name} Updated");
+        return back()->with('success', "{$attribute->name} Updated");
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(Attribute $attribute)
     {
         //
         $attribute->delete();
-        return back()->with('success',"{$attribute->name} Deleted");
+        return back()->with('success', "{$attribute->name} Deleted");
     }
 }
