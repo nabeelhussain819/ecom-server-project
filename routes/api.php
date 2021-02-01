@@ -41,3 +41,8 @@ Route::group(['prefix'=>'/auth',['middleware'=>'throttle:20,5']],function (){
 Route::group(['middleware' => 'auth:api'], function () {
     Route::get('categories-secure', [Api\CategoryController::class, 'index']);
 });
+
+
+Route::group(['prefix' => '/categories', ['middleware' => 'throttle:20,5']], function () {
+    Route::get('/product-attributes/{category}', [Api\CategoryController::class, 'productAttributes']);
+});

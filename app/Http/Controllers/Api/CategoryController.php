@@ -87,4 +87,10 @@ class CategoryController extends Controller
     {
         //
     }
+
+    public function productAttributes(Category $category){
+        return $category->categoryAttributes()
+            ->with(['attribute','unitType'])
+            ->get();
+    }
 }
