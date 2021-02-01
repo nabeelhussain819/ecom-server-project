@@ -40,30 +40,25 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //@todo MNN make it proper
-        $productCat = new ProductsCategories();
         $product = new Product();
-        $request['guid'] = \Illuminate\Support\Str::uuid();
+
         //temporary 1, for testing
         $request['user_id'] = 1;
-        $product->fill($request->all())->save();
-        $productCat->product_id = $product->id;
-        $productCat->category_id = $request->category_id;
-        $productCat->save();
-        return response()->json([
-                'message' => 'Product added successfully'
-            ],200);
+        $product->fill($request->all());
+        $product->save();
+        $productCategories = new ProductsCategories($request->all());
+        $product->categories()->saveMany([$productCategories]);
+
+        return $this->genericResponse(true, 'Product Created', 200, ['product' => $product->withCategories()]);
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Product $product
+     * @return Product
      */
-    public function show($id)
+    public function show(Product $product)
     {
-        //
+        return $product->withCategories();
     }
 
     /**
@@ -84,13 +79,11 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Product $product)
     {
-        //
-       $product = Product::find($id);
        $product->fill($request->all())->update();
-       ProductsCategories::where('product_id',$product->id)->update(['category_id' => $request->category_id]);
-       return response()->json(['message'=> 'Product Updated Successfully']);
+        //ProductsCategories::where('product_id',$product->id)->update(['category_id' => $request->category_id]);
+        return $this->genericResponse(true, "$product->name Product Updated" , 200, ['product' => $product->withCategories()]);
     }
 
     /**

@@ -27,7 +27,7 @@ Route::get('categories',[Api\CategoryController::class,'index']);
 Route::post('categories',[Api\CategoryController::class,'store']);
 Route::get('products',[Api\ProductController::class,'index']);
 Route::post('products',[Api\ProductController::class,'store']);
-Route::patch('products/{id}',[Api\ProductController::class,'update']);
+//Route::patch('products/{id}',[Api\ProductController::class,'update']);
 Route::delete('products/{id}',[Api\ProductController::class,'destroy']);
 
 
@@ -37,7 +37,7 @@ Route::group(['prefix'=>'/auth',['middleware'=>'throttle:20,5']],function (){
     Route::post('/login', [Api\Auth\LoginController::class, 'login']);
 });
 
-//Secure routes
+//all the below route should be in Secure routes
 Route::group(['middleware' => 'auth:api'], function () {
     Route::get('categories-secure', [Api\CategoryController::class, 'index']);
 });
@@ -46,3 +46,9 @@ Route::group(['middleware' => 'auth:api'], function () {
 Route::group(['prefix' => '/categories', ['middleware' => 'throttle:20,5']], function () {
     Route::get('/product-attributes/{category}', [Api\CategoryController::class, 'productAttributes']);
 });
+Route::group(['prefix' => '/products', ['middleware' => 'throttle:20,5']], function () {
+    Route::get('/show/{product:guid}', [Api\ProductController::class, 'show']);
+    Route::patch('/{product:guid}', [Api\ProductController::class, 'update']);
+});
+
+Route::get('products',[Api\ProductController::class,'index']);
