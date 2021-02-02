@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\GuidHelper;
 use App\Http\Controllers\Controller;
+use App\Models\Media;
 use App\Models\Product;
 use App\Models\ProductsCategories;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -17,8 +20,8 @@ class ProductController extends Controller
         //
         return ProductsCategories::with('products','category')
             ->whereHas('products', function($query){
-            $query->where('active',1);
-        })->get();
+                $query->where('active',true);
+            })->get();
     }
 
     /**
@@ -81,9 +84,9 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-       $product->fill($request->all())->update();
+        $product->fill($request->all())->update();
         //ProductsCategories::where('product_id',$product->id)->update(['category_id' => $request->category_id]);
-        return $this->genericResponse(true, "$product->name Product Updated" , 200, ['product' => $product->withCategories()]);
+        return $this->genericResponse(true, "$product->name Updated", 200, ['product' => $product->withCategories()]);
     }
 
     /**
@@ -94,8 +97,53 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
         Product::destroy($id);
         return response()->json(['message' => 'Product Deleted Successfully'],200);
+    }
+
+    /**
+     * @param Product $product
+     * @param Request $request
+     * @return array|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
+    public function upload(Product $product, Request $request)
+    {
+        dd($product);
+//        if ($product->user->id !== Auth::user()->id) {
+//            return $this->genericResponse(false, 'Unauthorized');
+//        }
+
+//        if ($product->media->count() > 3) {
+//            return $this->genericResponse(false, 'Could not upload more than 3 images');
+//        }
+        dd($product);
+        $file = $request->file('file');
+        $extension = $file->getClientOriginalExtension();
+        $guid = GuidHelper::getGuid();
+        $path = Media::PRODUCT_IMAGES . '/' . "55bf4e1c-e5f9-4def-b9ff-8ff10e65573f";
+        $name = "{$path}/{$guid}.{$extension}";
+        $media = new Media();
+
+        $media->fill([
+            'name' => $name,
+            'extension' => $extension,
+            'type' => Media::PRODUCT_IMAGES,
+            'user_id' => \Auth::user()->id,
+            'product_id' => $product->id,
+            'active' => true,
+        ]);
+
+        $media->save();
+
+        Storage::putFileAs(
+            'public/' . $path, $request->file('file'), "{$guid}.{$extension}"
+        );
+
+        return [
+            'uid' => $media->id,
+            'name' => $media->url,
+            'status' => 'done',
+            'url' => $media->url,
+        ];
     }
 }

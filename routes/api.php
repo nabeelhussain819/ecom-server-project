@@ -49,6 +49,7 @@ Route::group(['prefix' => '/categories', ['middleware' => 'throttle:20,5']], fun
 Route::group(['prefix' => '/products', ['middleware' => 'throttle:20,5']], function () {
     Route::get('/show/{product:guid}', [Api\ProductController::class, 'show']);
     Route::patch('/{product:guid}', [Api\ProductController::class, 'update']);
+    Route::post('upload/{product:guid}', [Api\ProductController::class, 'upload']);
 });
 
 Route::get('products',[Api\ProductController::class,'index']);

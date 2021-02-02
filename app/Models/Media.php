@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Core\Base;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * App\Models\Media
@@ -33,8 +35,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Media whereUserId($value)
  * @mixin \Eloquent
  */
-class Media extends Model
+class Media extends Base
 {
+    protected $autoBlame = false;
     /**
      * The "type" of the auto-incrementing ID.
      *
@@ -45,8 +48,18 @@ class Media extends Model
     /**
      * @var array
      */
-    protected $fillable = ['user_id', 'name', 'extension', 'type', 'active', 'system', 'guid', 'created_at', 'updated_at'];
+    protected $fillable = ['user_id', 'name', 'extension', 'type', 'active', 'system', 'guid', 'product_id','provider_id','created_at', 'updated_at'];
 
+    /**
+     * @var array Append url
+     */
+    protected $appends = ['url'];
+    /**
+     * @var
+     */
+    protected $visible = ['url', 'id', 'name', 'guid', 'product_id','provider_id'];
+
+    public const PRODUCT_IMAGES = "PRODUCT_IMAGE";
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -54,4 +67,10 @@ class Media extends Model
     {
         return $this->belongsTo('App\Models\User');
     }
+
+    public function getUrlAttribute()
+    {
+        return url(Storage::url($this->name));
+    }
+
 }
