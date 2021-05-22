@@ -15,7 +15,7 @@ class AlertMedia extends Migration
     {
         Schema::table('media', function (Blueprint $table) {
             $table->unsignedInteger('provider_id')->nullable();
-            $table->unsignedInteger('product_id')->nullable();
+            $table->unsignedBigInteger('product_id')->nullable();
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade')->onUpdate('cascade');
         });
     }
