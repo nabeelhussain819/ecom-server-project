@@ -7,6 +7,7 @@ use App\Helpers\StringHelper;
 use App\Http\Requests\ProductRequest;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductsAttribute;
 use App\Models\ProductsCategories;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +45,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('products.create', ['categories' => Category::where('active', true)->get()]);
+        return view('products.create', ['categories' => Category::where('active', true)->with('attributes')->get()]);
     }
 
     public function search(Request $request)
@@ -85,6 +86,17 @@ class ProductController extends Controller
             $productCat->product_id = $product->id;
             $productCat->category_id = $request->category_id;
             $productCat->save();
+
+            $attributes = [];
+            foreach($request->get('attributes', []) as $id => $value) {
+                $attributes[] = [
+                    'attribute_id' => $id,
+                    'product_id' => $product->id,
+                    'value' => json_encode($value),
+                ];
+            }
+
+            ProductsAttribute::insert($attributes);
         });
         return redirect('admin/products')->with('success', 'Product Added');
     }

@@ -15,12 +15,14 @@
             </div>
             <div class="form-group">
                 <label>Category</label>
-                <select name="category_id" class="form-control">
+                <select name="category_id" class="form-control" onchange="onCategorySelect(this)">
                     <option value="" selected>Please select...</option>
                     @foreach($categories as $item)
                         <option value="{{$item->id}}">{{$item->name}}</option>
                     @endforeach
                 </select>
+            </div>
+            <div id="attributes-div">
             </div>
             <div class="form-group">
                 <label>Status</label>
@@ -50,3 +52,11 @@
         @endif
     </div>
 @endsection
+
+<script type="application/javascript">
+    function onCategorySelect(elem) {
+        if (elem.value !== '') {
+            $('#attributes-div').load(`/admin/category/${elem.value}/attributes`);
+        }
+    }
+</script>

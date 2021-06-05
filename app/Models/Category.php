@@ -62,8 +62,8 @@ class Category extends Model
         return $this->hasMany('App\Models\ServicesCategories');
     }
 
-    public function categoryAttributes()
+    public function attributes()
     {
-        return $this->hasMany('App\Models\CategoryAttributes');
+        return $this->belongsToMany(Attribute::class, 'category_attributes');
     }
 }

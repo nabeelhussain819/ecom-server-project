@@ -157,4 +157,9 @@ class CategoryController extends Controller
     {
         return view('category.show-properties', ['category' => $category]);
     }
+
+    public function attributes(Category $category)
+    {
+        return view('products.attributes', ['attributes' => $category->attributes()->get()]);
+    }
 }
