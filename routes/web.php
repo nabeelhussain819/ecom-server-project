@@ -30,7 +30,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
 
 
     Route::get('category', 'CategoryController@search')->name('category.search');
-    Route::get('category/{category}/attributes', 'CategoryController@attributes')->name('category.attributes');
+    Route::get('category/{category}/attributes/{product?}', 'CategoryController@attributes')->name('category.attributes');
 
     //let me know when  we move that in1 view and 1 route
     // @todo add the some comment's on the route why you need it

@@ -14,6 +14,7 @@ class CreateProductsAttributesTable extends Migration
     public function up()
     {
         Schema::create('products_attributes', function (Blueprint $table) {
+            $table->bigIncrements('id')->index();
             $table->unsignedBigInteger('product_id')->index();
             $table->unsignedBigInteger('attribute_id')->index();
             $table->jsonb('value');

@@ -8,6 +8,8 @@ use App\Http\Requests\CategoryRequest;
 use App\Models\Attribute;
 use App\Models\Category;
 use App\Models\CategoryAttributes;
+use App\Models\Product;
+use App\Models\ProductsAttribute;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -158,8 +160,16 @@ class CategoryController extends Controller
         return view('category.show-properties', ['category' => $category]);
     }
 
-    public function attributes(Category $category)
+    public function attributes(Category $category, ?Product $product)
     {
-        return view('products.attributes', ['attributes' => $category->attributes()->get()]);
+        $defaults = [];
+        if ($product->exists) {
+            // @TODO: create relations to avoid where query
+            $defaults = ProductsAttribute::where('product_id', $product->id)
+                ->pluck('value', 'attribute_id')
+                ->all();
+        }
+
+        return view('products.attributes', ['attributes' => $category->attributes()->get(), 'defaults' => $defaults]);
     }
 }

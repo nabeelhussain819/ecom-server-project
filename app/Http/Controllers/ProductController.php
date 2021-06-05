@@ -88,11 +88,11 @@ class ProductController extends Controller
             $productCat->save();
 
             $attributes = [];
-            foreach($request->get('attributes', []) as $id => $value) {
+            foreach ($request->get('attributes', []) as $id => $value) {
                 $attributes[] = [
                     'attribute_id' => $id,
                     'product_id' => $product->id,
-                    'value' => json_encode($value),
+                    'value' => $value
                 ];
             }
 
@@ -140,6 +140,16 @@ class ProductController extends Controller
         } else {
             $product->fill($request->all())->update();
             ProductsCategories::where('product_id', $product->id)->update(['category_id' => $request->category_id]);
+
+            $attributes = $request->get('attributes', []);
+            // @TODO: create relations to avoid where query
+            ProductsAttribute::where('product_id', $product->id)
+                ->get()
+                ->each(function (ProductsAttribute $attribute) use ($attributes) {
+                    $attribute->value = $attributes[$attribute->attribute_id];
+                    $attribute->save();
+                });
+
             return redirect('admin/products')->with('success', 'Product Updated');
         }
     }
