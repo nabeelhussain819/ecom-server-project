@@ -29,7 +29,7 @@ class CategoryAttributes extends Model
     /**
      * @var array
      */
-    protected $fillable = ['attribute_id', 'category_id', 'unit_type_id', 'value', 'created_at', 'updated_at'];
+    protected $fillable = ['attribute_id', 'category_id', 'unit_type_id', 'created_at', 'updated_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

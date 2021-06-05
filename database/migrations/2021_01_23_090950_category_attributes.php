@@ -20,7 +20,6 @@ class CategoryAttributes extends Migration
             $table->unsignedBigInteger('category_id')
                 ->comment("category related to it ");
             $table->unsignedBigInteger('unit_type_id');
-            $table->longText('value');
             $table->timestamps();
         });
     }
