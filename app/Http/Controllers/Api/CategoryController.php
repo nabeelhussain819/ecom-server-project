@@ -46,12 +46,12 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  Category $category
+     * @return Category
      */
-    public function show($id)
+    public function show(Category $category)
     {
-        //
+        return $category->loadMissing('attributes');
     }
 
     /**

@@ -96,8 +96,18 @@ class Product extends Base
         return $this->hasMany(Rating::class);
     }
 
+    public function productsAttributes()
+    {
+        return $this->hasMany(ProductsAttribute::class);
+    }
+
     public function withCategories()
     {
         return $this->load("categories");
+    }
+
+    public function withProductsAttributes()
+    {
+        return $this->load('productsAttributes');
     }
 }

@@ -24,6 +24,7 @@ Route::group(['prefix' => 'auth'], function () {
 });
 
 Route::get('categories',[Api\CategoryController::class,'index']);
+Route::get('categories/{category}',[Api\CategoryController::class,'show']);
 Route::post('categories',[Api\CategoryController::class,'store']);
 Route::get('products',[Api\ProductController::class,'index']);
 Route::post('products',[Api\ProductController::class,'store']);

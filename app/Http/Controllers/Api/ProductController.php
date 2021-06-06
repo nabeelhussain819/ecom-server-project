@@ -6,6 +6,7 @@ use App\Helpers\GuidHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Media;
 use App\Models\Product;
+use App\Models\ProductsAttribute;
 use App\Models\ProductsCategories;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -52,6 +53,17 @@ class ProductController extends Controller
         $productCategories = new ProductsCategories($request->all());
         $product->categories()->saveMany([$productCategories]);
 
+        $attributes = [];
+        foreach ($request->get('attributes', []) as $attribute) {
+            $attributes[] = [
+                'attribute_id' => $attribute['id'],
+                'product_id' => $product->id,
+                'value' => $attribute['value']
+            ];
+        }
+
+        ProductsAttribute::insert($attributes);
+
         return $this->genericResponse(true, 'Product Created', 200, ['product' => $product->withCategories()]);
     }
 
@@ -61,7 +73,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return $product->withCategories();
+        return $product->withCategories()->withProductsAttributes();
     }
 
     /**
@@ -85,6 +97,15 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         $product->fill($request->all())->update();
+
+        $attributes = ($postedAttributes = $request->get('attributes')) ? array_combine(array_column($postedAttributes, 'id'), array_column($postedAttributes, 'value')) : [];
+        // @TODO: create relations to avoid where query
+        ProductsAttribute::where('product_id', $product->id)
+            ->get()
+            ->each(function (ProductsAttribute $attribute) use ($attributes) {
+                $attribute->value = $attributes[$attribute->attribute_id];
+                $attribute->save();
+            });
         //ProductsCategories::where('product_id',$product->id)->update(['category_id' => $request->category_id]);
         return $this->genericResponse(true, "$product->name Updated", 200, ['product' => $product->withCategories()]);
     }
