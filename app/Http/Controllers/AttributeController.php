@@ -79,8 +79,6 @@ class AttributeController extends Controller
      */
     public function update(Request $request, Attribute $attribute)
     {
-        //
-        $attribute->active = $request->active;
         $attribute->update($request->all());
         return back()->with('success', "{$attribute->name} Updated");
     }

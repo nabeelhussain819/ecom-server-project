@@ -20,19 +20,20 @@
 
             <div id="options-div" class="form-group" style="display: none">
                 <label>Options</label>
-                <select id="options" class="form-control" name="options[]" multiple="multiple" placeholder="Add Options">
+                <select id="options" class="form-control" name="options[]" multiple="multiple"
+                        placeholder="Add Options">
                 </select>
             </div>
 
 
-            {{--<div class="form-group">--}}
-            {{--<label>Status</label>--}}
-            {{--<select name="active" class="form-control">--}}
-            {{--<option value="" selected >Please select...</option>--}}
-            {{--<option value=1>Active</option>--}}
-            {{--<option value=0>In-Active</option>--}}
-            {{--</select>--}}
-            {{--</div>--}}
+            <div class="form-group">
+                <label>Status</label>
+                <select name="active" class="form-control">
+                    <option value="" selected>Please select...</option>
+                    <option value=1>Active</option>
+                    <option value=0>In-Active</option>
+                </select>
+            </div>
 
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>

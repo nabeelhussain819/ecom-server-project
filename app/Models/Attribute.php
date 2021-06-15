@@ -39,7 +39,7 @@ class Attribute extends Base
     /**
      * @var array
      */
-    protected $fillable = ['name', 'type', 'options'];
+    protected $fillable = ['name', 'type', 'options', 'active'];
 
     protected $casts = ['options' => 'array'];
 
