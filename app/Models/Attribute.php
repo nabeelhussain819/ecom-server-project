@@ -28,12 +28,20 @@ class Attribute extends Base
      * @var string
      */
 
+    const TEXT = 'TEXT',
+        CHECKBOX = 'CHECKBOX',
+        CHECKBOX_GROUP = 'CHECKBOX_GROUP',
+        RADIO_GROUP = 'RADIO_GROUP',
+        SELECT = 'SELECT';
+
 //    protected $hasGuid = false;
     protected $autoBlame = false;
     /**
      * @var array
      */
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'type', 'options'];
+
+    protected $casts = ['options' => 'array'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -59,5 +67,21 @@ class Attribute extends Base
     public static function getAll(): Builder
     {
         return self::where("active", true);
+    }
+
+    public static function types(): array
+    {
+        return [
+            static::TEXT => 'Text',
+            static::CHECKBOX => 'Checkbox',
+            static::CHECKBOX_GROUP => 'Checkbox Group',
+            static::RADIO_GROUP => 'Radio Group',
+            static::SELECT => 'Select'
+        ];
+    }
+
+    public static function typeKeys(): array
+    {
+        return array_keys(static::types());
     }
 }

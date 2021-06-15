@@ -17,6 +17,23 @@
                        placeholder="Enter Category Name" required>
             </div>
             <div class="form-group">
+                <label>Type</label>
+                <select class="form-control" name="type" placeholder="Select Type" onchange="onTypeSelect(this.value)">
+                    @foreach(\App\Models\Attribute::types() as $value => $text)
+                        <option
+                            value="{{$value}}" {{$attribute->type === $value ? 'selected' : null}}>{{$text}}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div id="options-div" class="form-group" style="display: none">
+                <label>Options</label>
+                <select id="options" class="form-control" name="options[]" multiple="multiple" required>
+                    @foreach($attribute->options as $option)
+                        <option value="{{$option}}" selected>{{$option}}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group">
                 <label>Status</label>
                 <select name="active" class="form-control" required>
                     <option value="" selected>Please select...</option>
@@ -39,3 +56,18 @@
     </div>
 
 @endsection
+
+<script type="application/javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+        $('#options').select2({tags: true});
+        onTypeSelect($('[name=type]').val());
+    });
+
+    function onTypeSelect(type) {
+        if (<?= json_encode([\App\Models\Attribute::CHECKBOX_GROUP, \App\Models\Attribute::RADIO_GROUP, \App\Models\Attribute::SELECT]) ?>.includes(type)) {
+            $('#options-div').show();
+        } else {
+            $('#options-div').hide();
+        }
+    }
+</script>

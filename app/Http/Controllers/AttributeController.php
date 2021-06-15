@@ -41,7 +41,7 @@ class AttributeController extends Controller
     {
         $attribute = new Attribute();
         $attribute->guid = GuidHelper::getGuid();
-        $attribute = $attribute->fill(['name' => $request->get('name')]);
+        $attribute = $attribute->fill($request->all());
         $attribute->save();
         return redirect()->back()
             ->with('success', 'Attribute Added');
