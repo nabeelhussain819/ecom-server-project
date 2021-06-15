@@ -27,7 +27,7 @@
             </div>
             <div id="options-div" class="form-group" style="display: none">
                 <label>Options</label>
-                <select id="options" class="form-control" name="options[]" multiple="multiple" required>
+                <select id="options" class="form-control" name="options[]" multiple="multiple">
                     @foreach($attribute->options as $option)
                         <option value="{{$option}}" selected>{{$option}}</option>
                     @endforeach

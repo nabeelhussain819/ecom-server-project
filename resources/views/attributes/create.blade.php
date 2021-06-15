@@ -20,7 +20,7 @@
 
             <div id="options-div" class="form-group" style="display: none">
                 <label>Options</label>
-                <select id="options" class="form-control" name="options[]" multiple="multiple" placeholder="Add Options" required>
+                <select id="options" class="form-control" name="options[]" multiple="multiple" placeholder="Add Options">
                 </select>
             </div>
 
