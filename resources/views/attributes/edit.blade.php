@@ -28,9 +28,11 @@
             <div id="options-div" class="form-group" style="display: none">
                 <label>Options</label>
                 <select id="options" class="form-control" name="options[]" multiple="multiple">
-                    @foreach($attribute->options as $option)
-                        <option value="{{$option}}" selected>{{$option}}</option>
-                    @endforeach
+                    @if($attribute->options)
+                        @foreach($attribute->options as $option)
+                            <option value="{{$option}}" selected>{{$option}}</option>
+                        @endforeach
+                    @endif
                 </select>
             </div>
             <div class="form-group">
