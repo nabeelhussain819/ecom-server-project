@@ -18,7 +18,7 @@ class CreateAttributes extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->enum('type', Attribute::typeKeys());
-            $table->json('options')->comment('If attribute type is in (CHECKBOX_GROUP, RADIO_GROUP, SELECT), user must provide a list of options.');
+            $table->jsonb('options')->comment('If attribute type is in (CHECKBOX_GROUP, RADIO_GROUP, SELECT), user must provide a list of options.');
             $table->boolean('active')->default(false);
             $table->uuid('guid')->unique();
             $table->timestamps();
