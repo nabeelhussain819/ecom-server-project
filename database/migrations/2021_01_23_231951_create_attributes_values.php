@@ -13,13 +13,13 @@ class CreateAttributesValues extends Migration
      */
     public function up()
     {
-        Schema::create('attributes_values', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('category_attribute_id')
-                ->comment("category Attribute");
-            $table->longText('value');
-            $table->timestamps();
-        });
+//        Schema::create('attributes_values', function (Blueprint $table) {
+//            $table->id();
+//            $table->unsignedBigInteger('category_attribute_id')
+//                ->comment("category Attribute");
+//            $table->longText('value');
+//            $table->timestamps();
+//        });
     }
 
     /**
