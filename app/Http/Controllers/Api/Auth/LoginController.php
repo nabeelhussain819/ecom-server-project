@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 use Tymon\JWTAuth\JWTAuth;
 
 class LoginController extends Controller
@@ -72,7 +73,9 @@ class LoginController extends Controller
         }
 
         if (!Auth::attempt(['email' => request('email'), 'password' => request('password')])) {
-            return $this->unProcessEntityResponse('invalid data');
+            throw ValidationException::withMessages([
+                $this->username() => [trans('auth.failed')],
+            ]);
         }
 
 
