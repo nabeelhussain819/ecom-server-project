@@ -54,3 +54,5 @@ Route::group(['prefix' => '/products', ['middleware' => 'throttle:20,5']], funct
 });
 
 Route::get('products',[Api\ProductController::class,'index']);
+Route::post('forgot-password', [Api\Auth\ForgotPasswordController::class, 'sendResetLinkEmail']);
+Route::post('password/reset', [Api\Auth\ResetPasswordController::class, 'reset']);
