@@ -17,8 +17,7 @@ class CreateProductsAttributesTable extends Migration
             $table->bigIncrements('id')->index();
             $table->unsignedBigInteger('product_id')->index();
             $table->unsignedBigInteger('attribute_id')->index();
-            $table->json('value');
-
+            $table->jsonb('value');
             $table->foreign('product_id')->references('id')->on('products')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreign('attribute_id')->references('id')->on('attributes')->restrictOnDelete()->onUpdate('restrict');
         });
