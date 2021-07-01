@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use Facebook\Facebook;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Tymon\JWTAuth\JWTAuth;
 
@@ -97,5 +100,34 @@ class LoginController extends Controller
             422, ['errors' => [
                 'email' => 'Invalid address or password',
             ]]);
+    }
+
+    public function facebookLogin(Request $request)
+    {
+        $fb = new Facebook([
+            'app_id' => config('app.facebook.app_id'),
+            'app_secret' => config('app.facebook.app_secret'),
+            'default_graph_version' => 'v8.0',
+        ]);
+
+        $response = $fb->get('/me?fields=name,email', $request->get('accessToken'));
+
+        $fbUser = $response->getGraphUser();
+        $internalUser = User::where('email', $fbUser->getEmail())->first();
+        if ($internalUser === null) {
+            $internalUser = new User(['name' => $fbUser->getName(), 'email' => $fbUser->getEmail()]);
+            $internalUser->save();
+        }
+        Auth::login($internalUser);
+
+        return $this->genericResponse(true, 'Successful login', 200, [
+            'data' => $request->user(),
+            'token' => $internalUser->createToken('Personal Access Token')->accessToken
+        ]);
+    }
+
+    public function googleLogin(Request $request)
+    {
+        Log::info(json_encode($request->all()));
     }
 }

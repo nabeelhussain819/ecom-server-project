@@ -36,6 +36,8 @@ Route::delete('products/{id}',[Api\ProductController::class,'destroy']);
 Route::group(['prefix'=>'/auth',['middleware'=>'throttle:20,5']],function (){
     Route::post('/register',[Api\Auth\RegisterController::class,'register']);
     Route::post('/login', [Api\Auth\LoginController::class, 'login']);
+    Route::post('/facebook-login', [Api\Auth\LoginController::class, 'facebookLogin']);
+    Route::post('/google-login', [Api\Auth\LoginController::class, 'googleLogin']);
 });
 
 //all the below route should be in Secure routes
