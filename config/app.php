@@ -58,6 +58,16 @@ return [
 
     'asset_url' => env('ASSET_URL', null),
 
+    'facebook' => [
+        'app_id' => env('FACEBOOK_APP_ID'),
+        'app_secret' => env('FACEBOOK_APP_SECRET')
+    ],
+
+    'google' => [
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET')
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
