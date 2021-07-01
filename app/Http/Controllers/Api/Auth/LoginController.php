@@ -128,6 +128,24 @@ class LoginController extends Controller
 
     public function googleLogin(Request $request)
     {
-        Log::info(json_encode($request->all()));
+        $client = new \Google_Client(['client_id' => config('app.google.client_id')]);
+        $valid = $client->verifyIdToken($request->get('id_token'));
+
+        if($valid){
+            $googleUser = $request->get('user');
+            $internalUser = User::where('email', $googleUser['email'])->first();
+            if ($internalUser === null) {
+                $internalUser = new User($googleUser);
+                $internalUser->save();
+            }
+            Auth::login($internalUser);
+
+            return $this->genericResponse(true, 'Successful login', 200, [
+                'data' => $request->user(),
+                'token' => $internalUser->createToken('Personal Access Token')->accessToken
+            ]);
+        }
+
+        throw ValidationException::withMessages(['token' => 'Invalid token provided.']);
     }
 }
