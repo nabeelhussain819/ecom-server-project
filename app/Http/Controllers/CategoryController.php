@@ -92,7 +92,6 @@ class CategoryController extends Controller
      * Show the form for editing the specified resource.
      * @param int $id
      * @return \Illuminate\Http\Response
-     * @todo add route model bind ad in delete and remove Category::findOrFail($id) and all other methods
      */
     public function edit($id)
     {

@@ -41,7 +41,6 @@ class Category extends Model
     protected $keyType = 'integer';
 
     /**
-     * @todo views:GUID not in migration ??
      * @var array
      */
     protected $fillable = ['name', 'guid', 'description', 'type', 'active', 'created_at', 'updated_at'];

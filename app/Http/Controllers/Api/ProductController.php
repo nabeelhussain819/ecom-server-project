@@ -18,9 +18,9 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return ProductsCategories::with('products','category')
-            ->whereHas('products', function($query){
-                $query->where('active',true);
+        return ProductsCategories::with('products', 'category')
+            ->whereHas('products', function ($query) {
+                $query->where('active', true);
             })->get();
     }
 
@@ -38,7 +38,7 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -78,7 +78,7 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -89,8 +89,8 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Product $product)
@@ -112,13 +112,18 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         Product::destroy($id);
-        return response()->json(['message' => 'Product Deleted Successfully'],200);
+        return response()->json(['message' => 'Product Deleted Successfully'], 200);
+    }
+
+    public function media(Product $product, Request $request)
+    {
+        return $product->media;
     }
 
     /**
@@ -129,14 +134,7 @@ class ProductController extends Controller
     public function upload(Product $product, Request $request)
     {
         dd($product);
-//        if ($product->user->id !== Auth::user()->id) {
-//            return $this->genericResponse(false, 'Unauthorized');
-//        }
 
-//        if ($product->media->count() > 3) {
-//            return $this->genericResponse(false, 'Could not upload more than 3 images');
-//        }
-        dd($product);
         $file = $request->file('file');
         $extension = $file->getClientOriginalExtension();
         $guid = GuidHelper::getGuid();
