@@ -19,7 +19,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return ProductsCategories::with('products', 'category')
+        return ProductsCategories::with('products', 'categories')
             ->whereHas('products', function ($query) {
                 $query->where('active', true);
             })->get();
