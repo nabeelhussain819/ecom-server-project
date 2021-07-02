@@ -124,7 +124,7 @@ class ProductController extends Controller
 
     public function media(Product $product, Request $request)
     {
-        return $product->media;
+        return $product->images();
     }
 
     /**

@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Core\Base;
+use App\Interfaces\IMediaInteraction;
+use App\Traits\InteractWithMedia;
 
 /**
  * App\Models\Product
@@ -46,8 +48,9 @@ use App\Core\Base;
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereUserId($value)
  * @mixin \Eloquent
  */
-class Product extends Base
+class Product extends Base implements IMediaInteraction
 {
+    use InteractWithMedia;
     protected $autoBlame = false; //@todo temp
 
     /**
@@ -94,11 +97,6 @@ class Product extends Base
     public function productsAttributes()
     {
         return $this->hasMany(ProductsAttribute::class);
-    }
-
-    public function media()
-    {
-        return $this->hasMany(Media::class);
     }
 
     public function withCategories()
