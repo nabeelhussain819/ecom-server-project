@@ -48,7 +48,7 @@ class Media extends Base
     /**
      * @var array
      */
-    protected $fillable = ['user_id', 'name', 'extension', 'type', 'active', 'system', 'guid', 'product_id','provider_id','created_at', 'updated_at'];
+    protected $fillable = ['user_id', 'name', 'extension', 'type', 'active', 'system', 'guid', 'product_id', 'provider_id', 'created_at', 'updated_at'];
 
     /**
      * @var array Append url
@@ -57,9 +57,10 @@ class Media extends Base
     /**
      * @var
      */
-    protected $visible = ['url', 'id', 'name', 'guid', 'product_id','provider_id'];
+    protected $visible = ['url', 'id', 'name', 'guid', 'product_id', 'provider_id'];
 
-    public const PRODUCT_IMAGES = "PRODUCT_IMAGE";
+    public const PRODUCT_IMAGES = "PRODUCT";
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

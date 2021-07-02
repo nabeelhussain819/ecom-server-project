@@ -43,6 +43,12 @@ Route::group(['prefix'=>'/auth',['middleware'=>'throttle:20,5']],function (){
 //all the below route should be in Secure routes
 Route::group(['middleware' => 'auth:api'], function () {
     Route::get('categories-secure', [Api\CategoryController::class, 'index']);
+
+    Route::group(['prefix' => '/products', ['middleware' => 'throttle:20,5']], function () {
+
+        Route::post('upload/{product:guid}', [Api\ProductController::class, 'upload']);
+
+    });
 });
 
 
@@ -52,7 +58,6 @@ Route::group(['prefix' => '/categories', ['middleware' => 'throttle:20,5']], fun
 Route::group(['prefix' => '/products', ['middleware' => 'throttle:20,5']], function () {
     Route::get('/show/{product:guid}', [Api\ProductController::class, 'show']);
     Route::patch('/{product:guid}', [Api\ProductController::class, 'update']);
-    Route::post('upload/{product:guid}', [Api\ProductController::class, 'upload']);
     Route::get('media/{product:guid}', [Api\ProductController::class, 'media']);
 });
 

@@ -8,6 +8,7 @@ use App\Models\Media;
 use App\Models\Product;
 use App\Models\ProductsAttribute;
 use App\Models\ProductsCategories;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -133,12 +134,10 @@ class ProductController extends Controller
      */
     public function upload(Product $product, Request $request)
     {
-        dd($product);
-
         $file = $request->file('file');
         $extension = $file->getClientOriginalExtension();
         $guid = GuidHelper::getGuid();
-        $path = Media::PRODUCT_IMAGES . '/' . "55bf4e1c-e5f9-4def-b9ff-8ff10e65573f";
+        $path = User::getUploadPath() . Media::PRODUCT_IMAGES;
         $name = "{$path}/{$guid}.{$extension}";
         $media = new Media();
 
