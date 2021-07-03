@@ -26,6 +26,7 @@ use App\Traits\InteractWithMedia;
  * @property string $updated_at
  * @property User $user
  * @property ProductsCategories[] $productsCategories
+ * @property Media[] media
  * @property Rating[] $ratings
  * @property-read int|null $ratings_count
  * @method static \Illuminate\Database\Eloquent\Builder|Product newModelQuery()
