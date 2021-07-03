@@ -17,24 +17,22 @@ Route::group(['prefix' => 'auth'], function () {
 //    Route::post('login', [Api\AuthController::class,'login']);
 //    Route::post('register', [Api\AuthController::class,'register']);
 
-    Route::group(['middleware' => 'auth:api'], function() {
-        Route::get('logout', [Api\AuthController::class,'logout']);
-        Route::get('user', [Api\AuthController::class,'user']);
+    Route::group(['middleware' => 'auth:api'], function () {
+        Route::get('logout', [Api\AuthController::class, 'logout']);
+        Route::get('user', [Api\AuthController::class, 'user']);
     });
 });
 
-Route::get('categories',[Api\CategoryController::class,'index']);
-Route::get('categories/{category}',[Api\CategoryController::class,'show']);
-Route::post('categories',[Api\CategoryController::class,'store']);
-Route::get('products',[Api\ProductController::class,'index']);
-Route::post('products',[Api\ProductController::class,'store']);
+
+Route::get('products', [Api\ProductController::class, 'index']);
+Route::post('products', [Api\ProductController::class, 'store']);
 //Route::patch('products/{id}',[Api\ProductController::class,'update']);
-Route::delete('products/{id}',[Api\ProductController::class,'destroy']);
+Route::delete('products/{id}', [Api\ProductController::class, 'destroy']);
 
 
 //
-Route::group(['prefix'=>'/auth',['middleware'=>'throttle:20,5']],function (){
-    Route::post('/register',[Api\Auth\RegisterController::class,'register']);
+Route::group(['prefix' => '/auth', ['middleware' => 'throttle:20,5']], function () {
+    Route::post('/register', [Api\Auth\RegisterController::class, 'register']);
     Route::post('/login', [Api\Auth\LoginController::class, 'login']);
     Route::post('/facebook-login', [Api\Auth\LoginController::class, 'facebookLogin']);
     Route::post('/google-login', [Api\Auth\LoginController::class, 'googleLogin']);
@@ -45,10 +43,17 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('categories-secure', [Api\CategoryController::class, 'index']);
 
     Route::group(['prefix' => '/products', ['middleware' => 'throttle:20,5']], function () {
-
         Route::post('upload/{product:guid}', [Api\ProductController::class, 'upload']);
-
     });
+
+    Route::group(['prefix' => '/categories'], function () {
+        Route::get('/tabs', [Api\CategoryController::class, 'tabs']);
+        Route::get('/', [Api\CategoryController::class, 'index']);
+//        Route::get('categories', [Api\CategoryController::class, 'index']);
+        Route::get('/{category}', [Api\CategoryController::class, 'show']);
+        Route::post('/', [Api\CategoryController::class, 'store']);
+    });
+
 });
 
 
@@ -61,6 +66,7 @@ Route::group(['prefix' => '/products', ['middleware' => 'throttle:20,5']], funct
     Route::get('media/{product:guid}', [Api\ProductController::class, 'media']);
 });
 
-Route::get('products',[Api\ProductController::class,'index']);
+Route::get('products', [Api\ProductController::class, 'index']);
 Route::post('forgot-password', [Api\Auth\ForgotPasswordController::class, 'sendResetLinkEmail']);
 Route::post('password/reset', [Api\Auth\ResetPasswordController::class, 'reset']);
+
