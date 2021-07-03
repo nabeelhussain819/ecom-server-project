@@ -66,7 +66,7 @@
     });
 
     function onTypeSelect(type) {
-        if (<?= json_encode([\App\Models\Attribute::CHECKBOX_GROUP, \App\Models\Attribute::RADIO_GROUP, \App\Models\Attribute::SELECT]) ?>.includes(type)) {
+        if (<?= json_encode(\App\Models\Attribute::typesWithOptions()) ?>.includes(type)) {
             $('#options-div').show();
         } else {
             $('#options-div').hide();

@@ -84,4 +84,13 @@ class Attribute extends Base
     {
         return array_keys(static::types());
     }
+
+    public static function typesWithOptions(): array
+    {
+        return [
+            static::CHECKBOX_GROUP,
+            static::RADIO_GROUP,
+            static::SELECT
+        ];
+    }
 }
