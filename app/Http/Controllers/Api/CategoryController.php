@@ -14,7 +14,7 @@ class CategoryController extends Controller
     public function index()
     {
         //
-        return Category::select(['id','name','description'])->get();
+        return Category::select(['id', 'name', 'description'])->get();
     }
 
     /**
@@ -30,7 +30,7 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -46,7 +46,7 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  Category $category
+     * @param Category $category
      * @return Category
      */
     public function show(Category $category)
@@ -57,7 +57,7 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -68,8 +68,8 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -80,7 +80,7 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -88,9 +88,23 @@ class CategoryController extends Controller
         //
     }
 
-    public function productAttributes(Category $category){
+    public function productAttributes(Category $category)
+    {
         return $category->categoryAttributes()
-            ->with(['attribute','unitType'])
+            ->with(['attribute', 'unitType'])
             ->get();
+    }
+
+
+    public function tabs()
+    {
+        return Category::select(['id', 'name', 'description'])
+            ->get()
+            ->map(function ($category) {
+                return [
+                    'key' => "$category->id",
+                    'tab' => $category->name
+                ];
+            });
     }
 }
