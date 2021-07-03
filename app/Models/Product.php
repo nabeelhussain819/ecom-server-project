@@ -70,6 +70,8 @@ class Product extends Base implements IMediaInteraction
      */
     protected $fillable = ['user_id', 'name', 'description', 'price', 'sale_price', 'location', 'google_address', 'postal_address', 'longitude', 'latitude', 'active', 'guid', 'created_at', 'updated_at'];
 
+    protected $appends = ['cover_image'];
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -107,5 +109,18 @@ class Product extends Base implements IMediaInteraction
     public function withProductsAttributes()
     {
         return $this->load('productsAttributes');
+    }
+
+    /**
+     * this is temp fix for the Demo its should  be field in the product table
+     * @return |null
+     */
+    public function getCoverImageAttribute()
+    {
+        $media = $this->media->first();
+        if (!empty($media)) {
+            return $media->url;
+        }
+        return null;
     }
 }
