@@ -54,6 +54,11 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::post('/', [Api\CategoryController::class, 'store']);
     });
 
+    Route::group(['prefix' => '/user'], function () {
+        Route::get('detail/', [Api\UserController::class, 'self']);
+        Route::post('upload', [Api\UserController::class, 'upload']);
+    });
+
 });
 
 
