@@ -14,15 +14,16 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
-    /**
-     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
-     */
+    //
     public function index()
     {
-        return ProductsCategories::with('products', 'categories')
-            ->whereHas('products', function ($query) {
-                $query->where('active', true);
-            })->get();
+        // why Product Categories whynot products ? @todo refactor it make it simple
+//        return ProductsCategories::with('products', 'categories')
+//            ->whereHas('products', function ($query) {
+//                $query->where('active', true);
+//            })->get();
+
+        return Product::where('active', true)->paginate($this->pageSize);
     }
 
     /**
