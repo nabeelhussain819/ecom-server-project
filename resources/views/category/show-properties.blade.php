@@ -43,7 +43,7 @@
                 <tr>
                     <td>{{$count++}}</td>
                     <td>{{$item->attribute->name}}</td>
-                    <td>{{$item->unitType->name}}</td>
+                    <td>{{$item->unitType ? $item->unitType->name : null}}</td>
 
                     <td>{{$item->created_at}}</td>
                     <td>
