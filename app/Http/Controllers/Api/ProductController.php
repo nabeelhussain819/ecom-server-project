@@ -36,6 +36,12 @@ class ProductController extends Controller
         //
     }
 
+    public function self()
+    {
+        return Product::where('user_id', \Auth::user()->id)
+            ->with(['categories', 'media'])
+            ->paginate($this->pageSize);
+    }
 
     /**
      * Store a newly created resource in storage.

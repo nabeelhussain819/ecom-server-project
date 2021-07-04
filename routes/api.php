@@ -42,9 +42,6 @@ Route::group(['prefix' => '/auth', ['middleware' => 'throttle:20,5']], function 
 Route::group(['middleware' => 'auth:api'], function () {
     Route::get('categories-secure', [Api\CategoryController::class, 'index']);
 
-    Route::group(['prefix' => '/products', ['middleware' => 'throttle:20,5']], function () {
-        Route::post('upload/{product:guid}', [Api\ProductController::class, 'upload']);
-    });
 
     Route::group(['prefix' => '/categories'], function () {
         Route::get('/tabs', [Api\CategoryController::class, 'tabs']);
@@ -55,19 +52,24 @@ Route::group(['middleware' => 'auth:api'], function () {
     });
 
     Route::group(['prefix' => '/user'], function () {
-        Route::get('detail/', [Api\UserController::class, 'self']);
+        Route::get('detail/', [Api\UserController::class, 'detail']);
         Route::post('upload', [Api\UserController::class, 'upload']);
     });
-
+    Route::group(['prefix' => '/products'], function () {
+        Route::patch('/{product:guid}', [Api\ProductController::class, 'update']);
+        Route::get('/self/', [Api\ProductController::class, 'self']);
+        Route::post('upload/{product:guid}', [Api\ProductController::class, 'upload']);
+    });
 });
 
+//====================================== PUBLIC ROUTES =========================================
 
 Route::group(['prefix' => '/categories', ['middleware' => 'throttle:20,5']], function () {
     Route::get('/product-attributes/{category}', [Api\CategoryController::class, 'productAttributes']);
 });
-Route::group(['prefix' => '/products', ['middleware' => 'throttle:20,5']], function () {
+
+Route::group(['prefix' => '/products'], function () {
     Route::get('/show/{product:guid}', [Api\ProductController::class, 'show']);
-    Route::patch('/{product:guid}', [Api\ProductController::class, 'update']);
     Route::get('media/{product:guid}', [Api\ProductController::class, 'media']);
 });
 
