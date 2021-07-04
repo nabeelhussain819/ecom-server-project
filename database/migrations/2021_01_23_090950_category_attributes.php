@@ -19,7 +19,7 @@ class CategoryAttributes extends Migration
                 ->comment("attribute");
             $table->unsignedBigInteger('category_id')
                 ->comment("category related to it ");
-            $table->unsignedBigInteger('unit_type_id');
+            $table->unsignedBigInteger('unit_type_id')->nullable();
             $table->timestamps();
         });
     }
