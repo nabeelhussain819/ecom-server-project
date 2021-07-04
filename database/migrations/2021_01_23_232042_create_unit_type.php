@@ -21,9 +21,9 @@ class CreateUnitType extends Migration
             $table->timestamps();
         });
 
-        Schema::table('attributes_values', function (Blueprint $table) {
+        /*Schema::table('attributes_values', function (Blueprint $table) {
             $table->foreign('category_attribute_id')->references('id')->on('category_attributes')->onDelete('cascade')->onUpdate('cascade');
-        });
+        });*/
 
         Schema::table('category_attributes', function (Blueprint $table) {
             $table->foreign('attribute_id')->references('id')->on('attributes')->onDelete('cascade')->onUpdate('cascade');
@@ -31,12 +31,12 @@ class CreateUnitType extends Migration
             $table->foreign('unit_type_id')->references('id')->on('unit_types')->onDelete('cascade')->onUpdate('cascade');
         });
 
-        Schema::table('product_attributes', function (Blueprint $table) {
+        /*Schema::table('product_attributes', function (Blueprint $table) {
             $table->foreign('attribute_id')->references('id')->on('attributes')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('unit_type_id')->references('id')->on('unit_types')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade')->onUpdate('cascade');
-        });
+        });*/
     }
 
     /**
