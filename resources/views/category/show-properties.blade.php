@@ -48,9 +48,9 @@
                     <td>{{$item->created_at}}</td>
                     <td>
                         <a href="{{route('category.edit', $item->id)}}" class="btn btn-info"><i
-                                    class="fa fa-pen"></i></a>
+                                class="fa fa-pen"></i></a>
                         <a href="{{route('category.show-list', $category->guid)}}" class="btn btn-info"><i
-                                    class="fa fa-pen"></i>add properties</a>
+                                class="fa fa-pen"></i>add properties</a>
                         <form action="{{ route('category.destroy', $item->id) }}" method="POST" style="display: unset">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
