@@ -60,6 +60,13 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('/self/', [Api\ProductController::class, 'self']);
         Route::post('upload/{product:guid}', [Api\ProductController::class, 'upload']);
     });
+
+    Route::group(['prefix' => '/services'], function () {
+        Route::get('/', [Api\ServiceController::class, 'index']);
+        Route::get('/{service:guid}', [Api\ServiceController::class, 'show']);
+        Route::post('/', [Api\ServiceController::class, 'store']);
+        Route::patch('/{service:guid}', [Api\ServiceController::class, 'update']);
+    });
 });
 
 //====================================== PUBLIC ROUTES =========================================

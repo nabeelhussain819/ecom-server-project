@@ -78,8 +78,23 @@ class Service extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function servicesCategories()
+    public function categories()
     {
-        return $this->hasMany('App\Models\ServicesCategories');
+        return $this->hasMany(ServicesCategories::class, 'service_id');
+    }
+
+    public function withCategories()
+    {
+        return $this->load('categories');
+    }
+
+    public function servicesAttributes()
+    {
+        return $this->hasMany(ServicesAttribute::class);
+    }
+
+    public function withServicesAttributes()
+    {
+        return $this->load('servicesAttributes');
     }
 }

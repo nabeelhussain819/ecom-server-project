@@ -38,16 +38,16 @@ class ServicesCategories extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function category()
+    public function categories()
     {
-        return $this->belongsTo('App\Models\Category');
+        return $this->belongsTo(Category::class, 'category_id');
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function service()
+    public function services()
     {
-        return $this->belongsTo('App\Models\Service');
+        return $this->belongsTo(Service::class, 'service_id');
     }
 }
