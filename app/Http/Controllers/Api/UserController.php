@@ -31,10 +31,11 @@ class UserController extends Controller
             /// todo handle it in Interact with upload making a method which remove the old one and create new
             $user = \Auth::user();
 
-            $hasPreviousImage = Auth::user()->profile_url;
+            $hasPreviousImage = Auth::user()->getRawOriginal('profile_url');
 
             if (!empty($hasPreviousImage)) {
                 $previous_media = Auth::user()->media()->where('type', User::MEDIA_UPLOAD)->first();
+            
                 Storage::delete('public/' . $hasPreviousImage);
                 $previous_media->delete();
             }
