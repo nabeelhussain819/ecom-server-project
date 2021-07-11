@@ -24,6 +24,7 @@ use Tymon\JWTAuth\Contracts\Providers\JWT;
  * @property Comment[] $comments
  * @property CommentsLike[] $commentsLikes
  * @property Medium[] $media
+ * @property string $profile_url
  * @property Product[] $products
  * @property Service[] $services
  * @property Vendor[] $vendors
@@ -61,9 +62,11 @@ class User extends Authenticatable implements JWTSubject
     /**
      * @var array
      */
-    protected $fillable = ['name', 'email', 'email_verified_at', 'password', 'guid', 'remember_token', 'created_at', 'updated_at'];
+    protected $fillable = ['name', 'email', 'email_verified_at', 'password', 'guid', 'profile_url', 'remember_token', 'created_at', 'updated_at'];
 
     protected $hidden = ['password'];
+
+    public const MEDIA_UPLOAD = 'User';
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -86,7 +89,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function media()
     {
-        return $this->hasMany('App\Models\Medium');
+        return $this->hasMany(Media::class);
     }
 
     /**
@@ -125,7 +128,6 @@ class User extends Authenticatable implements JWTSubject
 
     public static function getUploadPath(): string
     {
-
-        return 'User/' . \Auth::user()->id . '/';
+        return 'Users/' . \Auth::user()->id . '/';
     }
 }

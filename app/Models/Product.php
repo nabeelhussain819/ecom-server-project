@@ -53,6 +53,7 @@ class Product extends Base implements IMediaInteraction
 {
     use InteractWithMedia;
     protected $autoBlame = false; //@todo temp
+    public const MEDIA_UPLOAD = "PRODUCT";
 
     /**
      * The "type" of the auto-incrementing ID.
