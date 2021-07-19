@@ -179,15 +179,28 @@ class ProductController extends Controller
         $products = Product::from('products as p')
             ->select(DB::raw('p.*, pc.category_id'))
             ->join('products_categories as pc', 'p.id', '=', 'pc.product_id')
+            ->join('products_attributes as pa', 'p.id', '=', 'pa.product_id')
             ->where('p.name', 'LIKE', "%{$request->get('query')}%")
-            ->when($request->get('category_id'), function (Builder $builder, $category) {
-                $builder->where('pc.category_id', $category);
+            ->when($request->get('category_id'), function (Builder $builder, $category) use ($request) {
+                $builder->where('pc.category_id', $category)
+                    ->when($request->get('filters'), function (Builder $builder, $filters) {
+                        $filters = json_decode($filters, true);
+                        $clause = 'where';
+                        foreach ($filters as $id => $value) {
+                            $builder->{$clause}(function (Builder $builder) use ($id, $value) {
+                                $builder->where('pa.attribute_id', $id)
+                                    ->whereJsonContains('pa.value', $value);
+                            });
+                            $clause = 'orWhere';
+                        }
+                    });
             })
+            ->distinct()
             ->get();
 
-        $categories = Category::whereIn('id', $products->pluck('category_id')->unique())
-            ->when($request->get('category_id'), function (Builder $builder) {
-                $builder->with('attributes');
+        $categories = Category::when($request->get('category_id'), function (Builder $builder, $category) {
+                $builder->where('id', $category)
+                    ->with('attributes');
             })
             ->get();
 
