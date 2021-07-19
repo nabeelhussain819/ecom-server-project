@@ -179,29 +179,47 @@ class ProductController extends Controller
         $products = Product::from('products as p')
             ->select(DB::raw('p.*, pc.category_id'))
             ->join('products_categories as pc', 'p.id', '=', 'pc.product_id')
-            ->join('products_attributes as pa', 'p.id', '=', 'pa.product_id')
             ->where('p.name', 'LIKE', "%{$request->get('query')}%")
             ->when($request->get('category_id'), function (Builder $builder, $category) use ($request) {
                 $builder->where('pc.category_id', $category)
-                    ->when($request->get('filters'), function (Builder $builder, $filters) {
-                        $filters = json_decode($filters, true);
-                        $clause = 'where';
+                    ->when(json_decode($request->get('filters'), true), function (Builder $builder, $filters) {
+                        $copy = $filters;
+                        $having = '';
+
                         foreach ($filters as $id => $value) {
-                            $builder->{$clause}(function (Builder $builder) use ($id, $value) {
-                                $builder->where('pa.attribute_id', $id)
-                                    ->whereJsonContains('pa.value', $value);
-                            });
-                            $clause = 'orWhere';
+                            if (is_bool($value)) {
+                                $value = $value ? 'true' : 'false';
+                            }
+
+                            if (is_array($value)) {
+                                $value = implode('","', $value);
+                                $having .= "sum(case when pa.attribute_id = $id and json_overlaps(pa.value, '[\"$value\"]') then 1 else 0 end) > 0";
+                            } else {
+                                $having .= "sum(case when pa.attribute_id = $id and json_contains(pa.value, '\"$value\"') then 1 else 0 end) > 0";
+                            }
+
+                            if (next($copy)) {
+                                $having .= ' and ';
+                            }
                         }
+
+                        $builder->whereRaw("
+                            p.id in
+                            (select p.id
+                            from products p
+                            inner join products_attributes pa on p.id = pa.product_id
+                            group by p.id
+                            having $having)
+                        ");
                     });
             })
             ->distinct()
             ->get();
 
         $categories = Category::when($request->get('category_id'), function (Builder $builder, $category) {
-                $builder->where('id', $category)
-                    ->with('attributes');
-            })
+            $builder->where('id', $category)
+                ->with('attributes');
+        })
             ->get();
 
         return [
