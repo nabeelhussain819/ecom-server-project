@@ -9,7 +9,9 @@ use App\Models\Product;
 use App\Models\ProductsAttribute;
 use App\Models\ProductsCategories;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
@@ -168,6 +170,24 @@ class ProductController extends Controller
             'name' => $media->url,
             'status' => 'done',
             'url' => $media->url,
+        ];
+    }
+
+    public function search(Request $request)
+    {
+        $products = Product::from('products as p')
+            ->select(DB::raw('p.*, pc.category_id, c.name as category_name'))
+            ->join('products_categories as pc', 'p.id', '=', 'pc.product_id')
+            ->join('categories as c', 'c.id', '=', 'pc.category_id')
+            ->where('p.name', 'LIKE', "%{$request->get('query')}%")
+            ->when($request->get('category_id'), function (Builder $builder, $category) {
+                $builder->where('pc.category_id', $category);
+            })
+            ->get();
+
+        return [
+            'products' => $products,
+            'categories' => $products->pluck('category_name', 'category_id')
         ];
     }
 }

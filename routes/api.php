@@ -78,6 +78,7 @@ Route::group(['prefix' => '/categories', ['middleware' => 'throttle:20,5']], fun
 Route::group(['prefix' => '/products'], function () {
     Route::get('/show/{product:guid}', [Api\ProductController::class, 'show']);
     Route::get('media/{product:guid}', [Api\ProductController::class, 'media']);
+    Route::get('/search', [Api\ProductController::class, 'search']);
 });
 
 Route::get('products', [Api\ProductController::class, 'index']);
