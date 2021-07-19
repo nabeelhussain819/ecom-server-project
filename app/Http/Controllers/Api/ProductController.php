@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\GuidHelper;
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Media;
 use App\Models\Product;
 use App\Models\ProductsAttribute;
@@ -176,7 +177,7 @@ class ProductController extends Controller
     public function search(Request $request)
     {
         $products = Product::from('products as p')
-            ->select(DB::raw('p.*, pc.category_id, c.name as category_name'))
+            ->select(DB::raw('p.*, pc.category_id'))
             ->join('products_categories as pc', 'p.id', '=', 'pc.product_id')
             ->join('categories as c', 'c.id', '=', 'pc.category_id')
             ->where('p.name', 'LIKE', "%{$request->get('query')}%")
@@ -185,9 +186,15 @@ class ProductController extends Controller
             })
             ->get();
 
+        $categories = Category::whereIn('id', $products->pluck('category_id')->unique())
+            ->when($request->get('category_id'), function (Builder $builder) {
+                $builder->with('attributes');
+            })
+            ->get();
+
         return [
             'products' => $products,
-            'categories' => $products->pluck('category_name', 'category_id')
+            'categories' => $categories
         ];
     }
 }
