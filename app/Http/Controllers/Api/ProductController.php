@@ -179,7 +179,6 @@ class ProductController extends Controller
         $products = Product::from('products as p')
             ->select(DB::raw('p.*, pc.category_id'))
             ->join('products_categories as pc', 'p.id', '=', 'pc.product_id')
-            ->join('categories as c', 'c.id', '=', 'pc.category_id')
             ->where('p.name', 'LIKE', "%{$request->get('query')}%")
             ->when($request->get('category_id'), function (Builder $builder, $category) {
                 $builder->where('pc.category_id', $category);
