@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use App\Models\Service;
 use App\Models\ServicesAttribute;
 use App\Models\ServicesCategories;
@@ -11,13 +12,10 @@ use Illuminate\Http\Request;
 class ServiceController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
      */
     public function index()
     {
-        //
         return ServicesCategories::with('service', 'category')->whereHas('service', function ($query) {
             $query->where('active', 1);
         })->get();
@@ -44,12 +42,13 @@ class ServiceController extends Controller
         //
         $service = new Service();
         //temporary 1
-        $request['user_id'] = 1;
+        $request['user_id'] = \Auth::user()->id;
         $service->fill($request->all())->save();
         $serviceCategories = new ServicesCategories($request->all());
         $service->categories()->saveMany([$serviceCategories]);
 
         $attributes = [];
+        //@todo inherit attribute functionality
         foreach ($request->get('attributes', []) as $attribute) {
             $attributes[] = [
                 'attribute_id' => $attribute['id'],
@@ -119,5 +118,10 @@ class ServiceController extends Controller
         //
         Service::destroy($id);
         return response()->json(['message', 'Service deleted']);
+    }
+
+    public function media(Service $service, Request $request)
+    {
+        return $service->images();
     }
 }

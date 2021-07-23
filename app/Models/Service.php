@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Core\Base;
+use App\Interfaces\IMediaInteraction;
+use App\Traits\InteractWithMedia;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -45,9 +48,11 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Service whereUserId($value)
  * @mixin \Eloquent
  */
-class Service extends Model
+class Service extends Base implements IMediaInteraction
 {
-       /**
+    use InteractWithMedia;
+    public const MEDIA_UPLOAD = "SERVICES";
+    /**
      * The "type" of the auto-incrementing ID.
      *
      * @var string
@@ -58,6 +63,8 @@ class Service extends Model
      * @var array
      */
     protected $fillable = ['user_id', 'name', 'description', 'price', 'sale_price', 'location', 'google_address', 'postal_address', 'longitude', 'latitude', 'active', 'guid', 'created_at', 'updated_at'];
+
+    protected $autoBlame = false;
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
