@@ -25,7 +25,6 @@ Route::group(['prefix' => 'auth'], function () {
 
 
 Route::get('products', [Api\ProductController::class, 'index']);
-Route::post('products', [Api\ProductController::class, 'store']);
 //Route::patch('products/{id}',[Api\ProductController::class,'update']);
 Route::delete('products/{id}', [Api\ProductController::class, 'destroy']);
 
@@ -56,6 +55,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::post('upload', [Api\UserController::class, 'upload']);
     });
     Route::group(['prefix' => '/products'], function () {
+        Route::post('/', [Api\ProductController::class, 'store']);
         Route::patch('/{product:guid}', [Api\ProductController::class, 'update']);
         Route::get('/self/', [Api\ProductController::class, 'self']);
         Route::post('upload/{product:guid}', [Api\ProductController::class, 'upload']);
