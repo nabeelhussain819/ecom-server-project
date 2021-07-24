@@ -38,7 +38,7 @@ class ServicesCategories extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function categories()
+    public function category()
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
@@ -46,7 +46,7 @@ class ServicesCategories extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function services()
+    public function service()
     {
         return $this->belongsTo(Service::class, 'service_id');
     }
