@@ -99,17 +99,24 @@ class ServiceController extends Controller
      */
     public function update(Request $request, Service $service)
     {
-        //
-        $service->fill($request->all())->update();
+        DB::beginTransaction();
+        try {
+            $service->fill($request->all())->update();
 
-        $attributes = ($postedAttributes = $request->get('attributes')) ? array_combine(array_column($postedAttributes, 'id'), array_column($postedAttributes, 'value')) : [];
-        // @TODO: create relations to avoid where query
-        ServicesAttribute::where('product_id', $service->id)
-            ->get()
-            ->each(function (ServicesAttribute $attribute) use ($attributes) {
-                $attribute->value = $attributes[$attribute->attribute_id];
-                $attribute->save();
-            });
+            $attributes = ($postedAttributes = $request->get('attributes')) ? array_combine(array_column($postedAttributes, 'id'), array_column($postedAttributes, 'value')) : [];
+            // @TODO: create relations to avoid where query
+            ServicesAttribute::where('product_id', $service->id)
+                ->get()
+                ->each(function (ServicesAttribute $attribute) use ($attributes) {
+                    $attribute->value = $attributes[$attribute->attribute_id];
+                    $attribute->save();
+                });
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
 
 //        ServicesCategories::where('service_id', $service->id)->update(['category_id' => $request->category_id]);
         return $this->genericResponse(true, "$service->name Updated", 200, ['service' => $service->withCategories()]);

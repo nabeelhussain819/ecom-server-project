@@ -115,16 +115,24 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        $product->fill($request->all())->update();
+        DB::beginTransaction();
+        try {
+            $product->fill($request->all())->update();
 
-        $attributes = ($postedAttributes = $request->get('attributes')) ? array_combine(array_column($postedAttributes, 'id'), array_column($postedAttributes, 'value')) : [];
-        // @TODO: create relations to avoid where query
-        ProductsAttribute::where('product_id', $product->id)
-            ->get()
-            ->each(function (ProductsAttribute $attribute) use ($attributes) {
-                $attribute->value = $attributes[$attribute->attribute_id];
-                $attribute->save();
-            });
+            $attributes = ($postedAttributes = $request->get('attributes')) ? array_combine(array_column($postedAttributes, 'id'), array_column($postedAttributes, 'value')) : [];
+            // @TODO: create relations to avoid where query
+            ProductsAttribute::where('product_id', $product->id)
+                ->get()
+                ->each(function (ProductsAttribute $attribute) use ($attributes) {
+                    $attribute->value = $attributes[$attribute->attribute_id];
+                    $attribute->save();
+                });
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
         //ProductsCategories::where('product_id',$product->id)->update(['category_id' => $request->category_id]);
         return $this->genericResponse(true, "$product->name Updated", 200, ['product' => $product->withCategories()]);
     }
