@@ -8,6 +8,7 @@ use App\Models\Service;
 use App\Models\ServicesAttribute;
 use App\Models\ServicesCategories;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ServiceController extends Controller
 {
@@ -39,25 +40,32 @@ class ServiceController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        $service = new Service();
-        //temporary 1
-        $request['user_id'] = \Auth::user()->id;
-        $service->fill($request->all())->save();
-        $serviceCategories = new ServicesCategories($request->all());
-        $service->categories()->saveMany([$serviceCategories]);
+        DB::beginTransaction();
+        try {
+            $service = new Service();
+            //temporary 1
+            $request['user_id'] = \Auth::user()->id;
+            $service->fill($request->all())->save();
+            $serviceCategories = new ServicesCategories($request->all());
+            $service->categories()->saveMany([$serviceCategories]);
 
-        $attributes = [];
-        //@todo inherit attribute functionality
-        foreach ($request->get('attributes', []) as $attribute) {
-            $attributes[] = [
-                'attribute_id' => $attribute['id'],
-                'service_id' => $service->id,
-                'value' => $attribute['value']
-            ];
+            //@todo inherit attribute functionality
+            foreach ($request->get('attributes', []) as $attribute) {
+                $data = [
+                    'attribute_id' => $attribute['id'],
+                    'service_id' => $service->id,
+                    'value' => $attribute['value']
+                ];
+
+                $serviceAttribute = new ServicesAttribute($data);
+                $serviceAttribute->save();
+            }
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
         }
-
-        ServicesAttribute::insert($attributes);
 
         return $this->genericResponse(true, 'Service Created', 200, ['service' => $service->withCategories()]);
     }

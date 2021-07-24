@@ -54,26 +54,34 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $product = new Product();
+        DB::beginTransaction();
+        try {
+            $product = new Product();
 
-        //temporary 1, for testing
-        $request['user_id'] = \Auth::user()->id;
-        $product->fill($request->all());
-        $product->save();
-        $productCategories = new ProductsCategories($request->all());
-        $product->categories()->saveMany([$productCategories]);
+            //temporary 1, for testing
+            $request['user_id'] = \Auth::user()->id;
+            $product->fill($request->all());
+            $product->save();
+            $productCategories = new ProductsCategories($request->all());
+            $product->categories()->saveMany([$productCategories]);
 
-        $attributes = [];
-        //@todo inherit attribute functionality
-        foreach ($request->get('attributes', []) as $attribute) {
-            $attributes[] = [
-                'attribute_id' => $attribute['id'],
-                'product_id' => $product->id,
-                'value' => $attribute['value']
-            ];
+            //@todo inherit attribute functionality
+            foreach ($request->get('attributes', []) as $attribute) {
+                $data = [
+                    'attribute_id' => $attribute['id'],
+                    'product_id' => $product->id,
+                    'value' => $attribute['value']
+                ];
+
+                $productAttribute = new ProductsAttribute($data);
+                $productAttribute->save();
+            }
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
         }
-
-        ProductsAttribute::insert($attributes);
 
         return $this->genericResponse(true, 'Product Created', 200, ['product' => $product->withCategories()]);
     }
