@@ -72,7 +72,7 @@ class Product extends Base implements IMediaInteraction
      */
     protected $fillable = ['user_id', 'name', 'description', 'price', 'sale_price', 'location', 'google_address', 'postal_address', 'longitude', 'latitude', 'active', 'guid', 'created_at', 'updated_at'];
 
-    protected $appends = ['cover_image'];
+    protected $appends = ['cover_image', 'is_owner'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -124,5 +124,13 @@ class Product extends Base implements IMediaInteraction
             return $media->url;
         }
         return null;
+    }
+
+    public function getIsOwnerAttribute()
+    {
+        if (!empty(\Auth::user())) {
+            return $this->user_id === \Auth::user()->id;
+        }
+        return false;
     }
 }
