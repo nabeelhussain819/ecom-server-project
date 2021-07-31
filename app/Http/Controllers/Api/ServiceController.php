@@ -174,7 +174,7 @@ class ServiceController extends Controller
                             s.id in
                             (select s.id
                             from services s
-                            inner join services_attributes pa on s.id = sa.service_id
+                            inner join services_attributes sa on s.id = sa.service_id
                             group by s.id
                             having $having)
                         ");
