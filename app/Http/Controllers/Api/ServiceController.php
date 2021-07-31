@@ -150,8 +150,7 @@ class ServiceController extends Controller
             ->when($request->get('category_id'), function (Builder $builder, $category) use ($request) {
                 $builder->where('sc.category_id', $category)
                     ->when(json_decode($request->get('filters'), true), function (Builder $builder, $filters) {
-                        $copy = $filters;
-                        $having = '';
+                        $having = [];
 
                         foreach ($filters as $id => $value) {
                             if (is_bool($value)) {
@@ -160,16 +159,13 @@ class ServiceController extends Controller
 
                             if (is_array($value)) {
                                 $value = implode('","', $value);
-                                $having .= "sum(case when sa.attribute_id = $id and json_overlaps(sa.value, '[\"$value\"]') then 1 else 0 end) > 0";
+                                $having[] = "sum(case when sa.attribute_id = $id and json_overlaps(sa.value, '[\"$value\"]') then 1 else 0 end) > 0";
                             } else {
-                                $having .= "sum(case when sa.attribute_id = $id and json_contains(sa.value, '\"$value\"') then 1 else 0 end) > 0";
-                            }
-
-                            if (next($copy)) {
-                                $having .= ' and ';
+                                $having[] = "sum(case when sa.attribute_id = $id and json_contains(sa.value, '\"$value\"') then 1 else 0 end) > 0";
                             }
                         }
 
+                        $having = implode(' and ', $having);
                         $builder->whereRaw("
                             s.id in
                             (select s.id
