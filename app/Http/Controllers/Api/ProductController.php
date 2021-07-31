@@ -240,7 +240,7 @@ class ProductController extends Controller
             ->get();
 
         return [
-            'products' => $products,
+            'results' => $products,
             'categories' => $categories
         ];
     }
