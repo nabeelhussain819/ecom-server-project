@@ -47,8 +47,6 @@ class ServiceController extends Controller
             //temporary 1
             $request['user_id'] = \Auth::user()->id;
             $service->fill($request->all())->save();
-            $serviceCategories = new ServicesCategories($request->all());
-            $service->categories()->saveMany([$serviceCategories]);
 
             //@todo inherit attribute functionality
             foreach ($request->get('attributes', []) as $attribute) {
@@ -68,7 +66,7 @@ class ServiceController extends Controller
             throw $e;
         }
 
-        return $this->genericResponse(true, 'Service Created', 200, ['service' => $service->withCategories()]);
+        return $this->genericResponse(true, 'Service Created', 200, ['service' => $service->withCategory()]);
     }
 
     /**
@@ -79,7 +77,7 @@ class ServiceController extends Controller
      */
     public function show(Service $service)
     {
-        return $service->withCategories()->withServicesAttributes();
+        return $service->withCategory()->withServicesAttributes();
     }
 
     /**
@@ -119,8 +117,7 @@ class ServiceController extends Controller
             throw $e;
         }
 
-//        ServicesCategories::where('service_id', $service->id)->update(['category_id' => $request->category_id]);
-        return $this->genericResponse(true, "$service->name Updated", 200, ['service' => $service->withCategories()]);
+        return $this->genericResponse(true, "$service->name Updated", 200, ['service' => $service->withCategory()]);
     }
 
     /**
@@ -143,12 +140,9 @@ class ServiceController extends Controller
 
     public function search(Request $request)
     {
-        $services = Service::from('services as s')
-            ->select(DB::raw('s.*, sc.category_id'))
-            ->join('services_categories as sc', 's.id', '=', 'sc.service_id')
-            ->where('s.name', 'LIKE', "%{$request->get('query')}%")
+        $services = Service::where('name', 'LIKE', "%{$request->get('query')}%")
             ->when($request->get('category_id'), function (Builder $builder, $category) use ($request) {
-                $builder->where('sc.category_id', $category)
+                $builder->where('category_id', $category)
                     ->when(json_decode($request->get('filters'), true), function (Builder $builder, $filters) {
                         $having = [];
 
@@ -159,19 +153,19 @@ class ServiceController extends Controller
 
                             if (is_array($value)) {
                                 $value = implode('","', $value);
-                                $having[] = "sum(case when sa.attribute_id = $id and json_overlaps(sa.value, '[\"$value\"]') then 1 else 0 end) > 0";
+                                $having[] = "sum(case when services_attributes.attribute_id = $id and json_overlaps(services_attributes.value, '[\"$value\"]') then 1 else 0 end) > 0";
                             } else {
-                                $having[] = "sum(case when sa.attribute_id = $id and json_contains(sa.value, '\"$value\"') then 1 else 0 end) > 0";
+                                $having[] = "sum(case when services_attributes.attribute_id = $id and json_contains(services_attributes.value, '\"$value\"') then 1 else 0 end) > 0";
                             }
                         }
 
                         $having = implode(' and ', $having);
                         $builder->whereRaw("
-                            s.id in
-                            (select s.id
-                            from services s
-                            inner join services_attributes sa on s.id = sa.service_id
-                            group by s.id
+                            id in
+                            (select services.id
+                            from services
+                            inner join services_attributes on services.id = services_attributes.service_id
+                            group by services.id
                             having $having)
                         ");
                     });
@@ -183,6 +177,7 @@ class ServiceController extends Controller
             $builder->where('id', $category)
                 ->with('attributes');
         })
+            ->where('type', Category::SERVICE)
             ->get();
 
         return [
