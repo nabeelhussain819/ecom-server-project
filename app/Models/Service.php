@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Core\Base;
 use App\Interfaces\IMediaInteraction;
 use App\Traits\InteractWithMedia;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * App\Models\Service
@@ -51,6 +51,7 @@ use Illuminate\Database\Eloquent\Model;
 class Service extends Base implements IMediaInteraction
 {
     use InteractWithMedia;
+
     public const MEDIA_UPLOAD = "SERVICES";
     /**
      * The "type" of the auto-incrementing ID.
@@ -62,7 +63,7 @@ class Service extends Base implements IMediaInteraction
     /**
      * @var array
      */
-    protected $fillable = ['user_id', 'name', 'description', 'price', 'sale_price', 'location', 'google_address', 'postal_address', 'longitude', 'latitude', 'active', 'guid', 'created_at', 'updated_at'];
+    protected $fillable = ['category_id', 'user_id', 'name', 'description', 'price', 'sale_price', 'location', 'google_address', 'postal_address', 'longitude', 'latitude', 'active', 'guid', 'created_at', 'updated_at'];
 
     protected $autoBlame = false;
 
@@ -83,16 +84,18 @@ class Service extends Base implements IMediaInteraction
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function categories()
+    public function category()
     {
-        return $this->hasMany(ServicesCategories::class, 'service_id');
+        return $this->belongsTo(Category::class);
     }
 
-    public function withCategories()
+    public function withCategory()
     {
-        return $this->load('categories');
+        return $this->load(['category' => function (BelongsTo $query) {
+            $query->with('attributes');
+        }]);
     }
 
     public function servicesAttributes()

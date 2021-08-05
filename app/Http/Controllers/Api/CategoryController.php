@@ -11,10 +11,12 @@ class CategoryController extends Controller
     /**
      * @return \Illuminate\Support\Collection
      */
-    public function index()
+    public function index(Request $request)
     {
         //
-        return Category::select(['id', 'name', 'description'])->get();
+        return Category::select(['id', 'name', 'description'])
+            ->where('type', $request->get('type') == 1 ? Category::PRODUCT : Category::SERVICE)
+            ->get();
     }
 
     /**

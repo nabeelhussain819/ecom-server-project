@@ -45,6 +45,9 @@ class Category extends Model
      */
     protected $fillable = ['name', 'guid', 'description', 'type', 'active', 'created_at', 'updated_at'];
 
+    const PRODUCT = 'Product',
+        SERVICE = 'Service';
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

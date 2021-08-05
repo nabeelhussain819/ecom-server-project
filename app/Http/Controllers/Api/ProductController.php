@@ -8,7 +8,6 @@ use App\Models\Category;
 use App\Models\Media;
 use App\Models\Product;
 use App\Models\ProductsAttribute;
-use App\Models\ProductsCategories;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -62,8 +61,6 @@ class ProductController extends Controller
             $request['user_id'] = \Auth::user()->id;
             $product->fill($request->all());
             $product->save();
-            $productCategories = new ProductsCategories($request->all());
-            $product->categories()->saveMany([$productCategories]);
 
             //@todo inherit attribute functionality
             foreach ($request->get('attributes', []) as $attribute) {
@@ -83,7 +80,7 @@ class ProductController extends Controller
             throw $e;
         }
 
-        return $this->genericResponse(true, 'Product Created', 200, ['product' => $product->withCategories()]);
+        return $this->genericResponse(true, 'Product Created', 200, ['product' => $product->withCategory()]);
     }
 
     /**
@@ -92,7 +89,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return $product->withCategories()->withProductsAttributes();
+        return $product->withCategory()->withProductsAttributes();
     }
 
     /**
@@ -133,8 +130,8 @@ class ProductController extends Controller
             DB::rollBack();
             throw $e;
         }
-        //ProductsCategories::where('product_id',$product->id)->update(['category_id' => $request->category_id]);
-        return $this->genericResponse(true, "$product->name Updated", 200, ['product' => $product->withCategories()]);
+
+        return $this->genericResponse(true, "$product->name Updated", 200, ['product' => $product->withCategory()]);
     }
 
     /**
@@ -193,15 +190,11 @@ class ProductController extends Controller
 
     public function search(Request $request)
     {
-        $products = Product::from('products as p')
-            ->select(DB::raw('p.*, pc.category_id'))
-            ->join('products_categories as pc', 'p.id', '=', 'pc.product_id')
-            ->where('p.name', 'LIKE', "%{$request->get('query')}%")
+        $products = Product::where('name', 'LIKE', "%{$request->get('query')}%")
             ->when($request->get('category_id'), function (Builder $builder, $category) use ($request) {
-                $builder->where('pc.category_id', $category)
+                $builder->where('category_id', $category)
                     ->when(json_decode($request->get('filters'), true), function (Builder $builder, $filters) {
-                        $copy = $filters;
-                        $having = '';
+                        $having = [];
 
                         foreach ($filters as $id => $value) {
                             if (is_bool($value)) {
@@ -210,22 +203,19 @@ class ProductController extends Controller
 
                             if (is_array($value)) {
                                 $value = implode('","', $value);
-                                $having .= "sum(case when pa.attribute_id = $id and json_overlaps(pa.value, '[\"$value\"]') then 1 else 0 end) > 0";
+                                $having[] = "sum(case when products_attributes.attribute_id = $id and json_overlaps(products_attributes.value, '[\"$value\"]') then 1 else 0 end) > 0";
                             } else {
-                                $having .= "sum(case when pa.attribute_id = $id and json_contains(pa.value, '\"$value\"') then 1 else 0 end) > 0";
-                            }
-
-                            if (next($copy)) {
-                                $having .= ' and ';
+                                $having[] = "sum(case when products_attributes.attribute_id = $id and json_contains(products_attributes.value, '\"$value\"') then 1 else 0 end) > 0";
                             }
                         }
 
+                        $having = implode(' and ', $having);
                         $builder->whereRaw("
-                            p.id in
-                            (select p.id
-                            from products p
-                            inner join products_attributes pa on p.id = pa.product_id
-                            group by p.id
+                            id in
+                            (select products.id
+                            from products
+                            inner join products_attributes on products.id = products_attributes.product_id
+                            group by products.id
                             having $having)
                         ");
                     });
@@ -237,10 +227,11 @@ class ProductController extends Controller
             $builder->where('id', $category)
                 ->with('attributes');
         })
+            ->where('type', Category::PRODUCT)
             ->get();
 
         return [
-            'products' => $products,
+            'results' => $products,
             'categories' => $categories
         ];
     }

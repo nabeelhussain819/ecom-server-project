@@ -13,7 +13,7 @@ class CreateServicesCategoryTable extends Migration
      */
     public function up()
     {
-        Schema::create('services_categories', function (Blueprint $table) {
+        /*Schema::create('services_categories', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('service_id');
             $table->unsignedBigInteger('category_id');
@@ -22,7 +22,7 @@ class CreateServicesCategoryTable extends Migration
         Schema::table('services_categories', function (Blueprint $table) {
             $table->foreign('service_id')->references('id')->on('services')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade')->onUpdate('cascade');
-        });
+        });*/
     }
     /**
      * Reverse the migrations.

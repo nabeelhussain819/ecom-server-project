@@ -5,12 +5,14 @@ namespace App\Models;
 use App\Core\Base;
 use App\Interfaces\IMediaInteraction;
 use App\Traits\InteractWithMedia;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Auth;
 
 /**
  * App\Models\Product
  *
  * @property integer $id
+ * @property integer $category_id
  * @property integer $user_id
  * @property string $name
  * @property string $description
@@ -53,6 +55,7 @@ use Illuminate\Support\Facades\Auth;
 class Product extends Base implements IMediaInteraction
 {
     use InteractWithMedia;
+
     protected $autoBlame = false; //@todo temp
     public const MEDIA_UPLOAD = "PRODUCT";
 
@@ -71,7 +74,7 @@ class Product extends Base implements IMediaInteraction
     /**
      * @var array
      */
-    protected $fillable = ['user_id', 'name', 'description', 'price', 'sale_price', 'location', 'google_address', 'postal_address', 'longitude', 'latitude', 'active', 'guid', 'created_at', 'updated_at'];
+    protected $fillable = ['category_id', 'user_id', 'name', 'description', 'price', 'sale_price', 'location', 'google_address', 'postal_address', 'longitude', 'latitude', 'active', 'guid', 'created_at', 'updated_at'];
 
     protected $appends = ['cover_image', 'is_owner'];
 
@@ -84,11 +87,11 @@ class Product extends Base implements IMediaInteraction
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function categories()
+    public function category()
     {
-        return $this->hasMany(ProductsCategories::class, 'product_id');
+        return $this->belongsTo(Category::class);
     }
 
     /**
@@ -104,15 +107,18 @@ class Product extends Base implements IMediaInteraction
         return $this->hasMany(ProductsAttribute::class);
     }
 
+
     public function savedUsers()
     {
         $savedUser = new SavedUsersProduct();
         return $this->belongsToMany(SavedUsersProduct::class, $savedUser->getTable());
     }
 
-    public function withCategories()
+    public function withCategory()
     {
-        return $this->load("categories");
+        return $this->load(['category' => function (BelongsTo $query) {
+            $query->with('attributes');
+        }]);
     }
 
     public function withProductsAttributes()
