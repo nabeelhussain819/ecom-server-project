@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Core\Base;
 use App\Interfaces\IMediaInteraction;
 use App\Traits\InteractWithMedia;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * App\Models\Product
@@ -103,6 +104,12 @@ class Product extends Base implements IMediaInteraction
         return $this->hasMany(ProductsAttribute::class);
     }
 
+    public function savedUsers()
+    {
+        $savedUser = new SavedUsersProduct();
+        return $this->belongsToMany(SavedUsersProduct::class, $savedUser->getTable());
+    }
+
     public function withCategories()
     {
         return $this->load("categories");
@@ -132,5 +139,21 @@ class Product extends Base implements IMediaInteraction
             return $this->user_id === \Auth::user()->id;
         }
         return false;
+    }
+
+    /**
+     *User that method as in Trait so what so ever we also used in service just passing the same name in relation
+     */
+    public function attachOrDetachSaved()
+    {
+        if (Auth::check()) {
+            $authenticatedUserId = \Auth::user()->id;
+            $savedItem = $this->savedUsers()->where('user_id', $authenticatedUserId)->first();
+            if (!empty($savedItem)) {
+                return $savedItem->delete();
+            }
+            $this->savedUsers()->sync([$authenticatedUserId]);
+        }
+
     }
 }

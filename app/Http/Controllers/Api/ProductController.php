@@ -244,4 +244,14 @@ class ProductController extends Controller
             'categories' => $categories
         ];
     }
+
+    /**
+     * Saved user products
+     * @param Product $product
+     * @param Request $request
+     */
+    public function Saved(Product $product, Request $request)
+    {
+        $product->attachOrDetachSaved();
+    }
 }

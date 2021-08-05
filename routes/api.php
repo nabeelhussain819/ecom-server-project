@@ -54,11 +54,13 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('detail/', [Api\UserController::class, 'detail']);
         Route::post('upload', [Api\UserController::class, 'upload']);
     });
+
     Route::group(['prefix' => '/products'], function () {
         Route::post('/', [Api\ProductController::class, 'store']);
         Route::patch('/{product:guid}', [Api\ProductController::class, 'update']);
         Route::get('/self/', [Api\ProductController::class, 'self']);
         Route::post('upload/{product:guid}', [Api\ProductController::class, 'upload']);
+        Route::post('saved-users/{product:guid}', [Api\ProductController::class, 'saved']);
     });
 
     Route::group(['prefix' => '/services'], function () {
