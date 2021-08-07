@@ -22,10 +22,7 @@ class ProductController extends Controller
     public function index()
     {
         return view('products.index', [
-            'products' => ProductsCategories::with('products')
-                ->whereHas('products', function ($query) {
-                    $query->where('active', true);
-                })->orderBy('created_at', 'ASC')->paginate(10)
+            'products' => Product::where('active', true)->paginate(10)
         ]);
     }
 
@@ -50,12 +47,7 @@ class ProductController extends Controller
 
     public function search(Request $request)
     {
-
-        $search = $request->get('search');
-        $products = ProductsCategories::with('products')
-            ->whereHas('products', function ($query) use ($search) {
-                $query->where('active', true)->where('name', 'like', '%' . $search . '%');
-            })->paginate(10);
+        $products = Product::paginate(15);
         return view('products.index', ['products' => $products]);
     }
 
@@ -119,8 +111,9 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
+
         return view('products.edit', [
-            'product' => Product::with('categories')->findOrFail($id),
+            'product' => Product::with('category')->findOrFail($id),
             'category' => Category::where('active', true)->get()
         ]);
     }
@@ -134,12 +127,13 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
+
         if ($request->get('activateOne') == "activateOnlyOne") {
             $product->update(['active' => $request->get('checkbox')]);
             return back()->with('success', "{$product->name} Status Changed Successfully.");
         } else {
             $product->fill($request->all())->update();
-            ProductsCategories::where('product_id', $product->id)->update(['category_id' => $request->category_id]);
+            //  ProductsCategories::where('product_id', $product->id)->update(['category_id' => $request->category_id]);
 
             $attributes = $request->get('attributes', []);
             // @TODO: create relations to avoid where query

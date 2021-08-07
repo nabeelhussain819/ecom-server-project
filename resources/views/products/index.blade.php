@@ -43,24 +43,24 @@
             @forelse($products as $item)
                 <tr>
                     <td>{{$count++}}</td>
-                    <td>{{$item->products->name}}</td>
+                    <td>{{$item->name}}</td>
                     <td>
                         <button type="button"
-                                class="{{$item->products->active  == 1 ? "btn btn-success" : "btn btn-danger"}}"
-                                data-toggle="modal" data-target="#products{{$item->products->id}}">
-                            {{$item->products->active == 1 ? 'Active' : 'Un-Active'}}
+                                class="{{$item->active  == 1 ? "btn btn-success" : "btn btn-danger"}}"
+                                data-toggle="modal" data-target="#products{{$item->id}}">
+                            {{$item->active == 1 ? 'Active' : 'Un-Active'}}
                         </button>
                     </td>
-                    <td>$ {{$item->products->price}}</td>
+                    <td>$ {{$item->price}}</td>
                     <td>
-                        <a href="{{route('customer.products',$item->products->user->id)}}">{{$item->products->user->name}}</a>
+                        {{--                        <a href="{{route('customer.products',$item->user->id)}}">{{$item->user->name}}</a>--}}
                     </td>
                     {{--<td>{{$item->category->name}}</td>--}}
                     {{--<td>{{$item->created_at}}</td>--}}
                     <td>
-                        <a href="{{route('products.edit', $item->products->id)}}" class="btn btn-info"><i
-                                class="fa fa-pen"></i></a>
-                        <form action="{{ route('products.destroy', $item->products->id) }}" method="POST"
+                        <a href="{{route('products.edit', $item->id)}}" class="btn btn-info"><i
+                                    class="fa fa-pen"></i></a>
+                        <form action="{{ route('products.destroy', $item->id) }}" method="POST"
                               style="display: unset">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -70,7 +70,7 @@
                     </td>
                 </tr>
                 <!-- Modal -->
-                @include('partials.status-modal',['data' => $item->products,'route'=> "products"])
+                @include('partials.status-modal',['data' => $item,'route'=> "products"])
             @empty
                 <p>No Active Products</p>
             @endforelse
