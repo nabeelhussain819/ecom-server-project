@@ -41,7 +41,7 @@ class ProductController extends Controller
     public function self()
     {
         return Product::where('user_id', \Auth::user()->id)
-            ->with(['categories', 'media'])
+            ->with(['category', 'media'])
             ->paginate($this->pageSize);
     }
 
