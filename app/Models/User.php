@@ -136,4 +136,5 @@ class User extends Authenticatable implements JWTSubject
     {
         return url(Storage::url($profile_url));
     }
+
 }

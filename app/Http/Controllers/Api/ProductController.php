@@ -89,7 +89,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return $product->withCategory()->withProductsAttributes();
+        return $product->withCategory()->withProductsAttributes()->appendDetailAttribute();
     }
 
     /**

@@ -161,6 +161,19 @@ class Product extends Base implements IMediaInteraction
             }
             $this->savedUsers()->save(new SavedUsersProduct(["user_id" => $authenticatedUserId]));
         }
+    }
 
+    public function getIsSavedAttribute(): bool
+    {
+        if (auth('api')->check()) {
+            return $this->savedUsers->contains('user_id', auth('api')->user()->id);
+        }
+        return false;
+    }
+
+    public function appendDetailAttribute()
+    {
+        $this->append(['isSaved']);
+        return $this;
     }
 }
