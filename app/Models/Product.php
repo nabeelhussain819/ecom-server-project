@@ -110,8 +110,7 @@ class Product extends Base implements IMediaInteraction
 
     public function savedUsers()
     {
-        $savedUser = new SavedUsersProduct();
-        return $this->belongsToMany(SavedUsersProduct::class, $savedUser->getTable());
+        return $this->hasMany(SavedUsersProduct::class, 'product_id');
     }
 
     public function withCategory()
@@ -154,11 +153,13 @@ class Product extends Base implements IMediaInteraction
     {
         if (Auth::check()) {
             $authenticatedUserId = \Auth::user()->id;
+
             $savedItem = $this->savedUsers()->where('user_id', $authenticatedUserId)->first();
+
             if (!empty($savedItem)) {
                 return $savedItem->delete();
             }
-            $this->savedUsers()->sync([$authenticatedUserId]);
+            $this->savedUsers()->save(new SavedUsersProduct(["user_id" => $authenticatedUserId]));
         }
 
     }

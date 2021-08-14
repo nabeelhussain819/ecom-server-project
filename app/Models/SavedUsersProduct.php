@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class SavedUsersProduct extends Model
 {
+    public $timestamps = false;
     /**
      * The "type" of the auto-incrementing ID.
      *
