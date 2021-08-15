@@ -37,10 +37,9 @@ Route::group(['prefix' => '/auth', ['middleware' => 'throttle:20,5']], function 
     Route::post('/google-login', [Api\Auth\LoginController::class, 'googleLogin']);
 });
 
-//all the below route should be in Secure routes
+//===============================All the below route should be in Secure routes==============================
 Route::group(['middleware' => 'auth:api'], function () {
     Route::get('categories-secure', [Api\CategoryController::class, 'index']);
-
 
     Route::group(['prefix' => '/categories'], function () {
         Route::get('/tabs', [Api\CategoryController::class, 'tabs']);
@@ -70,7 +69,12 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::patch('/{service:guid}', [Api\ServiceController::class, 'update']);
         Route::get('media/{service:guid}', [Api\ServiceController::class, 'media']);
     });
+
+    Route::Resources([
+        'message' => \App\Message::class
+    ]);
 });
+//===============================All the below route should be in Secure routes==============================
 
 //====================================== PUBLIC ROUTES =========================================
 
