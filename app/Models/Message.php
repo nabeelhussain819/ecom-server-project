@@ -4,7 +4,6 @@ namespace App;
 
 use App\Core\Base;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property integer $id
@@ -48,6 +47,15 @@ class Message extends Base
         return $this->belongsTo(User::class, 'recipient_id');
     }
 
+
+    /**
+     * @throws \Exception
+     */
+    public static function boot()
+    {
+        parent::boot();
+        throw new \Exception("Implementation of the Notification Observer by which message associate with the notification");
+    }
     /**
      * Move this to  Base model
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
