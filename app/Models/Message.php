@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Core\Base;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -36,7 +37,7 @@ class Message extends Base
      */
     public function sender()
     {
-        return $this->belongsTo('App\User', 'sender_id');
+        return $this->belongsTo(User::class, 'sender_id');
     }
 
     /**
@@ -44,7 +45,7 @@ class Message extends Base
      */
     public function recipient()
     {
-        return $this->belongsTo('App\User', 'recipient_id');
+        return $this->belongsTo(User::class, 'recipient_id');
     }
 
     /**
