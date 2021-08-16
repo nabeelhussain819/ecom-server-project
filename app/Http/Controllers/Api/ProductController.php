@@ -9,8 +9,10 @@ use App\Models\Media;
 use App\Models\Product;
 use App\Models\ProductsAttribute;
 use App\Models\User;
+use App\Models\Message;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -244,5 +246,27 @@ class ProductController extends Controller
     public function Saved(Product $product, Request $request)
     {
         $product->attachOrDetachSaved();
+    }
+
+    public function offer(Product $product, Request $request)
+    {
+        $offer = $request->get('offer');
+        if ($offer == $product->price) {
+            throw new \Exception('Make an offer greater or lesser than the product price.');
+        }
+
+        $sender = Auth::user();
+        $recipient = $product->user;
+        if ($sender->id === $recipient->id) {
+            throw new \Exception('Unable to make an offer on your own product');
+        }
+
+        $message = new Message();
+        $message->sender_id = $sender->id;
+        $message->recipient_id = $recipient->id;
+        $message->data = $sender->name . ' has offered you Rs. ' . $offer . ' for ' . $product->name;
+        $message->save();
+
+        return $this->genericResponse(true, 'Offer made successfully.');
     }
 }

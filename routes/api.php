@@ -60,6 +60,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('/self/', [Api\ProductController::class, 'self']);
         Route::post('upload/{product:guid}', [Api\ProductController::class, 'upload']);
         Route::post('saved-users/{product:guid}', [Api\ProductController::class, 'saved']);
+        Route::post('/{product:guid}/offer', [Api\ProductController::class, 'offer']);
     });
 
     Route::group(['prefix' => '/services'], function () {

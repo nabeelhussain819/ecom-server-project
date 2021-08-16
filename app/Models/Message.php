@@ -1,9 +1,8 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use App\Core\Base;
-use App\Models\User;
 
 /**
  * @property integer $id
@@ -51,11 +50,11 @@ class Message extends Base
     /**
      * @throws \Exception
      */
-    public static function boot()
+    /*public static function boot()
     {
         parent::boot();
         throw new \Exception("Implementation of the Notification Observer by which message associate with the notification");
-    }
+    }*/
     /**
      * Move this to  Base model
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
