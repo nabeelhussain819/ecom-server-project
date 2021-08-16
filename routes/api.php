@@ -52,6 +52,8 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::group(['prefix' => '/user'], function () {
         Route::get('detail/', [Api\UserController::class, 'detail']);
         Route::post('upload', [Api\UserController::class, 'upload']);
+        Route::get('conversations', [Api\UserController::class, 'conversations']);
+        Route::get('{user}/messages', [Api\UserController::class, 'messages']);
     });
 
     Route::group(['prefix' => '/products'], function () {
