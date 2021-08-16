@@ -76,4 +76,15 @@ class UserController extends Controller
             }])
             ->paginate();
     }
+
+    public function sendMessage(User $user, Request $request)
+    {
+        $message = new Message();
+        $message->sender_id = Auth::user()->id;
+        $message->recipient_id = $user->id;
+        $message->data = $request->get('message');
+        $message->save();
+
+        return $this->genericResponse(true, 'Message sent successfully.');
+    }
 }
