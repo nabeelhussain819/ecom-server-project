@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\OfferMade;
 use App\Helpers\GuidHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
@@ -266,6 +267,8 @@ class ProductController extends Controller
         $message->recipient_id = $recipient->id;
         $message->data = $sender->name . ' has offered you Rs. ' . $offer . ' for ' . $product->name;
         $message->save();
+
+        OfferMade::trigger($recipient);
 
         return $this->genericResponse(true, 'Offer made successfully.');
     }

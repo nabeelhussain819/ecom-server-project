@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\MessageReceived;
 use App\Http\Controllers\Controller;
 use App\Model\Media;
 use App\Models\Message;
@@ -84,6 +85,8 @@ class UserController extends Controller
         $message->recipient_id = $user->id;
         $message->data = $request->get('message');
         $message->save();
+
+        MessageReceived::trigger($user);
 
         return $this->genericResponse(true, 'Message sent successfully.');
     }
