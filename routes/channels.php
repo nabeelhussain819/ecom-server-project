@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Broadcast;
 |
 */
 
-Broadcast::channel('App.User.{id}', function ($user, $id) {
+Broadcast::channel('messages.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
-});
+}, ['guards' => 'api']);
+
+Broadcast::channel('offers.{id}', function ($user, $id) {
+    return (int) $user->id === (int) $id;
+}, ['guards' => 'api']);
