@@ -35,14 +35,16 @@ class MessageReceived implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('messages'); // temp for running local websockets
+        return new PrivateChannel('messages.' . $this->user->id);
     }
 
     public static function trigger(User $user)
     {
         try {
+
             event(new self($user));
         } catch (\Exception $ex) {
+
             Log::error(__CLASS__);
         }
     }
