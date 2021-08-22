@@ -74,9 +74,11 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('media/{service:guid}', [Api\ServiceController::class, 'media']);
     });
 
+    Route::get('/message/conversations', [Api\MessageController::class, 'conversations']);
     Route::Resources([
-        'message' => MessageController::class
+        'message' => Api\MessageController::class
     ]);
+
 });
 //===============================All the below route should be in Secure routes==============================
 

@@ -1,10 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Events\MessageReceived;
+use App\Http\Controllers\Controller;
 use App\Models\Message;
+use App\Models\Product;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class MessageController extends Controller
@@ -36,10 +39,14 @@ class MessageController extends Controller
      */
     public function store(Request $request, User $user)
     {
+        // validation on recipient id
+
         $message = new Message();
         $message->sender_id = \Auth::user()->id;
-        $message->recipient_id = $user->id;
+        $message->recipient_id = $request->get('recipient_id');
         $message->data = $request->get('message');
+        $message->notifiable_type = Product::class;
+        $message->notifiable_id = $request->get('notifiable_id');
         $message->save();
 
         MessageReceived::trigger($user);
@@ -90,5 +97,23 @@ class MessageController extends Controller
     public function destroy(Message $message)
     {
         //
+    }
+
+    public function conversations()
+    {
+        $authenticatedUserId = \Auth::user()->id;
+
+        return Message::selectRaw("notifiable_id,
+	                notifiable_type ,
+	                max(id) as id,
+	                max(recipient_id) as recipient_id,
+	                max(data),
+	                max(sender_id) as sender_id,
+	                bool_and(sender_id = " . $authenticatedUserId . ") as is_sender")
+            ->where(function (Builder $builder) use ($authenticatedUserId) {
+                $builder->orWhere("recipient_id", $authenticatedUserId)
+                    ->orWhere("sender_id", $authenticatedUserId);
+            })->groupBy(['notifiable_type', 'notifiable_id'])
+            ->paginate($this->pageSize);
     }
 }
