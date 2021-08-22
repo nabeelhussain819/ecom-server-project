@@ -28,7 +28,7 @@ class Message extends Base
     /**
      * @var array
      */
-    protected $fillable = ['sender_id', 'recipient_id', 'created_by', 'updated_by', 'read_at', 'guid', 'data', 'created_at', 'updated_at'];
+    protected $fillable = ['sender_id', 'recipient_id', 'created_by', 'updated_by', 'read_at', 'guid', 'data', 'created_at', 'updated_at', 'notifiable_type', 'notifiable_id'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
