@@ -107,9 +107,13 @@ class MessageController extends Controller
 	                notifiable_type ,
 	                max(id) as id,
 	                max(recipient_id) as recipient_id,
-	                max(data),
+	                max(data) as data,
 	                max(sender_id) as sender_id,
-	                bool_and(sender_id = " . $authenticatedUserId . ") as is_sender")
+	                bool_and(sender_id = " . $authenticatedUserId . ") as is_sender,
+	                case
+	                WHEN notifiable_type = 'App\Models\Product' THEN (select name from products where id = notifiable_id)
+	                WHEN notifiable_type = 'App\Models\Service' THEN (select name from services where id = notifiable_id)
+	                END as name")
             ->where(function (Builder $builder) use ($authenticatedUserId) {
                 $builder->orWhere("recipient_id", $authenticatedUserId)
                     ->orWhere("sender_id", $authenticatedUserId);
