@@ -13,6 +13,8 @@ use App\Core\Base;
  * @property string $read_at
  * @property string $guid
  * @property string $data
+ * @property integer $notifiable_id
+ * @property string $notifiable_type
  * @property string $created_at
  * @property string $updated_at
  */
@@ -24,6 +26,7 @@ class Message extends Base
      * @var string
      */
     protected $keyType = 'integer';
+
 
     /**
      * @var array

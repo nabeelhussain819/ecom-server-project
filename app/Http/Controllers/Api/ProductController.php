@@ -249,15 +249,24 @@ class ProductController extends Controller
         $product->attachOrDetachSaved();
     }
 
+    /*
+     * @param Product $product
+     * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @throws \Exception
+     */
     public function offer(Product $product, Request $request)
     {
         $offer = $request->get('offer');
-        if ($offer == $product->price) {
-            throw new \Exception('Make an offer greater or lesser than the product price.');
+
+        // optimize move this into the request
+        if ($offer == $product->price && $offer >= $product->price) {
+            throw new \Exception('Make an offer lesser than the product price.');
         }
 
         $sender = Auth::user();
         $recipient = $product->user;
+
         if ($sender->id === $recipient->id) {
             throw new \Exception('Unable to make an offer on your own product');
         }
@@ -266,6 +275,8 @@ class ProductController extends Controller
         $message->sender_id = $sender->id;
         $message->recipient_id = $recipient->id;
         $message->data = $sender->name . ' has offered you Rs. ' . $offer . ' for ' . $product->name;
+        $message->notifiable_id = $product->id;
+        $message->notifiable_type = Product::class;
         $message->save();
 
         OfferMade::trigger($recipient);

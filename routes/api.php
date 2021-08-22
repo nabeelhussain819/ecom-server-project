@@ -75,7 +75,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     });
 
     Route::Resources([
-        'message' => \App\Message::class
+        'message' => MessageController::class
     ]);
 });
 //===============================All the below route should be in Secure routes==============================
