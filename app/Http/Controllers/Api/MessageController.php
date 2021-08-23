@@ -68,6 +68,7 @@ class MessageController extends Controller
             $builder->orWhere("sender_id", $message->sender_id)->orWhere("recipient_id", $message->sender_id);
         })->where("notifiable_type", $message->notifiable_type)
             ->where("notifiable_id", $message->notifiable_id)
+            ->orderBy('created_at')
             ->paginate($this->pageSize);
     }
 
@@ -125,5 +126,14 @@ class MessageController extends Controller
                     ->orWhere("sender_id", $authenticatedUserId);
             })->groupBy(['notifiable_type', 'notifiable_id'])
             ->paginate($this->pageSize);
+    }
+
+    public function saveAssociated(Request $request, Message $message)
+    {
+        $newMessage = $message->replicate(['guid', 'id', 'created_by', 'updated_by', 'created_at', 'updated_at']);
+        $newMessage->data = $request->get("data");
+        
+        $newMessage->save();
+        return $newMessage;
     }
 }

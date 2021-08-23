@@ -75,6 +75,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     });
 
     Route::get('/message/conversations', [Api\MessageController::class, 'conversations']);
+    Route::post('/message/saveAssociated/{message}', [Api\MessageController::class, 'saveAssociated']);
     Route::Resources([
         'message' => \Api\MessageController::class
     ]);
