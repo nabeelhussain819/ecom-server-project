@@ -76,7 +76,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::get('/message/conversations', [Api\MessageController::class, 'conversations']);
     Route::Resources([
-        'message' => Api\MessageController::class
+        'message' => \Api\MessageController::class
     ]);
 
 });

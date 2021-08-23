@@ -74,4 +74,9 @@ class Message extends Base
 //    {
 //        return $this->belongsTo('App\User', 'updated_by');
 //    }
+
+    public static function defaultSelect(): array
+    {
+        return ['id', 'recipient_id', 'sender_id', 'data', 'guid'];
+    }
 }

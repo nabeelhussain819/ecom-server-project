@@ -62,7 +62,13 @@ class MessageController extends Controller
      */
     public function show(Message $message)
     {
-        //
+        return Message::select(Message::defaultSelect())->where(function (Builder $builder) use ($message) {
+            $builder->orWhere("sender_id", $message->recipient_id)->orWhere("recipient_id", $message->recipient_id);
+        })->where(function (Builder $builder) use ($message) {
+            $builder->orWhere("sender_id", $message->sender_id)->orWhere("recipient_id", $message->sender_id);
+        })->where("notifiable_type", $message->notifiable_type)
+            ->where("notifiable_id", $message->notifiable_id)
+            ->paginate($this->pageSize);
     }
 
     /**
