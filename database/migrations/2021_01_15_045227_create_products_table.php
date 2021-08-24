@@ -19,13 +19,14 @@ class CreateProductsTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('name');
             $table->longText('description')->nullable();
-            $table->float('price',36);
-            $table->float('sale_price',36)->nullable();
+            $table->float('price', 36)->nullable();
+            $table->float('sale_price', 36)->nullable();
             $table->string('location')->nullable();
             $table->mediumText('google_address')->nullable();
             $table->mediumText('postal_address')->nullable();
-            $table->decimal('longitude',10,7)->nullable();
-            $table->decimal('latitude',10,7)->nullable();
+            $table->decimal('longitude', 10, 7)->nullable();
+            $table->decimal('latitude', 10, 7)->nullable();
+            $table->enum('status', ['DRAFT', 'COMPLETE']);
             $table->boolean('active')->default(false);
             $table->uuid('guid')->unique();
             $table->timestamps();
@@ -34,6 +35,7 @@ class CreateProductsTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });
     }
+
     /**
      * Reverse the migrations.
      *

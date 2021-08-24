@@ -120,13 +120,15 @@ class ProductController extends Controller
             $product->fill($request->all())->update();
 
             $attributes = ($postedAttributes = $request->get('attributes')) ? array_combine(array_column($postedAttributes, 'id'), array_column($postedAttributes, 'value')) : [];
-            // @TODO: create relations to avoid where query
-            ProductsAttribute::where('product_id', $product->id)
-                ->get()
-                ->each(function (ProductsAttribute $attribute) use ($attributes) {
-                    $attribute->value = $attributes[$attribute->attribute_id];
-                    $attribute->save();
-                });
+            if (!empty($attributes)) {
+                // @TODO: create relations to avoid where query
+                ProductsAttribute::where('product_id', $product->id)
+                    ->get()
+                    ->each(function (ProductsAttribute $attribute) use ($attributes) {
+                        $attribute->value = $attributes[$attribute->attribute_id];
+                        $attribute->save();
+                    });
+            }
 
             DB::commit();
         } catch (\Exception $e) {
