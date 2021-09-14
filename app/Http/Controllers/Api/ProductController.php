@@ -62,6 +62,7 @@ class ProductController extends Controller
 
             //temporary 1, for testing
             $request['user_id'] = \Auth::user()->id;
+            $request['status'] = 1;
             $product->fill($request->all());
             $product->save();
 

@@ -74,7 +74,7 @@ class Product extends Base implements IMediaInteraction
     /**
      * @var array
      */
-    protected $fillable = ['category_id', 'user_id', 'name', 'description', 'price', 'sale_price', 'location', 'google_address', 'postal_address', 'longitude', 'latitude', 'active', 'guid', 'created_at', 'updated_at'];
+    protected $fillable = ['category_id', 'user_id', 'name', 'description', 'status', 'price', 'sale_price', 'location', 'google_address', 'postal_address', 'longitude', 'latitude', 'active', 'guid', 'created_at', 'updated_at'];
 
     protected $appends = ['cover_image', 'is_owner'];
 
