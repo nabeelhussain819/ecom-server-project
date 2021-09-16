@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Auth;
 use App\Helpers\ArrayHelper;
 use App\Helpers\GuidHelper;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RegistrationRequest;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -84,8 +85,9 @@ class RegisterController extends Controller
      * @param Request $request
      * @throws \Throwable
      */
-    public function register(Request $request)
+    public function register(RegistrationRequest $request)
     {
+
         return DB::transaction(function () use ($request) {
             $validator = $this->validator($request->all());
             if (!$validator->fails()) {

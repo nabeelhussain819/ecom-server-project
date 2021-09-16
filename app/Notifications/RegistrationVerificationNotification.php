@@ -60,10 +60,11 @@ class RegistrationVerificationNotification extends Notification
      */
     protected function verificationUrl($notifiable)
     {
-        $domain = env('FRONT_END_URL') . 'verify';
+        $domain = env('FRONT_END_URL') . 'user/verify';
+        $envKey = env('APP_KEY');
         $expires = Carbon::now()->addMinutes(Config::get('auth.verification.expire', 60));
         $key = $notifiable->getKey();
-        $hash = sha1($notifiable->getEmailForVerification());
+        $hash = sha1($notifiable->getEmailForVerification() . $envKey);
         $url = "$domain/$key/$hash/?expires=$expires";
         return $url;
 //        return URL::temporarySignedRoute(

@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\VerifiesEmails;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 class VerificationController extends Controller
 {
@@ -39,7 +41,7 @@ class VerificationController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+//        $this->middleware('auth');
         $this->middleware('signed')->only('verify');
         $this->middleware('throttle:6,1')->only('verify', 'resend');
     }
@@ -49,24 +51,24 @@ class VerificationController extends Controller
      * @return JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|mixed
      * @throws AuthorizationException
      */
-    public function verifyApi(Request $request)
+    public function verifyRegisterUser(Request $request)
     {
-        if (!hash_equals((string)$request->route('id'), (string)$request->user()->getKey())) {
+        $user = User::where('id', $request->route('id'))->firstOrFail();
+
+        if (!hash_equals((string)$request->route('id'), (string)$user->getKey())) {
+            throw new AuthorizationException;
+        }
+        $envKey = env('APP_KEY');
+        if (!hash_equals((string)$request->route('hash'), sha1($user->getEmailForVerification() . $envKey))) {
             throw new AuthorizationException;
         }
 
-        if (!hash_equals((string)$request->route('hash'), sha1($request->user()->getEmailForVerification()))) {
-            throw new AuthorizationException;
+        if ($user->hasVerifiedEmail()) {
+            throw new ConflictHttpException("Already Verified");
         }
 
-        if ($request->user()->hasVerifiedEmail()) {
-            return $request->wantsJson()
-                ? new JsonResponse([], 204)
-                : redirect($this->redirectPath());
-        }
-
-        if ($request->user()->markEmailAsVerified()) {
-            event(new Verified($request->user()));
+        if ($user->markEmailAsVerified()) {
+            event(new Verified($user));
         }
 
         if ($response = $this->verified($request)) {
