@@ -6,9 +6,11 @@ use App\Helpers\ArrayHelper;
 use App\Helpers\GuidHelper;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\JWTAuth;
@@ -50,7 +52,7 @@ class RegisterController extends Controller
     /**
      * Get a validator for an incoming registration request.
      *
-     * @param  array $data
+     * @param array $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
@@ -65,7 +67,7 @@ class RegisterController extends Controller
     /**
      * Create a new user instance after a valid registration.
      *
-     * @param  array $data
+     * @param array $data
      * @return \App\Models\User
      */
     protected function create(array $data)
@@ -78,26 +80,31 @@ class RegisterController extends Controller
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @throws \Throwable
+     */
     public function register(Request $request)
     {
-        $validator = $this->validator($request->all());
+        return DB::transaction(function () use ($request) {
+            $validator = $this->validator($request->all());
+            if (!$validator->fails()) {
+                // dd(ArrayHelper::merge($request->all(),['guid'=>GuidHelper::getGuid()]));
 
-        if (!$validator->fails()) {
-           // dd(ArrayHelper::merge($request->all(),['guid'=>GuidHelper::getGuid()]));
-            $user = $this->create(ArrayHelper::merge($request->all(),['guid'=>GuidHelper::getGuid()]));
-
-            $user = Auth::user();
-            $token = $user->createToken('Personal Access Token')->accessToken;
+                event(new Registered($user = $this->create(ArrayHelper::merge($request->all(), ['guid' => GuidHelper::getGuid()]))));
+//            $user = Auth::user();
+//            $token = $user->createToken('Personal Access Token')->accessToken;
+                return response()->json([
+                    'success' => true,
+//                'data' => $user,
+                    'message' => "Please verify your email"
+                ], 200);
+            }
             return response()->json([
-                'success' => true,
-                'data' => $user,
-                'token' => $token
-            ],200);
-        }
-        return response()->json([
-            'success' => false,
-            'errors' => $this,
-            'token' => $validator->errors(),
-        ],401);
+                'success' => false,
+                'errors' => $this,
+                'message' => $validator->getMessageBag()
+            ], 401);
+        });
     }
 }

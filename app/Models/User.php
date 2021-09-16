@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Notifications\RegistrationVerificationNotification;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
@@ -49,7 +51,7 @@ use Tymon\JWTAuth\Contracts\Providers\JWT;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class User extends Authenticatable implements JWTSubject
+class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 {
     use HasApiTokens, Notifiable;
 
@@ -135,6 +137,11 @@ class User extends Authenticatable implements JWTSubject
     public function getProfileUrlAttribute($profile_url)
     {
         return url(Storage::url($profile_url));
+    }
+
+    public function sendEmailVerificationNotification()
+    {
+        $this->notify(new RegistrationVerificationNotification());
     }
 
 }
