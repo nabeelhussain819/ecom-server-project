@@ -79,4 +79,9 @@ class VerificationController extends Controller
             ? new JsonResponse([], 204)
             : redirect($this->redirectPath())->with('verified', true);
     }
+
+    protected function verified(Request $request)
+    {
+        return $this->genericResponse(true, "Your email has been verified");
+    }
 }
