@@ -19,10 +19,18 @@
             </div>
             <div class="form-group">
                 <label>Status</label>
-                <select name="active" class="form-control">
+                <select name="has_shipping" class="form-control">
                     <option value="" selected>Please select...</option>
                     <option value=1>Active</option>
                     <option value=0>In-Active</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Has Shiping</label>
+                <select name="active" class="form-control">
+                    <option value="" selected>Please select...</option>
+                    <option value=1>yes</option>
+                    <option value=0>false</option>
                 </select>
             </div>
             <div class="form-group">

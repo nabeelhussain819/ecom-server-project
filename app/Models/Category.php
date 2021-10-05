@@ -43,7 +43,7 @@ class Category extends Model
     /**
      * @var array
      */
-    protected $fillable = ['name', 'guid', 'description', 'type', 'active', 'created_at', 'updated_at'];
+    protected $fillable = ['name', 'guid', 'description', 'type', 'active', 'has_shipping', 'created_at', 'updated_at'];
 
     const PRODUCT = 'Product',
         SERVICE = 'Service';
