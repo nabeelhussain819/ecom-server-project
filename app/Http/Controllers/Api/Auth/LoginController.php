@@ -50,13 +50,14 @@ class LoginController extends Controller
     /**
      * Handle a login request to the application.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
-     * @todo right now simple JWT TOKEN after move to passport soon
      * @throws \Illuminate\Validation\ValidationException
+     * @todo right now simple JWT TOKEN after move to passport soon
      */
     public function login(Request $request)
     {
+
         $request->validate([
             'email' => 'required|string|email',
             'password' => 'required|string',
@@ -87,6 +88,7 @@ class LoginController extends Controller
         // user surpasses their maximum number of attempts they will get locked out.
         $this->incrementLoginAttempts($request);
         $user = Auth::user();
+        
         $tokenResult = $user->createToken('Personal Access Token')->accessToken;
         return $this->genericResponse(true, 'Successful login',
             200, ['data' => $request->user(),
@@ -131,7 +133,7 @@ class LoginController extends Controller
         $client = new \Google_Client(['client_id' => config('app.google.client_id')]);
         $valid = $client->verifyIdToken($request->get('id_token'));
 
-        if($valid){
+        if ($valid) {
             $googleUser = $request->get('user');
             $internalUser = User::where('email', $googleUser['email'])->first();
             if ($internalUser === null) {
