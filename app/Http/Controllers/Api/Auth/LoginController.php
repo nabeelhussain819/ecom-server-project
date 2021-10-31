@@ -88,7 +88,7 @@ class LoginController extends Controller
         // user surpasses their maximum number of attempts they will get locked out.
         $this->incrementLoginAttempts($request);
         $user = Auth::user();
-        
+        $user->validateEmailVerification();
         $tokenResult = $user->createToken('Personal Access Token')->accessToken;
         return $this->genericResponse(true, 'Successful login',
             200, ['data' => $request->user(),

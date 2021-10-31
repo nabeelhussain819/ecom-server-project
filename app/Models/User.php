@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Tymon\JWTAuth\Contracts\Providers\JWT;
 
@@ -142,6 +143,19 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     public function sendEmailVerificationNotification()
     {
         $this->notify(new RegistrationVerificationNotification());
+    }
+
+    public function isVerified()
+    {
+        return !empty($this->email_verified_at);
+    }
+
+    public function validateEmailVerification()
+    {
+
+        if (!$this->isVerified()) {
+            throw new NotAcceptableHttpException("Email not verified");
+        }
     }
 
 }
