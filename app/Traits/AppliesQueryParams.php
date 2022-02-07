@@ -8,6 +8,7 @@
 
 namespace App\Traits;
 
+use App\Helpers\ArrayHelper;
 use Illuminate\Database\Eloquent\Builder;
 
 trait AppliesQueryParams
@@ -19,6 +20,11 @@ trait AppliesQueryParams
                 return $query->where('id', (int)$id);
             })->when($request->get('active'), function (Builder $query, $active) {
                 return $query->where('active', $active);
+            })->when($request->get('categories'), function (Builder $query, $categories) {
+                if (ArrayHelper::isArray($categories)) {
+                    return $query->whereIn('category_id', $categories);
+                }
+                return $query->where('category_id', $categories);
             });
         };
     }

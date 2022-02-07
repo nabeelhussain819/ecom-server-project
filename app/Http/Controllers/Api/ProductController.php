@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Storage;
 class ProductController extends Controller
 {
     //
-    public function index()
+    public function index(Request $request)
     {
         // why Product Categories whynot products ? @todo refactor it make it simple
 //        return ProductsCategories::with('products', 'categories')
@@ -28,7 +28,10 @@ class ProductController extends Controller
 //                $query->where('active', true);
 //            })->get();
 
-        return Product::where('active', true)->paginate($this->pageSize);
+
+        return Product::where('active', true)
+            ->where($this->applyFilters($request))
+            ->paginate($this->pageSize);
     }
 
     /**
