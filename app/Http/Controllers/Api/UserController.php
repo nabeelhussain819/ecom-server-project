@@ -90,4 +90,17 @@ class UserController extends Controller
 
         return $this->genericResponse(true, 'Message sent successfully.');
     }
+
+    //@todo Request handling
+    public function update(Request $request)
+    {
+        if (Auth::check()) {
+            // $user = User::where('id', Auth::user()->id);
+           
+            User::where('id', Auth::user()->id)->update($request->all());
+
+            return $this->genericResponse(true, "Profile Updated");
+        }
+
+    }
 }

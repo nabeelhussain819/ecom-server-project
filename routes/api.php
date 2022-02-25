@@ -55,6 +55,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('conversations', [Api\UserController::class, 'conversations']);
         Route::get('{user}/messages', [Api\UserController::class, 'messages']);
         Route::post('{user}/send-message', [Api\UserController::class, 'sendMessage']);
+        Route::patch('/', [Api\UserController::class, 'update']);
     });
 
     Route::group(['prefix' => '/products'], function () {

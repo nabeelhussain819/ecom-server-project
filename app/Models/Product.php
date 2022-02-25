@@ -57,7 +57,7 @@ class Product extends Base implements IMediaInteraction
     use InteractWithMedia;
 
     protected $autoBlame = false; //@todo temp
-    public const MEDIA_UPLOAD = "PRODUCT";
+    const MEDIA_UPLOAD = "PRODUCT";
 
     /**
      * The "type" of the auto-incrementing ID.
@@ -74,7 +74,7 @@ class Product extends Base implements IMediaInteraction
     /**
      * @var array
      */
-    protected $fillable = ['category_id', 'user_id', 'name', 'description', 'status', 'price', 'sale_price', 'location', 'google_address', 'postal_address', 'longitude', 'latitude', 'active', 'guid', 'created_at', 'updated_at'];
+    protected $fillable = ['category_id', 'user_id', 'name', 'is_sold', 'description', 'status', 'price', 'sale_price', 'location', 'google_address', 'postal_address', 'longitude', 'latitude', 'active', 'guid', 'created_at', 'updated_at'];
 
     protected $appends = ['cover_image', 'is_owner'];
 
