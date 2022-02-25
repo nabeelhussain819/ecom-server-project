@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
 class AdminSeeder extends Seeder
@@ -18,7 +19,8 @@ class AdminSeeder extends Seeder
             'name' => 'admin',
             'email' => 'admin@admin.com',
             'password' => \Illuminate\Support\Facades\Hash::make('admin1234'),
-            'guid' => \App\Helpers\GuidHelper::getGuid()
+            'guid' => \App\Helpers\GuidHelper::getGuid(),
+            'email_verified_at' => Carbon::now()
         ]);
     }
 }
