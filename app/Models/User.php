@@ -70,7 +70,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 
     protected $hidden = ['password'];
 
-    public const MEDIA_UPLOAD = 'User';
+    const MEDIA_UPLOAD = 'User';
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -158,4 +158,10 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
         }
     }
 
+
+    public function savedProducts()
+    {
+        // return $this->hasManyThrough(Product::class, SavedUsersProduct::class, 'product_id', 'id', 'id', 'id');
+        return $this->belongsToMany(Product::class, SavedUsersProduct::class);
+    }
 }

@@ -289,4 +289,12 @@ class ProductController extends Controller
 
         return $this->genericResponse(true, 'Offer made successfully.');
     }
+
+    public function getSaved()
+    {
+        if (Auth::check()) {
+            $user = User::where('id', Auth::user()->id)->with('savedProducts')->first();
+            return $user->savedProducts;
+        }
+    }
 }
