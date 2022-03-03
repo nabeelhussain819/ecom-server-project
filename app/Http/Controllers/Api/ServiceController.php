@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\ArrayHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Service;
@@ -46,14 +47,15 @@ class ServiceController extends Controller
             $service = new Service();
             //temporary 1
             $request['user_id'] = \Auth::user()->id;
-            $service->fill($request->all())->save();
+            $service->fill(ArrayHelper::merge($request->all(), ['status' => 1]))->save();
 
             //@todo inherit attribute functionality
             foreach ($request->get('attributes', []) as $attribute) {
                 $data = [
                     'attribute_id' => $attribute['id'],
                     'service_id' => $service->id,
-                    'value' => $attribute['value']
+                    'value' => $attribute['value'],
+
                 ];
 
                 $serviceAttribute = new ServicesAttribute($data);

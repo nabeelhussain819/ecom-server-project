@@ -48,9 +48,10 @@ class ServiceController extends Controller
     public function search(Request $request)
     {
         $search = $request->get('search');
-        $services = ServicesCategories::with('service')->whereHas('service', function ($query) use ($search) {
-            $query->where('active', true)->where('name', 'like', '%' . $search . '%');
-        })->paginate(10);
+//        $services = ServicesCategories::with('service')->whereHas('service', function ($query) use ($search) {
+//            $query->where('active', true)->where('name', 'like', '%' . $search . '%');
+//        })->paginate(10);
+        $services = Service::paginate(15);
         return view('services.index', ['services' => $services]);
     }
 
@@ -71,7 +72,7 @@ class ServiceController extends Controller
      */
     public function store(Request $request)
     {
-        DB::transaction(function () use($request){
+        DB::transaction(function () use ($request) {
             $serviceCat = new ServicesCategories();
             $service = new Service();
             $service->guid = GuidHelper::getGuid();

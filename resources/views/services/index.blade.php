@@ -42,28 +42,29 @@
             @php
                 $count = 1;
             @endphp
+
             @forelse($services as $item)
                 <tr>
                     <td>{{$count++}}</td>
-                    <td>{{$item->service->name}}</td>
+                    <td>{{$item-->name}}</td>
                     <td>
                         <button type="button"
-                                class="{{$item->service->active  == 1 ? "btn btn-success" : "btn btn-danger"}}"
+                                class="{{$item->active  == 1 ? "btn btn-success" : "btn btn-danger"}}"
                                 data-toggle="modal" data-target="#products{{$item->service->id}}">
                             {{$item->service->active == 1 ? 'Active' : 'Un-Active'}}
                         </button>
                     </td>
-                    <td>$ {{$item->service->price}}</td>
+                    <td>$ {{$item->price}}</td>
                     <td>
-                        <a href="{{route('customer.services',$item->service->user->id)}}">{{$item->service->user->name}}</a>
+                        <a href="{{route('customer.services',$item->user->id)}}">{{$item->user->name}}</a>
                     </td>
 
                     {{-- <td>{{$item->category->name}}</td>--}}
                     {{-- <td>{{$item->created_at}}</td>--}}
                     <td>
-                        <a href="{{route('services.edit', $item->service->id)}}" class="btn btn-info"><i
+                        <a href="{{route('services.edit', $item->id)}}" class="btn btn-info"><i
                                 class="fa fa-pen"></i></a>
-                        <form action="{{ route('services.destroy', $item->service->id) }}" method="POST"
+                        <form action="{{ route('services.destroy', $item->id) }}" method="POST"
                               style="display: unset">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -73,7 +74,7 @@
                     </td>
                 </tr>
                 @include('partials.status-modal',['data' => $item->service,'route' => "services"])
-                @empty
+            @empty
                 <p>No Active Services</p>
             @endforelse
             </tbody>
