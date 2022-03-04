@@ -70,7 +70,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::group(['prefix' => '/services'], function () {
         Route::get('/', [Api\ServiceController::class, 'index']);
-        Route::get('/show/{service:guid}', [Api\ServiceController::class, 'show']);
+
         Route::post('/', [Api\ServiceController::class, 'store']);
         Route::patch('/{service:guid}', [Api\ServiceController::class, 'update']);
         Route::get('media/{service:guid}', [Api\ServiceController::class, 'media']);
@@ -99,6 +99,7 @@ Route::group(['prefix' => '/products'], function () {
 
 Route::group(['prefix' => '/services'], function () {
     Route::get('/search', [Api\ServiceController::class, 'search']);
+    Route::get('/show/{service:guid}', [Api\ServiceController::class, 'show']);
 });
 
 Route::get('products', [Api\ProductController::class, 'index']);

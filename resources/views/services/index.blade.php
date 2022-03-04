@@ -46,12 +46,12 @@
             @forelse($services as $item)
                 <tr>
                     <td>{{$count++}}</td>
-                    <td>{{$item-->name}}</td>
+                    <td>{{$item->name}}</td>
                     <td>
                         <button type="button"
                                 class="{{$item->active  == 1 ? "btn btn-success" : "btn btn-danger"}}"
-                                data-toggle="modal" data-target="#products{{$item->service->id}}">
-                            {{$item->service->active == 1 ? 'Active' : 'Un-Active'}}
+                                data-toggle="modal" data-target="#products{{$item->id}}">
+                            {{$item->active == 1 ? 'Active' : 'Un-Active'}}
                         </button>
                     </td>
                     <td>$ {{$item->price}}</td>
@@ -73,7 +73,7 @@
                         </form>
                     </td>
                 </tr>
-                @include('partials.status-modal',['data' => $item->service,'route' => "services"])
+                @include('partials.status-modal',['data' => $item,'route' => "services"])
             @empty
                 <p>No Active Services</p>
             @endforelse

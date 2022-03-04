@@ -6,6 +6,7 @@ use App\Core\Base;
 use App\Interfaces\IMediaInteraction;
 use App\Traits\InteractWithMedia;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * App\Models\Service
@@ -65,7 +66,7 @@ class Service extends Base implements IMediaInteraction
      */
     protected $fillable = ['category_id', 'user_id', 'name', 'description', 'price', 'status', 'sale_price', 'location', 'google_address', 'postal_address', 'longitude', 'latitude', 'active', 'guid', 'created_at', 'updated_at'];
 
-    protected $autoBlame = false;
+    protected $appends = ['is_owner'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -107,4 +108,10 @@ class Service extends Base implements IMediaInteraction
     {
         return $this->load('servicesAttributes');
     }
+
+    public function getIsOwnerAttribute()
+    {
+        return Auth::guard('api')->check();
+    }
+
 }
