@@ -58,9 +58,7 @@ class ServiceController extends Controller
     public function searchInActive(Request $request)
     {
         $search = $request->get('search');
-        $services = ServicesCategories::with('service')->whereHas('service', function ($query) use ($search) {
-            $query->where('active', false)->where('name', 'like', '%' . $search . '%');
-        })->paginate(10);
+        $services = Category::where('active', false)->where('type', Category::SERVICE)->paginate();
         return view('services.in-active', ['services' => $services]);
     }
 
