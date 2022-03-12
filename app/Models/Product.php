@@ -125,6 +125,13 @@ class Product extends Base implements IMediaInteraction
         return $this->load('productsAttributes');
     }
 
+    public function withUser()
+    {
+        return $this->load(['user' => function (BelongsTo $belongsTo) {
+            $belongsTo->select(['id', 'name']);
+        }]);
+    }
+
     /**
      * this is temp fix for the Demo its should  be field in the product table
      * @return |null
