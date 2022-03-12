@@ -147,7 +147,11 @@ class Product extends Base implements IMediaInteraction
 
     public function getIsOwnerAttribute()
     {
-        return Auth::guard('api')->check();
+        if (Auth::guard('api')->check()) {
+
+            return $this->user_id == Auth::guard('api')->id();
+        }
+        return false;
     }
 
     /**
