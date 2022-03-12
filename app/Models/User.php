@@ -132,7 +132,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 
     public static function getUploadPath(): string
     {
-        return 'Users/' . \Auth::user()->id . '/';
+        return 'users/' . \Auth::user()->id . '/';
     }
 
     public function getProfileUrlAttribute($profile_url)

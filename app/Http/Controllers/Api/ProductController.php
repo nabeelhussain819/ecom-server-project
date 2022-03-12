@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Events\OfferMade;
 use App\Helpers\GuidHelper;
+use App\Helpers\StringHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Media;
@@ -170,34 +171,35 @@ class ProductController extends Controller
      */
     public function upload(Product $product, Request $request)
     {
-        $file = $request->file('file');
-        $extension = $file->getClientOriginalExtension();
-        $guid = GuidHelper::getGuid();
-        $path = User::getUploadPath() . Media::PRODUCT_IMAGES;
-        $name = "{$path}/{$guid}.{$extension}";
-        $media = new Media();
+        return DB::transaction(function () use (&$request, &$product) {
+            $file = $request->file('file');
+            $extension = $file->getClientOriginalExtension();
+            $guid = GuidHelper::getGuid();
+            $path = User::getUploadPath() . StringHelper::trimLower(Media::PRODUCT_IMAGES);
+            $name = "{$path}/{$guid}.{$extension}";
+            $media = new Media();
+            $media->fill([
+                'name' => $name,
+                'extension' => $extension,
+                'type' => Media::PRODUCT_IMAGES,
+                'user_id' => \Auth::user()->id,
+                'product_id' => $product->id,
+                'active' => true,
+            ]);
 
-        $media->fill([
-            'name' => $name,
-            'extension' => $extension,
-            'type' => Media::PRODUCT_IMAGES,
-            'user_id' => \Auth::user()->id,
-            'product_id' => $product->id,
-            'active' => true,
-        ]);
+            $media->save();
 
-        $media->save();
+            Storage::putFileAs(
+                'public/' . $path, $request->file('file'), "{$guid}.{$extension}"
+            );
 
-        Storage::putFileAs(
-            'public/' . $path, $request->file('file'), "{$guid}.{$extension}"
-        );
-
-        return [
-            'uid' => $media->id,
-            'name' => $media->url,
-            'status' => 'done',
-            'url' => $media->url,
-        ];
+            return [
+                'uid' => $media->id,
+                'name' => $media->url,
+                'status' => 'done',
+                'url' => $media->url,
+            ];
+        });
     }
 
     public function search(Request $request)
