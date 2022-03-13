@@ -10,7 +10,7 @@ namespace App\Traits;
 
 trait Paginates
 {
-    protected $pageSize = 10;
+    protected $pageSize = 100;
     protected $pageSize_homepage = 10;
     protected $pageSize_reports = 100;
 
