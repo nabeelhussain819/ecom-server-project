@@ -48,7 +48,7 @@ class Media extends Base
     /**
      * @var array
      */
-    protected $fillable = ['user_id', 'name', 'extension', 'type', 'active', 'system', 'guid', 'product_id', 'provider_id', 'created_at', 'updated_at'];
+    protected $fillable = ['user_id', 'name', 'extension', 'type', 'active', 'system', 'guid', 'product_id', 'service_id', 'provider_id', 'created_at', 'updated_at'];
 
     /**
      * @var array Append url

@@ -114,4 +114,10 @@ class Service extends Base implements IMediaInteraction
         return Auth::guard('api')->check();
     }
 
+    public function withMedia()
+    {
+
+        return $this->load('media');
+    }
+
 }

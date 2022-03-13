@@ -53,8 +53,9 @@ class ServiceController extends Controller
             $service = new Service();
             //temporary 1
             $request['user_id'] = \Auth::user()->id;
-            $service->fill(ArrayHelper::merge($request->all(), ['status' => 1]))->save();
+            $service->fill(ArrayHelper::merge($request->all(), ['status' => "DRAFT"]))->save();
 
+         
             //@todo inherit attribute functionality
             foreach ($request->get('attributes', []) as $attribute) {
                 $data = [
@@ -85,7 +86,7 @@ class ServiceController extends Controller
      */
     public function show(Service $service)
     {
-        return $service->withCategory()->withServicesAttributes();
+        return $service->withMedia()->withCategory()->withServicesAttributes();
     }
 
     /**

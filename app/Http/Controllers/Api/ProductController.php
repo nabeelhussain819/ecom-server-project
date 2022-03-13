@@ -66,7 +66,7 @@ class ProductController extends Controller
 
             //temporary 1, for testing
             $request['user_id'] = \Auth::user()->id;
-            $request['status'] = 1;
+            $request['status'] = "DRAFT";
             $product->fill($request->all());
             $product->save();
 
@@ -97,6 +97,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
+
         return $product->withCategory()
             ->withProductsAttributes()
             ->appendDetailAttribute()
