@@ -60,6 +60,7 @@ class Media extends Base
     protected $visible = ['url', 'id', 'name', 'guid', 'product_id', 'provider_id'];
 
     public const PRODUCT_IMAGES = "PRODUCT";
+    public const SERVICE_IMAGES = "SERVICE";
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

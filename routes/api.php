@@ -74,6 +74,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::post('/', [Api\ServiceController::class, 'store']);
         Route::patch('/{service:guid}', [Api\ServiceController::class, 'update']);
         Route::get('media/{service:guid}', [Api\ServiceController::class, 'media']);
+        Route::post('upload/{service:guid}', [Api\ServiceController::class, 'upload']);
     });
 
     Route::get('/message/conversations', [Api\MessageController::class, 'conversations']);

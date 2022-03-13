@@ -3,14 +3,20 @@
 namespace App\Http\Controllers\Api;
 
 use App\Helpers\ArrayHelper;
+use App\Helpers\GuidHelper;
+use App\Helpers\StringHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Media;
+use App\Models\Product;
 use App\Models\Service;
 use App\Models\ServicesAttribute;
 use App\Models\ServicesCategories;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ServiceController extends Controller
 {
@@ -186,5 +192,38 @@ class ServiceController extends Controller
             'results' => $services,
             'categories' => $categories
         ];
+    }
+
+    public function upload(Service $service, Request $request)
+    {
+        return DB::transaction(function () use (&$request, &$service) {
+            $file = $request->file('file');
+            $extension = $file->getClientOriginalExtension();
+            $guid = GuidHelper::getGuid();
+            $path = User::getUploadPath() . StringHelper::trimLower(Media::SERVICE_IMAGES);
+            $name = "{$path}/{$guid}.{$extension}";
+            $media = new Media();
+            $media->fill([
+                'name' => $name,
+                'extension' => $extension,
+                'type' => Media::SERVICE_IMAGES,
+                'user_id' => \Auth::user()->id,
+                'service_id' => $service->id,
+                'active' => true,
+            ]);
+
+            $media->save();
+
+            Storage::putFileAs(
+                'public/' . $path, $request->file('file'), "{$guid}.{$extension}"
+            );
+
+            return [
+                'uid' => $media->id,
+                'name' => $media->url,
+                'status' => 'done',
+                'url' => $media->url,
+            ];
+        });
     }
 }
