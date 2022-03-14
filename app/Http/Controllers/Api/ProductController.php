@@ -12,6 +12,8 @@ use App\Models\Product;
 use App\Models\ProductsAttribute;
 use App\Models\User;
 use App\Models\Message;
+use App\Scopes\ActiveScope;
+use App\Scopes\SoldScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -49,6 +51,8 @@ class ProductController extends Controller
     {
         return Product::where('user_id', \Auth::user()->id)
             ->with(['category', 'media'])
+            ->withoutGlobalScope(ActiveScope::class)
+            ->withoutGlobalScope(SoldScope::class)
             ->paginate($this->pageSize);
     }
 
@@ -101,6 +105,7 @@ class ProductController extends Controller
         return $product->withCategory()
             ->withProductsAttributes()
             ->appendDetailAttribute()
+            ->withoutScopes()
             ->withUser();
     }
 
@@ -199,7 +204,7 @@ class ProductController extends Controller
                 'name' => $media->url,
                 'status' => 'done',
                 'url' => $media->url,
-                'guid'=>$media->guid
+                'guid' => $media->guid
             ];
         });
     }

@@ -9,11 +9,15 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductsAttribute;
 use App\Models\ProductsCategories;
+use App\Scopes\ActiveScope;
+use App\Scopes\SoldScope;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use function PHPUnit\Framework\isEmpty;
 
 class ProductController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -21,6 +25,7 @@ class ProductController extends Controller
      */
     public function index()
     {
+
         return view('products.index', [
             'products' => Product::where('active', true)->paginate(10)
         ]);
@@ -28,6 +33,7 @@ class ProductController extends Controller
 
     public function inActive()
     {
+
         $inActiveProduct = ProductsCategories::with('products')
             ->whereHas('products', function ($query) {
                 $query->where('active', false);
@@ -47,17 +53,21 @@ class ProductController extends Controller
 
     public function search(Request $request)
     {
-        $products = Product::paginate(15);
+
+        $products = Product::withoutGlobalScope(ActiveScope::class)
+            ->withoutGlobalScope(SoldScope::class)->paginate(15);
         return view('products.index', ['products' => $products]);
     }
 
     public function searchInActive(Request $request)
     {
+
         $search = $request->get('search');
         $products = ProductsCategories::with('products')
             ->whereHas('products', function ($query) use ($search) {
                 $query->where('active', false)->where('name', 'like', '%' . $search . '%');
-            })->paginate(10);
+            })->withoutGlobalScope(ActiveScope::class)
+            ->withoutGlobalScope(SoldScope::class)->paginate(10);
         return view('products.in-active', ['products' => $products]);
     }
 
@@ -101,6 +111,7 @@ class ProductController extends Controller
      */
     public function show($id)
     {
+
     }
 
     /**
@@ -113,7 +124,8 @@ class ProductController extends Controller
     {
 
         return view('products.edit', [
-            'product' => Product::with('category')->findOrFail($id),
+            'product' => Product::with('category')->withoutGlobalScope(ActiveScope::class)
+                ->withoutGlobalScope(SoldScope::class)->findOrFail($id),
             'category' => Category::where('active', true)->get()
         ]);
     }
@@ -129,7 +141,7 @@ class ProductController extends Controller
     {
 
         if ($request->get('activateOne') == "activateOnlyOne") {
-            $product->update(['active' => $request->get('checkbox')]);
+            $product->update(['active' => !empty($request->get('checkbox'))]);
             return back()->with('success', "{$product->name} Status Changed Successfully.");
         } else {
             $product->fill($request->all())->update();
@@ -150,7 +162,9 @@ class ProductController extends Controller
 
     public function activateAll()
     {
-        Product::query()->update(['active' => 1]);
+
+        Product::query()->withoutGlobalScope(ActiveScope::class)
+            ->withoutGlobalScope(SoldScope::class)->update(['active' => 1]);
         return back()->with('success', 'All Products Activated');
     }
 
