@@ -199,6 +199,7 @@ class ProductController extends Controller
                 'name' => $media->url,
                 'status' => 'done',
                 'url' => $media->url,
+                'guid'=>$media->guid
             ];
         });
     }
@@ -302,5 +303,15 @@ class ProductController extends Controller
             $user = User::where('id', Auth::user()->id)->with('savedProducts')->first();
             return $user->savedProducts;
         }
+    }
+
+    public function deleteMedia(Media $media)
+    {
+        if (Auth::user()->id == $media->user_id) {
+            Storage::delete($media->name);
+            $media->delete();
+
+        }
+
     }
 }

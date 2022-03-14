@@ -25,6 +25,7 @@ trait InteractWithMedia
                 'name' => $media->url,
                 'status' => 'done',
                 'url' => $media->url,
+                'guid' => $media->guid
             ];
 
         });

@@ -66,6 +66,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::post('saved-users/{product:guid}', [Api\ProductController::class, 'saved']);
         Route::get('saved', [Api\ProductController::class, 'getSaved']);
         Route::post('/{product:guid}/offer', [Api\ProductController::class, 'offer']);
+        Route::delete('media/{media:guid}', [Api\ProductController::class, 'deleteMedia']);;
     });
 
     Route::group(['prefix' => '/services'], function () {
@@ -76,6 +77,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('media/{service:guid}', [Api\ServiceController::class, 'media']);
         Route::post('upload/{service:guid}', [Api\ServiceController::class, 'upload']);
     });
+
 
     Route::get('/message/conversations', [Api\MessageController::class, 'conversations']);
     Route::post('/message/saveAssociated/{message}', [Api\MessageController::class, 'saveAssociated']);
