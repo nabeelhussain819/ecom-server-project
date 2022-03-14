@@ -42,7 +42,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('categories-secure', [Api\CategoryController::class, 'index']);
 
     Route::group(['prefix' => '/categories'], function () {
-        Route::get('/tabs', [Api\CategoryController::class, 'tabs']);
+
         Route::get('/', [Api\CategoryController::class, 'index']);
 //        Route::get('categories', [Api\CategoryController::class, 'index']);
         Route::get('/{category}', [Api\CategoryController::class, 'show']);
@@ -91,7 +91,10 @@ Route::group(['middleware' => 'auth:api'], function () {
 //====================================== PUBLIC ROUTES =========================================
 
 Route::group(['prefix' => '/categories', ['middleware' => 'throttle:20,5']], function () {
+    Route::get('/tabs', [Api\CategoryController::class, 'tabs']);
+    Route::get('tabs/list', [Api\CategoryController::class, 'tabs']);
     Route::get('/product-attributes/{category}', [Api\CategoryController::class, 'productAttributes']);
+
 });
 
 Route::group(['prefix' => '/products'], function () {

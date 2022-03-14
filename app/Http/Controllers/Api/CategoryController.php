@@ -13,7 +13,7 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        //
+
         return Category::select(['id', 'name', 'description'])
             ->where('type', $request->get('type') == 1 ? Category::PRODUCT : Category::SERVICE)
             ->get();
@@ -98,9 +98,10 @@ class CategoryController extends Controller
     }
 
 
-    public function tabs()
+    public function tabs(Request $request)
     {
         return Category::select(['id', 'name', 'description'])
+            ->where($this->applyFilters($request))
             ->get()
             ->map(function ($category) {
                 return [
