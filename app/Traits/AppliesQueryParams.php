@@ -19,6 +19,7 @@ trait AppliesQueryParams
             $query->when($request->get('id'), function (Builder $query, $id) {
                 return $query->where('id', (int)$id);
             })->when($request->get('active'), function (Builder $query, $active) {
+
                 return $query->where('active', $active);
             })->when($request->get('is_sold'), function (Builder $query, $active) {
                 return $query->where('is_sold', $active);

@@ -133,7 +133,7 @@ class Product extends Base implements IMediaInteraction
     public function withUser()
     {
         return $this->load(['user' => function (BelongsTo $belongsTo) {
-            $belongsTo->select(['id', 'name']);
+            $belongsTo->select(['id', 'name', 'profile_url']);
         }]);
     }
 
