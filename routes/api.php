@@ -70,7 +70,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::group(['prefix' => '/services'], function () {
         Route::get('/', [Api\ServiceController::class, 'index']);
-
+        Route::get('/self/', [Api\ServiceController::class, 'self']);
         Route::post('/', [Api\ServiceController::class, 'store']);
         Route::patch('/{service:guid}', [Api\ServiceController::class, 'update']);
         Route::get('media/{service:guid}', [Api\ServiceController::class, 'media']);

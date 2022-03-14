@@ -15,6 +15,7 @@ use App\Models\ServicesCategories;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -55,7 +56,7 @@ class ServiceController extends Controller
             $request['user_id'] = \Auth::user()->id;
             $service->fill(ArrayHelper::merge($request->all(), ['status' => "DRAFT"]))->save();
 
-         
+
             //@todo inherit attribute functionality
             foreach ($request->get('attributes', []) as $attribute) {
                 $data = [
@@ -226,5 +227,12 @@ class ServiceController extends Controller
                 'url' => $media->url,
             ];
         });
+    }
+
+    public function self()
+    {
+        return Service::where('user_id', Auth::user()->id)
+            ->with(['category', 'media'])
+            ->paginate($this->pageSize);
     }
 }
