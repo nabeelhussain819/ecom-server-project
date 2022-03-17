@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * App\Models\Category
@@ -43,7 +44,7 @@ class Category extends Model
     /**
      * @var array
      */
-    protected $fillable = ['name', 'guid', 'description', 'type', 'active', 'has_shipping', 'created_at', 'updated_at'];
+    protected $fillable = ['name', 'guid', 'description', 'type', 'active', 'has_shipping', 'created_at', 'updated_at', 'parent_id'];
 
     const PRODUCT = 'Product',
         SERVICE = 'Service';
@@ -72,5 +73,10 @@ class Category extends Model
     public function attributes()
     {
         return $this->belongsToMany(Attribute::class, 'category_attributes');
+    }
+
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(Category::class, 'parent_id');
     }
 }

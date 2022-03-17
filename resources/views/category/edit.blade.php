@@ -42,6 +42,17 @@
                 </select>
             </div>
             <div class="form-group">
+                <label>Related Parent</label>
+
+                <select name="parent_id" class="form-control">
+                    <option value="" selected>Please select...</option>
+                    @foreach($categories as $cat)
+                        <option {{$category->parent_id == $cat->id ? 'selected':''}}
+                                value={{$cat->id}}>{{$cat->name}}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group">
                 <label>Description</label>
                 <textarea type="text" rows="5" cols="5" class="form-control" name="description"
                           placeholder="Enter Description">{{$category->description}}</textarea>

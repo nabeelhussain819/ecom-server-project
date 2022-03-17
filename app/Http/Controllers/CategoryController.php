@@ -36,13 +36,13 @@ class CategoryController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function create()
     {
-        return view('category.create');
+        $categories = Category::where('active', true)->get();
+
+        return view('category.create', ['categories' => $categories]);
     }
 
     public function search(Request $request)
@@ -95,7 +95,8 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        return view('category.edit', ['category' => Category::findOrFail($id)]);
+        $categories = Category::where('active', true)->get();
+        return view('category.edit', ['category' => Category::findOrFail($id), 'categories' => $categories]);
     }
 
     /**
