@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -15,7 +16,11 @@ class CategoryController extends Controller
     {
 
         return Category::select(['id', 'name', 'description'])
+            ->where('parent_id', '=', null)
             ->where('type', $request->get('type') == 1 ? Category::PRODUCT : Category::SERVICE)
+            ->with(['childrenRecursive' => function (HasMany $hasMany) {
+//                $hasMany->select(['id', 'name', 'parent_id']);
+            }])
             ->get();
     }
 
@@ -101,6 +106,7 @@ class CategoryController extends Controller
     public function tabs(Request $request)
     {
         return Category::select(['id', 'name', 'description'])
+            ->where('parent_id', '=', null)
             ->where($this->applyFilters($request))
             ->get()
             ->map(function ($category) {

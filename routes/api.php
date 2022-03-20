@@ -43,7 +43,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::group(['prefix' => '/categories'], function () {
 
-        Route::get('/', [Api\CategoryController::class, 'index']);
+//        Route::get('/', [Api\CategoryController::class, 'index']);
 //        Route::get('categories', [Api\CategoryController::class, 'index']);
         Route::get('/{category}', [Api\CategoryController::class, 'show']);
         Route::post('/', [Api\CategoryController::class, 'store']);
@@ -94,7 +94,7 @@ Route::group(['prefix' => '/categories', ['middleware' => 'throttle:20,5']], fun
     Route::get('/tabs', [Api\CategoryController::class, 'tabs']);
     Route::get('tabs/list', [Api\CategoryController::class, 'tabs']);
     Route::get('/product-attributes/{category}', [Api\CategoryController::class, 'productAttributes']);
-
+    Route::get('/', [Api\CategoryController::class, 'index']);
 });
 
 Route::group(['prefix' => '/products'], function () {
