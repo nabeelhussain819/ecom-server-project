@@ -120,4 +120,10 @@ class Service extends Base implements IMediaInteraction
         return $this->load('media');
     }
 
+    public function withUser()
+    {
+
+        return $this->load('user');
+    }
+
 }

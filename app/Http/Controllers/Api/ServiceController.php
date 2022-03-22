@@ -87,7 +87,7 @@ class ServiceController extends Controller
      */
     public function show(Service $service)
     {
-        return $service->withMedia()->withCategory()->withServicesAttributes();
+        return $service->withMedia()->withCategory()->withServicesAttributes()->withUser();
     }
 
     /**
