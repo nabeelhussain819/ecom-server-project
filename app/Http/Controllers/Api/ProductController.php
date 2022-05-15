@@ -134,6 +134,7 @@ class ProductController extends Controller
 
             $attributes = ($postedAttributes = $request->get('attributes')) ? array_combine(array_column($postedAttributes, 'id'), array_column($postedAttributes, 'value')) : [];
             if (!empty($attributes)) {
+
                 // @TODO: create relations to avoid where query
                 ProductsAttribute::where('product_id', $product->id)
                     ->get()
@@ -149,7 +150,8 @@ class ProductController extends Controller
             throw $e;
         }
 
-        return $this->genericResponse(true, "$product->name Updated", 200, ['product' => $product->withCategory()]);
+        return $this->genericResponse(true, "$product->name Updated", 200, ['product' => $product->withCategory()->withProductsAttributes()
+            ->appendDetailAttribute()]);
     }
 
     /**
