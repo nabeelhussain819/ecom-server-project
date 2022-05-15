@@ -63,6 +63,7 @@ class LoginController extends Controller
             'password' => 'required|string',
             'remember_me' => 'boolean'
         ]);
+
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
         // the login attempts for this application. We'll key this by the username and
         // the IP address of the client making these requests into this application.
@@ -92,7 +93,7 @@ class LoginController extends Controller
 
         $tokenResult = $user->createToken('Personal Access Token')->accessToken;
 
-        return $this->genericResponse(  true, 'Successful login',
+        return $this->genericResponse(true, 'Successful login',
             200, ['data' => $request->user(),
                 'token' => $tokenResult
             ]);
