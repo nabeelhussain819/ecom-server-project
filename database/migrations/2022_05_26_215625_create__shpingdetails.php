@@ -13,7 +13,7 @@ class CreateShpingdetails extends Migration
      */
     public function up()
     {
-        Schema::create('shipping_detail', function (Blueprint $table) {
+        Schema::create('shipping_details', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('name')->nullable();
@@ -33,6 +33,6 @@ class CreateShpingdetails extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('_shpingdetails');
+        Schema::dropIfExists('shipping_details');
     }
 }

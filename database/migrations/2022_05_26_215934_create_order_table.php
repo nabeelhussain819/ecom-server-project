@@ -22,7 +22,7 @@ class CreateOrderTable extends Migration
             $table->unsignedBigInteger('status')->nullable();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('shipping_detail_id')->references('id')->on('shipping_detail')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('shipping_detail_id')->references('id')->on('shipping_details')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade')->onUpdate('cascade');
 
             $table->timestamps();
@@ -36,6 +36,6 @@ class CreateOrderTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('order');
+        Schema::dropIfExists('orders');
     }
 }
