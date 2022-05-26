@@ -20,8 +20,8 @@ class CreateShpingdetails extends Migration
             $table->string('street_address')->nullable();
             $table->string('state')->nullable();
             $table->string('city')->nullable();
+            $table->string('zip')->nullable();
             $table->timestamps();
-
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });
     }

@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $city
  * @property string $created_at
  * @property string $updated_at
+ * @property string $zip
  * @property User $user
  * @property Orders[] $orders
  */
@@ -28,7 +29,7 @@ class ShippingDetail extends Model
     /**
      * @var array
      */
-    protected $fillable = ['user_id', 'name', 'street_address', 'state', 'city', 'created_at', 'updated_at'];
+    protected $fillable = ['user_id', 'name', 'street_address', 'state', 'city', 'zip', 'created_at', 'updated_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
