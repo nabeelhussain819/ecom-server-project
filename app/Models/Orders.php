@@ -29,7 +29,18 @@ class Orders extends Model
     /**
      * @var array
      */
-    protected $fillable = ['user_id', 'shipping_detail_id', 'product_id', 'type_id', 'status', 'created_at', 'updated_at'];
+    protected $fillable = [
+        'user_id',
+        'shipping_detail_id',
+        'product_id',
+        'type_id',
+        'status',
+        'created_at',
+        'updated_at',
+        'offer_id',
+        'price',
+        'actual_prices'
+    ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
