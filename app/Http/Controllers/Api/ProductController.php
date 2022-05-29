@@ -8,6 +8,7 @@ use App\Helpers\StringHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Media;
+use App\Models\Offer;
 use App\Models\Product;
 use App\Models\ProductsAttribute;
 use App\Models\User;
@@ -297,6 +298,8 @@ class ProductController extends Controller
         $message->notifiable_id = $product->id;
         $message->notifiable_type = Product::class;
         $message->save();
+
+        Offer::request($product, $offer);
 
         OfferMade::trigger($recipient);
 
