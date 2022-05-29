@@ -31,8 +31,8 @@ class CreateOffersTable extends Migration
         Schema::table('orders', function (Blueprint $table) {
             $table->unsignedBigInteger('offer_id')->nullable();
             $table->decimal("price");
-            $table->decimal("actual_prices")->default(0);
-            $table->foreign('offer_id')->references('id')->on('offers')->cascadeOnDelete();
+            $table->decimal("actual_price")->default(0);
+            $table->foreign('offer_id')->references('id')->on('offers')->cascadeOnDelete()->cascadeOnUpdate();
         });
     }
 
@@ -43,6 +43,10 @@ class CreateOffersTable extends Migration
      */
     public function down()
     {
+        Schema::table('orders', function (Blueprint $table) {
+            $table->dropColumn("offer_id");
+        });
+
         Schema::dropIfExists('offers');
     }
 }

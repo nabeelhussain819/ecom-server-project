@@ -39,7 +39,7 @@ class Orders extends Model
         'updated_at',
         'offer_id',
         'price',
-        'actual_prices'
+        'actual_price'
     ];
 
     /**
