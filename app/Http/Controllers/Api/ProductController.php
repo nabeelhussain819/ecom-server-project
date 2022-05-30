@@ -336,9 +336,9 @@ class ProductController extends Controller
 
     public function getSellingOffers()
     {
-        if (Auth::check()) {
-            $user = User::where('id', Auth::user()->id)->with('savedProducts')->first();
-            return $user->savedProducts;
-        }
+        $user = Auth::user();
+        return $user->sellingOffers()->with(["product" => function (BelongsTo $hasMany) {
+            $hasMany->select(Product::defaultSelect());
+        }])->get();
     }
 }

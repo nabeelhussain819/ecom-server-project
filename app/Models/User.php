@@ -32,6 +32,8 @@ use Tymon\JWTAuth\Contracts\Providers\JWT;
  * @property Product[] $products
  * @property Service[] $services
  * @property Vendor[] $vendors
+ * @property Offer[] sellingOffers
+ * @property Offer[] buyingOffers
  * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Passport\Client[] $clients
  * @property-read int|null $clients_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
