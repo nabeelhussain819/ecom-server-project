@@ -16,6 +16,8 @@ use App\Models\Message;
 use App\Scopes\ActiveScope;
 use App\Scopes\SoldScope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -322,5 +324,21 @@ class ProductController extends Controller
 
         }
 
+    }
+
+    public function getBuyingOffers()
+    {
+        $user = Auth::user();
+        return $user->buyingOffers()->with(["product" => function (BelongsTo $hasMany) {
+            $hasMany->select(Product::defaultSelect());
+        }])->get();
+    }
+
+    public function getSellingOffers()
+    {
+        if (Auth::check()) {
+            $user = User::where('id', Auth::user()->id)->with('savedProducts')->first();
+            return $user->savedProducts;
+        }
     }
 }

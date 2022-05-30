@@ -62,11 +62,13 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::post('/', [Api\ProductController::class, 'store']);
         Route::patch('/{product:guid}', [Api\ProductController::class, 'update']);
         Route::get('/self/', [Api\ProductController::class, 'self']);
-        Route::post('upload/{product:guid}', [Api\ProductController::class, 'upload']);
+        Route::post('upload/{:guid}', [Api\ProductController::class, 'upload']);
         Route::post('saved-users/{product:guid}', [Api\ProductController::class, 'saved']);
         Route::get('saved', [Api\ProductController::class, 'getSaved']);
         Route::post('/{product:guid}/offer', [Api\ProductController::class, 'offer']);
-        Route::delete('media/{media:guid}', [Api\ProductController::class, 'deleteMedia']);;
+        Route::delete('media/{media:guid}', [Api\ProductController::class, 'deleteMedia']);
+        Route::get('offers/buying', [Api\ProductController::class, 'getBuyingOffers']);
+        Route::get('offers/selling', [Api\ProductController::class, 'getSellingOffers']);
     });
 
     Route::group(['prefix' => '/services'], function () {

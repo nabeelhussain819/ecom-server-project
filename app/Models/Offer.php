@@ -82,4 +82,5 @@ class Offer extends Base
             'status_name' => self::$STATUS_NEW_REQUEST
         ]);
     }
+
 }

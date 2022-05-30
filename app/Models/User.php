@@ -164,4 +164,20 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
         // return $this->hasManyThrough(Product::class, SavedUsersProduct::class, 'product_id', 'id', 'id', 'id');
         return $this->belongsToMany(Product::class, SavedUsersProduct::class);
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function buyingOffers()
+    {
+        return $this->hasMany(Offer::class, 'requester_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function sellingOffers()
+    {
+        return $this->hasMany(Offer::class, 'user_id');
+    }
 }
