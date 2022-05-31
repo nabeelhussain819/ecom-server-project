@@ -71,6 +71,10 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('offers/selling', [Api\ProductController::class, 'getSellingOffers']);
     });
 
+    Route::group(['prefix' => '/offer'], function () {
+        Route::post('status/{offer:guid}', [Api\OfferController::class, 'statusHandler']);
+    });
+
     Route::group(['prefix' => '/services'], function () {
         Route::get('/', [Api\ServiceController::class, 'index']);
         Route::get('/self/', [Api\ServiceController::class, 'self']);

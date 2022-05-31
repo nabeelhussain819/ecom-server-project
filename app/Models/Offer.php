@@ -33,7 +33,7 @@ class Offer extends Base
     /**
      * @var array
      */
-    protected $fillable = ['product_id', 'requester_id', 'user_id', 'price', 'status_id', 'status_name', 'created_at', 'updated_at'];
+    protected $fillable = ['product_id', 'requester_id', 'user_id', 'price', 'status_id', 'status_name', 'created_at', 'updated_at', 'guid'];
 
     public static $STATUS_NEW_REQUEST = 'NEW_REQUEST';
     public static $STATUS_REJECT = 'REJECT';
