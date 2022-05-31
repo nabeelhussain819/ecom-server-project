@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Core\Base;
+use App\Helpers\GuidHelper;
 use App\Interfaces\IMediaInteraction;
 use App\Scopes\ActiveScope;
 use App\Scopes\SoldScope;
@@ -10,6 +11,7 @@ use App\Traits\InteractWithMedia;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Auth;
+use phpDocumentor\Reflection\Types\Self_;
 
 /**
  * App\Models\Product
@@ -202,5 +204,10 @@ class Product extends Base implements IMediaInteraction
     {
         $this->append(['isSaved']);
         return $this;
+    }
+
+    public static function getByGuid(string $guid)
+    {
+        return self::where("guid", $guid)->firstOrFail();
     }
 }

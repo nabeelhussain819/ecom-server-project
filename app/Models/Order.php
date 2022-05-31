@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property ShippingDetail $shippingDetail
  * @property Product $product
  */
-class Orders extends Model
+class Order extends Model
 {
     /**
      * The "type" of the auto-incrementing ID.

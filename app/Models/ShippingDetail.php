@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $updated_at
  * @property string $zip
  * @property User $user
- * @property Orders[] $orders
+ * @property Order[] $orders
  */
 class ShippingDetail extends Model
 {

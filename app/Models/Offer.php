@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Auth;
  * @property User $user
  * @property requester $requester
  * @property Product $product
- * @property orders[] $orders
+ * @property Order[] $orders
  */
 class Offer extends Base
 {
