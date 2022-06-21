@@ -19,6 +19,7 @@ class CreateOrderTable extends Migration
             $table->unsignedBigInteger('shipping_detail_id')->nullable();
             $table->unsignedBigInteger('product_id')->nullable();
             $table->unsignedBigInteger('type_id')->nullable();
+            $table->string('payment_intent')->comment('Stripe returns this after successful payment hold')->nullable();
             $table->unsignedBigInteger('status')->nullable();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');

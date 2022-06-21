@@ -71,14 +71,10 @@ class ServiceController extends Controller
     public function store(Request $request)
     {
         DB::transaction(function () use ($request) {
-            $serviceCat = new ServicesCategories();
             $service = new Service();
             $service->guid = GuidHelper::getGuid();
             $request['user_id'] = auth()->user()->getAuthIdentifier();
             $service->fill($request->all())->save();
-            $serviceCat->service_id = $service->id;
-            $serviceCat->category_id = $request->category_id;
-            $serviceCat->save();
         });
         return redirect('admin/services')->with('success', 'Service Added');
     }

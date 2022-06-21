@@ -10,6 +10,7 @@
     "require": {
         "php": "^7.2.5|^8.0",
         "beyondcode/laravel-websockets": "^1.12",
+        "facebook/graph-sdk": "^5.7",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "google/apiclient": "^2.10",

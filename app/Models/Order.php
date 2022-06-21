@@ -19,6 +19,10 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Order extends Model
 {
+    const STATUS_UNPAID = 'UNPAID',
+        STATUS_PAID = 'PAID',
+        STATUS_REFUNDED = 'REFUNDED';
+
     /**
      * The "type" of the auto-incrementing ID.
      *
@@ -34,6 +38,7 @@ class Order extends Model
         'shipping_detail_id',
         'product_id',
         'type_id',
+        'payment_intent',
         'status',
         'created_at',
         'updated_at',

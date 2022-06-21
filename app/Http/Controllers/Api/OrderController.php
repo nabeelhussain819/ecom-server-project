@@ -9,6 +9,7 @@ use App\Models\ShippingDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Stripe\StripeClient;
 
 class OrderController extends Controller
 {
@@ -50,10 +51,12 @@ class OrderController extends Controller
 
             $product = Product::getByGuid($request->get('product_id'));
             $order->product_id = $product->id;
+            $order->price = $product->price;
             $order->shipping_detail_id = $shipping->id;
-            $order->status = "new";
-            dd($order);
-            dd($request->all());
+            $order->status = Order::STATUS_UNPAID;
+            $order->save();
+
+            return $order;
         });
     }
 
@@ -86,9 +89,23 @@ class OrderController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Order $order, Request $request)
     {
-        //
+        $shouldUpdate = true;
+        if ($request->has('status')) {
+            $stripe = new StripeClient(env('STRIPE_SK'));
+            $paymentIntent = $stripe->paymentIntents->retrieve($request->get('payment_intent'));
+
+            if ($paymentIntent->id !== $request->get('payment_intent'))
+                $shouldUpdate = false;
+        }
+
+        if ($shouldUpdate) {
+            $order->fill($request->all());
+            $order->update();
+        }
+
+        return $order;
     }
 
     /**

@@ -80,14 +80,10 @@ class ProductController extends Controller
     public function store(ProductRequest $request)
     {
         DB::transaction(function () use ($request) {
-            $productCat = new ProductsCategories();
             $product = new Product();
             $product->guid = GuidHelper::getGuid();
             $request['user_id'] = auth()->user()->getAuthIdentifier();
             $product->fill($request->all())->save();
-            $productCat->product_id = $product->id;
-            $productCat->category_id = $request->category_id;
-            $productCat->save();
 
             $attributes = [];
             foreach ($request->get('attributes', []) as $id => $value) {
