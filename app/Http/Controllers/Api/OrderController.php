@@ -53,7 +53,7 @@ class OrderController extends Controller
             $order->product_id = $product->id;
             $order->price = $product->price;
             $order->shipping_detail_id = $shipping->id;
-            $order->status = Order::STATUS_UNCAPTURED;
+            $order->status = Order::STATUS_UNPAID;
             $order->save();
 
             return $order;
