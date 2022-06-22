@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Order extends Model
 {
-    const STATUS_UNPAID = 'UNPAID',
+    const STATUS_UNCAPTURED = 'UNCAPTURED',
         STATUS_PAID = 'PAID',
         STATUS_REFUNDED = 'REFUNDED';
 
