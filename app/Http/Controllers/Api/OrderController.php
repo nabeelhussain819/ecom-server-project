@@ -50,6 +50,8 @@ class OrderController extends Controller
 
 
             $product = Product::getByGuid($request->get('product_id'));
+            $order->seller_id = $product->user_id;
+            $order->buyer_id = Auth::user()->id;
             $order->product_id = $product->id;
             $order->price = $product->price;
             $order->shipping_detail_id = $shipping->id;

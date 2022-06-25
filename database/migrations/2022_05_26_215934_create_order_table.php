@@ -15,14 +15,16 @@ class CreateOrderTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('seller_id')->index();
+            $table->unsignedBigInteger('buyer_id')->index();
             $table->unsignedBigInteger('shipping_detail_id')->nullable();
             $table->unsignedBigInteger('product_id')->nullable();
             $table->unsignedBigInteger('type_id')->nullable();
             $table->string('payment_intent')->comment('Stripe returns this after successful payment hold')->nullable();
             $table->unsignedBigInteger('status')->nullable();
 
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('seller_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('buyer_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('shipping_detail_id')->references('id')->on('shipping_details')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade')->onUpdate('cascade');
 

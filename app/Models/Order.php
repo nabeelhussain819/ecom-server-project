@@ -6,14 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property integer $id
- * @property integer $user_id
+ * @property integer $seller_id
+ * @property integer $buyer_id
  * @property integer $shipping_detail_id
  * @property integer $product_id
  * @property integer $type_id
  * @property integer $status
  * @property string $created_at
  * @property string $updated_at
- * @property User $user
+ * @property User $seller
+ * @property User $buyer
  * @property ShippingDetail $shippingDetail
  * @property Product $product
  */
@@ -35,7 +37,8 @@ class Order extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id',
+        'seller_id',
+        'buyer_id',
         'shipping_detail_id',
         'product_id',
         'type_id',
@@ -51,9 +54,14 @@ class Order extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function user()
+    public function seller()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\User', 'seller_id');
+    }
+
+    public function buyer()
+    {
+        return $this->belongsTo('App\User', 'buyer_id');
     }
 
     /**
