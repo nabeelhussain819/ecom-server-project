@@ -7,6 +7,7 @@ use App\Helpers\GuidHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegistrationRequest;
 use App\Models\User;
+use App\Notifications\OnboardingRequired;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Stripe\StripeClient;
 use Tymon\JWTAuth\JWTAuth;
 
 class RegisterController extends Controller
@@ -38,6 +40,7 @@ class RegisterController extends Controller
      */
     protected $redirectTo = '';
     protected $auth;
+    protected $stripe;
 
     /**
      * Create a new controller instance.
@@ -47,6 +50,7 @@ class RegisterController extends Controller
     public function __construct(JWTAuth $auth)
     {
         $this->auth = $auth;
+        $this->stripe = new StripeClient(env('STRIPE_SK'));
         // $this->middleware('guest');
     }
 
@@ -73,12 +77,23 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'guid' => $data['guid'],
         ]);
+
+        $accountLink = $this->stripe->accountLinks->create([
+            'account' => $user->stripe_account_id,
+            'refresh_url' => 'http://localhost:3000', // @TODO: replace with env variable
+            'return_url' => 'http://localhost:3000', // @TODO: replace with env variable
+            'type' => 'account_onboarding'
+        ]);
+
+        $user->notify(new OnboardingRequired($accountLink));
+
+        return $user;
     }
 
     /**

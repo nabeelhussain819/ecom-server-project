@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Notifications\RegistrationVerificationNotification;
+use App\Observers\UserObserver;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
@@ -17,6 +18,7 @@ use Tymon\JWTAuth\Contracts\Providers\JWT;
  * App\Models\User
  *
  * @property integer $id
+ * @property string $stripe_account_id
  * @property string $name
  * @property string $email
  * @property string $email_verified_at
@@ -73,6 +75,13 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     protected $hidden = ['password'];
 
     const MEDIA_UPLOAD = 'User';
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        User::observe(UserObserver::class);
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -181,5 +190,10 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     public function sellingOffers()
     {
         return $this->hasMany(Offer::class, 'user_id');
+    }
+
+    public function withNotifications()
+    {
+        return $this->load('notifications');
     }
 }

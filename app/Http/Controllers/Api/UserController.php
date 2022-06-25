@@ -20,7 +20,7 @@ class UserController extends Controller
 
     public function detail()
     {
-        return \Auth::user();
+        return \Auth::user()->withNotifications();
     }
 
     /**
@@ -96,7 +96,7 @@ class UserController extends Controller
     {
         if (Auth::check()) {
             // $user = User::where('id', Auth::user()->id);
-           
+
             User::where('id', Auth::user()->id)->update($request->all());
 
             return $this->genericResponse(true, "Profile Updated");

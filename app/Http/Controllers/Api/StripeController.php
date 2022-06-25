@@ -17,7 +17,10 @@ class StripeController extends Controller
         $paymentIntent = $stripe->paymentIntents->create([
             'amount' => $product->price * 100,
             'currency' => 'usd',
-            'capture_method' => 'manual'
+            'capture_method' => 'manual',
+            'transfer_data' => [
+                'destination' => $product->user->stripe_account_id,
+            ],
         ]);
 
         return [
