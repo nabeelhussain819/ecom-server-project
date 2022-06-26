@@ -104,6 +104,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
+        $product->price = $product->getPrice();
 
         return $product->withCategory()
             ->withProductsAttributes()

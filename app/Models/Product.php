@@ -114,6 +114,11 @@ class Product extends Base implements IMediaInteraction
         return $this->hasMany(Rating::class);
     }
 
+    public function offers()
+    {
+        return $this->hasMany(Offer::class);
+    }
+
     public function productsAttributes()
     {
 
@@ -204,6 +209,16 @@ class Product extends Base implements IMediaInteraction
     {
         $this->append(['isSaved']);
         return $this;
+    }
+
+    public function getPrice()
+    {
+        $user = Auth::user() ?? Auth::guard('api')->user();
+        $offer = $this->offers()->where('requester_id', $user->id)
+            ->where('status_name', Offer::$STATUS_ACCEPT)
+            ->first();
+
+        return $offer ? $offer->price : $this->price;
     }
 
     public static function getByGuid(string $guid)

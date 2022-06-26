@@ -15,7 +15,7 @@ class StripeController extends Controller
     {
         $stripe = new StripeClient(env('STRIPE_SK'));
         $paymentIntent = $stripe->paymentIntents->create([
-            'amount' => $product->price * 100,
+            'amount' => $product->getPrice() * 100,
             'currency' => 'usd',
             'capture_method' => 'manual',
             'transfer_data' => [

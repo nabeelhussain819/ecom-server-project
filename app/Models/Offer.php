@@ -74,13 +74,17 @@ class Offer extends Base
 
     public static function request(Product $product, int $offer)
     {
-        Offer::create([
-            'product_id' => $product->id,
-            'user_id' => $product->user_id,
-            'requester_id' => Auth::id(),
-            'price' => $offer,
-            'status_name' => self::$STATUS_NEW_REQUEST
-        ]);
+        Offer::updateOrCreate(
+            [
+                'product_id' => $product->id,
+                'requester_id' => Auth::user()->id
+            ],
+            [
+                'user_id' => $product->user_id,
+                'price' => $offer,
+                'status_name' => self::$STATUS_NEW_REQUEST
+            ]
+        );
     }
 
 }

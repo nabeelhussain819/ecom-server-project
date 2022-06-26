@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Offer;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\ShippingDetail;
@@ -50,10 +51,15 @@ class OrderController extends Controller
 
 
             $product = Product::getByGuid($request->get('product_id'));
+            $offer = $product->offers()->where('requester_id', Auth::user()->id)
+                ->where('status_name', Offer::$STATUS_ACCEPT)
+                ->first();
             $order->seller_id = $product->user_id;
             $order->buyer_id = Auth::user()->id;
             $order->product_id = $product->id;
-            $order->price = $product->price;
+            $order->offer_id = $offer->id;
+            $order->price = $offer ? $offer->price : $product->price;
+            $order->actual_price = $product->price;
             $order->shipping_detail_id = $shipping->id;
             $order->status = Order::STATUS_UNPAID;
             $order->save();
