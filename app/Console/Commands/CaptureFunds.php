@@ -49,11 +49,9 @@ class CaptureFunds extends Command
             ->where('status', Order::STATUS_UNCAPTURED)
             ->whereNotNull('payment_intent')
             ->each(function (Order $order) {
-                if ($order->status !== Order::STATUS_REFUNDED) {
-                    $this->stripe->paymentIntents->capture($order->payment_intent);
-                    $order->status = Order::STATUS_PAID;
-                    $order->update();
-                }
+                $this->stripe->paymentIntents->capture($order->payment_intent);
+                $order->status = Order::STATUS_PAID;
+                $order->update();
             });
     }
 }
