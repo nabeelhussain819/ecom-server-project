@@ -28,6 +28,8 @@ class CreateProductsTable extends Migration
             $table->decimal('latitude', 10, 7)->nullable();
             $table->enum('status', ['DRAFT', 'COMPLETE']);
             $table->boolean('active')->default(false);
+            $table->boolean('featured')->default(false);
+            $table->timestamp('featured_until')->nullable();
             $table->uuid('guid')->unique();
             $table->timestamps();
 

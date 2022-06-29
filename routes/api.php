@@ -69,6 +69,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::delete('media/{media:guid}', [Api\ProductController::class, 'deleteMedia']);
         Route::get('offers/buying', [Api\ProductController::class, 'getBuyingOffers']);
         Route::get('offers/selling', [Api\ProductController::class, 'getSellingOffers']);
+        Route::post('/{product:guid}/feature', [Api\ProductController::class, 'feature']);
     });
 
     Route::group(['prefix' => '/offer'], function () {
@@ -117,6 +118,8 @@ Route::group(['prefix' => '/services'], function () {
 
 Route::group(['prefix' => '/stripe', ['middleware' => 'auth:api']], function () {
     Route::get('/generate/{product:guid}', [Api\StripeController::class, 'generate']);
+    Route::get('/feature', [Api\StripeController::class, 'feature']);
+    Route::get('/hire', [Api\StripeController::class, 'hire']);
 });
 
 Route::get('products', [Api\ProductController::class, 'index']);

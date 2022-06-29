@@ -57,7 +57,7 @@ class OrderController extends Controller
             $order->seller_id = $product->user_id;
             $order->buyer_id = Auth::user()->id;
             $order->product_id = $product->id;
-            $order->offer_id = $offer->id;
+            $order->offer_id = $offer ? $offer->id : null;
             $order->price = $offer ? $offer->price : $product->price;
             $order->actual_price = $product->price;
             $order->shipping_detail_id = $shipping->id;
@@ -104,7 +104,7 @@ class OrderController extends Controller
             $stripe = new StripeClient(env('STRIPE_SK'));
             $paymentIntent = $stripe->paymentIntents->retrieve($request->get('payment_intent'));
 
-            if ($paymentIntent->id !== $request->get('payment_intent'))
+            if ($paymentIntent->id !== $request->get('payment_intent') || $paymentIntent->status !== 'requires_capture')
                 $shouldUpdate = false;
         }
 

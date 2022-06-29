@@ -15,6 +15,7 @@ use App\Models\User;
 use App\Models\Message;
 use App\Scopes\ActiveScope;
 use App\Scopes\SoldScope;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -22,6 +23,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Stripe\StripeClient;
 
 class ProductController extends Controller
 {
@@ -37,6 +39,7 @@ class ProductController extends Controller
 
         return Product::where('active', true)
             ->where($this->applyFilters($request))
+            ->orderByDesc('featured')
             ->paginate($this->pageSize);
     }
 
@@ -247,6 +250,7 @@ class ProductController extends Controller
                     });
             })
             ->distinct()
+            ->orderByDesc('featured')
             ->get();
 
         $categories = Category::when($request->get('category_id'), function (Builder $builder, $category) {
@@ -341,5 +345,22 @@ class ProductController extends Controller
         return $user->sellingOffers()->with(["product" => function (BelongsTo $hasMany) {
             $hasMany->select(Product::defaultSelect());
         }])->get();
+    }
+
+    public function feature(Product $product, Request $request)
+    {
+        $stripe = new StripeClient(env('STRIPE_SK'));
+        $paymentIntent = $stripe->paymentIntents->retrieve($request->get('payment_intent'));
+
+        $days = $request->get('days');
+        if ($paymentIntent->id === $request->get('payment_intent') &&
+            $paymentIntent->status === 'succeeded' &&
+            $paymentIntent->amount === (Product::getFeaturedPrice($days) * 100)) {
+            $product->featured = true;
+            $product->featured_until = Carbon::today()->addDays($days);
+            $product->update();
+        }
+
+        return $product;
     }
 }

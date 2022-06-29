@@ -28,6 +28,8 @@ use phpDocumentor\Reflection\Types\Self_;
  * @property string $postal_address
  * @property float $longitude
  * @property float $latitude
+ * @property boolean $featured
+ * @property string $featured_until
  * @property boolean $active
  * @property string $guid
  * @property string $created_at
@@ -63,6 +65,11 @@ class Product extends Base implements IMediaInteraction
 
     protected $autoBlame = false; //@todo temp
     const MEDIA_UPLOAD = "PRODUCT";
+
+    const FEATURED_PRICES = [
+        7 => 149,
+        30 => 299
+    ];
 
     /**
      * The "type" of the auto-incrementing ID.
@@ -214,11 +221,19 @@ class Product extends Base implements IMediaInteraction
     public function getPrice()
     {
         $user = Auth::user() ?? Auth::guard('api')->user();
-        $offer = $this->offers()->where('requester_id', $user->id)
-            ->where('status_name', Offer::$STATUS_ACCEPT)
-            ->first();
+        $offer = null;
+        if ($user) {
+            $offer = $this->offers()->where('requester_id', $user->id)
+                ->where('status_name', Offer::$STATUS_ACCEPT)
+                ->first();
+        }
 
         return $offer ? $offer->price : $this->price;
+    }
+
+    public static function getFeaturedPrice($days)
+    {
+        return self::FEATURED_PRICES[$days];
     }
 
     public static function getByGuid(string $guid)

@@ -25,6 +25,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('capture:funds')->daily();
+        $schedule->command('expire:ads')->daily();
     }
 
     /**
