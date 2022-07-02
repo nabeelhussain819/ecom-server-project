@@ -86,8 +86,8 @@ class RegisterController extends Controller
 
         $accountLink = $this->stripe->accountLinks->create([
             'account' => $user->stripe_account_id,
-            'refresh_url' => 'http://localhost:3000', // @TODO: replace with env variable
-            'return_url' => 'http://localhost:3000', // @TODO: replace with env variable
+            'refresh_url' => env('STRIPE_REFRESH_URL'),
+            'return_url' => env('STRIPE_RETURN_URL'),
             'type' => 'account_onboarding'
         ]);
 
