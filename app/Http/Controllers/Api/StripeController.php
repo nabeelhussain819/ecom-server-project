@@ -26,8 +26,7 @@ class StripeController extends Controller
             'currency' => 'usd',
             'capture_method' => 'manual',
             'transfer_data' => [
-//                'destination' => $product->user->stripe_account_id,
-                'destination' => 'acct_1LEZPWDH0CAtxFo3',
+                'destination' => $product->user->stripe_account_id,
             ],
         ]);
 
