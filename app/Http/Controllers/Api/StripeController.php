@@ -47,8 +47,18 @@ class StripeController extends Controller
         return ['client_secret' => $paymentIntent->client_secret];
     }
 
-    public function hire()
+    /**
+     * @param Request $request
+     * @return array
+     * @throws \Stripe\Exception\ApiErrorException
+     */
+    public function hire(Request $request)
     {
+        $paymentIntent = $this->stripe->paymentIntents->create([
+            'amount' => Product::getHirePrice($request->get('choice')) * 100,
+            'currency' => 'usd'
+        ]);
 
+        return ['client_secret' => $paymentIntent->client_secret];
     }
 }

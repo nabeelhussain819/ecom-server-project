@@ -70,6 +70,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('offers/buying', [Api\ProductController::class, 'getBuyingOffers']);
         Route::get('offers/selling', [Api\ProductController::class, 'getSellingOffers']);
         Route::post('/{product:guid}/feature', [Api\ProductController::class, 'feature']);
+        Route::post('/{product:guid}/hire', [Api\ProductController::class, 'hire']);
     });
 
     Route::group(['prefix' => '/offer'], function () {

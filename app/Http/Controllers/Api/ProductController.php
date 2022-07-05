@@ -363,4 +363,21 @@ class ProductController extends Controller
 
         return $product;
     }
+
+    public function hire(Product $product, Request $request)
+    {
+        $stripe = new StripeClient(env('STRIPE_SK'));
+        $paymentIntent = $stripe->paymentIntents->retrieve($request->get('payment_intent'));
+
+        $days = $request->get('days');
+        if ($paymentIntent->id === $request->get('payment_intent') &&
+            $paymentIntent->status === 'succeeded' &&
+            $paymentIntent->amount === (Product::getHirePrice($days) * 100)) {
+            $product->hired = true;
+            $product->hired_until = Carbon::today()->addDays($days);
+            $product->update();
+        }
+
+        return $product;
+    }
 }

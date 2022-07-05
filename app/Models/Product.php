@@ -30,6 +30,8 @@ use phpDocumentor\Reflection\Types\Self_;
  * @property float $latitude
  * @property boolean $featured
  * @property string $featured_until
+ * @property boolean $hired
+ * @property string $hired_until
  * @property boolean $active
  * @property string $guid
  * @property string $created_at
@@ -67,6 +69,11 @@ class Product extends Base implements IMediaInteraction
     const MEDIA_UPLOAD = "PRODUCT";
 
     const FEATURED_PRICES = [
+        7 => 149,
+        30 => 299
+    ];
+
+    const HIRE_PRICES = [
         7 => 149,
         30 => 299
     ];
@@ -234,6 +241,11 @@ class Product extends Base implements IMediaInteraction
     public static function getFeaturedPrice($days)
     {
         return self::FEATURED_PRICES[$days];
+    }
+
+    public static function getHirePrice($days)
+    {
+        return self::HIRE_PRICES[$days];
     }
 
     public static function getByGuid(string $guid)

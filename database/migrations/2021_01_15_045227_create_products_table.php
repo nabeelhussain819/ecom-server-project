@@ -30,6 +30,8 @@ class CreateProductsTable extends Migration
             $table->boolean('active')->default(false);
             $table->boolean('featured')->default(false);
             $table->timestamp('featured_until')->nullable();
+            $table->boolean('hired')->default(false);
+            $table->timestamp('hired_until')->nullable();
             $table->uuid('guid')->unique();
             $table->timestamps();
 
