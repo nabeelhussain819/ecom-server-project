@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Events\MessageReceived;
+use App\Helpers\StripeHelper;
 use App\Http\Controllers\Controller;
 use App\Model\Media;
 use App\Models\Message;
 use App\Models\User;
+use App\Notifications\OnboardingRequired;
 use App\Traits\InteractWithUpload;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Http\Request;
@@ -102,5 +104,14 @@ class UserController extends Controller
             return $this->genericResponse(true, "Profile Updated");
         }
 
+    }
+
+    public function refreshOnboardingUrl(User $user)
+    {
+        $accountLink = StripeHelper::createAccountLink($user);
+        $user->notifications()->where('data', 'LIKE', "%$user->stripe_account_id%")->delete();
+        $user->notify(new OnboardingRequired($accountLink));
+
+        return $accountLink->url;
     }
 }

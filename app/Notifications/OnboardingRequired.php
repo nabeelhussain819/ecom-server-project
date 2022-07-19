@@ -2,11 +2,11 @@
 
 namespace App\Notifications;
 
+use App\Models\User;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Stripe\AccountLink;
+use Stripe\StripeClient;
 
 class OnboardingRequired extends Notification
 {
@@ -45,7 +45,9 @@ class OnboardingRequired extends Notification
     public function toArray($notifiable)
     {
         return [
-            'onboarding_url' => $this->accountLink->url
+            'message' => 'Complete Onboarding',
+            'url' => $this->accountLink->url,
+            'stripe_account_id' => $notifiable->stripe_account_id
         ];
     }
 }

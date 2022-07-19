@@ -56,6 +56,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('{user}/messages', [Api\UserController::class, 'messages']);
         Route::post('{user}/send-message', [Api\UserController::class, 'sendMessage']);
         Route::patch('/', [Api\UserController::class, 'update']);
+        Route::get('/refresh/{user}', [Api\UserController::class, 'refreshOnboardingUrl']);
     });
 
     Route::group(['prefix' => '/products'], function () {
