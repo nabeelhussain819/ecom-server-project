@@ -23,21 +23,6 @@ class CaptureFunds extends Command
      */
     protected $description = 'Captures funds for orders that are past the 2 days protection.';
 
-
-    protected $stripe;
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->stripe = new StripeClient(env('STRIPE_SK'));
-    }
-
     /**
      * Execute the console command.
      *
@@ -45,11 +30,12 @@ class CaptureFunds extends Command
      */
     public function handle()
     {
+        $stripe = new StripeClient(env('STRIPE_SK'));
         Order::whereDate('created_at', '<=', Carbon::now()->subDays(2)->toDateTimeString())
             ->where('status', Order::STATUS_UNCAPTURED)
             ->whereNotNull('payment_intent')
-            ->each(function (Order $order) {
-                $this->stripe->paymentIntents->capture($order->payment_intent);
+            ->each(function (Order $order) use ($stripe) {
+                $stripe->paymentIntents->capture($order->payment_intent);
                 $order->status = Order::STATUS_PAID;
                 $order->update();
             });
