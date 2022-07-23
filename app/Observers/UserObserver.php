@@ -2,7 +2,9 @@
 
 namespace App\Observers;
 
+use App\Helpers\StringHelper;
 use App\Models\User;
+
 //use Stripe\StripeClient;
 
 class UserObserver
@@ -15,7 +17,7 @@ class UserObserver
     {
 //        $stripe = new StripeClient(env('STRIPE_SK'));
 //        $account = $stripe->accounts->create(['type' => 'express']);
-//
-//        $user->stripe_account_id = $account->id;
+
+        $user->stripe_account_id = StringHelper::random(4);
     }
 }
