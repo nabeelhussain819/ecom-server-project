@@ -3,7 +3,7 @@
 namespace App\Observers;
 
 use App\Models\User;
-use Stripe\StripeClient;
+//use Stripe\StripeClient;
 
 class UserObserver
 {
@@ -13,9 +13,9 @@ class UserObserver
      */
     public function creating(User $user)
     {
-        $stripe = new StripeClient(env('STRIPE_SK'));
-        $account = $stripe->accounts->create(['type' => 'express']);
-
-        $user->stripe_account_id = $account->id;
+//        $stripe = new StripeClient(env('STRIPE_SK'));
+//        $account = $stripe->accounts->create(['type' => 'express']);
+//
+//        $user->stripe_account_id = $account->id;
     }
 }
