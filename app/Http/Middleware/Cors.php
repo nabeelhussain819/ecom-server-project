@@ -17,6 +17,8 @@ class Cors
     {
         $allowedOrigins = [
             'http://localhost:3000',
+            'http://front.letsdeploy.us',
+            'https://front.letsdeploy.us'
         ];
         $requestOrigin = $request->headers->get('origin');
 
