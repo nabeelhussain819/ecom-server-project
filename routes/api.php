@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api;
+use App\Models\Fedex;
 use Illuminate\Support\Facades\Route;
 
 /*
