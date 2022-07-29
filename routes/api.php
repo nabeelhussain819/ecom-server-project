@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api;
+use App\Models\Fedex;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -125,7 +126,8 @@ Route::group(['prefix' => '/stripe', ['middleware' => 'auth:api']], function () 
 });
 
 Route::get('products', [Api\ProductController::class, 'index']);
-Route::post('forgot-password', [Api\Auth\ForgotPasswordController::class, 'Check']);
+Route::post('forgot-password', [Api\Auth\ForgotPasswordController::class, 'check']);
+Route::post('verify/otp', [Api\Auth\ForgotPasswordController::class, 'verifyOtp']);
 Route::post('password/reset', [Api\Auth\ResetPasswordController::class, 'reset']);
 
 

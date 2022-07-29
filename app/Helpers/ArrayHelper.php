@@ -135,7 +135,7 @@ class ArrayHelper extends Arr
     {
         return array_intersect($array1, $array2);
     }
-
+   
     /*
      * You can change value of last glue.
      * */
@@ -196,7 +196,10 @@ class ArrayHelper extends Arr
     {
         return array_combine($keys, $values);
     }
-
+    public static function otpGenerate()
+    {
+        return mt_rand(1000,9999);
+    }
     /*
      * This array_column_ext is different from standard as it does not return null,
      * when column value is empty string.

@@ -10,53 +10,39 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\ForgetPasswordVerification;
+use Illuminate\Support\Facades\Validator;
 
 class ForgotPasswordController extends Controller
 {
     use SendsPasswordResetEmails;
-    public function Check(Request $request){
-        $user = User::where('email', '=', $request->email)->first();       
-        $verificationCode = mt_rand(1000,9999);
-        $otp = new Otp();
-        $otp->otp = $verificationCode;
-        $otp->user_id = $user->id;
-        $otp->save();
-        Notification::send($request->email,$verificationCode, new ForgetPasswordVerification());
-        if ($user) {
-            $verificationCode = mt_rand(1000,9999);
-            $otp = new Otp();
-            $otp->otp = $verificationCode;
-            $otp->user_id = $user->id;
-            $otp->save();
-            Notification::send($request->email,$verificationCode, new ForgetPasswordVerification());
-         }else{
-            return $this->genericResponse(false,'Invalid Email',
-            422, ['errors' => [
-                'email' => 'Invalid Email Address',
-            ]]);
-         }
-     
-    }
-    public function VerifyOtp(Request $request){
-        $user = User::where('email', '=', $request->email)->first();       
-       
-        if ($user) {
-         }else{
-            return $this->genericResponse(false,'Invalid Email',
-            422, ['errors' => [
-                'email' => 'Invalid Email Address',
-            ]]);
-         }
-     
-    }
-    protected function sendResetLinkResponse(Request $request, $response): array
-    {
-       
-        return ['message' => trans($response)];
-    }
 
-    protected function sendResetLinkFailedResponse(Request $request, $response)
+    public function check(Request $request){
+        $user = User::where('email', '=', $request->email)->first();       
+        if ($user) {
+            Otp::where('email','=',$user->email)->delete();
+            Notification::send($user, new ForgetPasswordVerification());
+         }else{
+            throw ValidationException::withMessages(['email' => trans($user)]);
+         }
+    }
+    public function verifyOtp(Request $request){
+
+        $validator = $this->validator($request->all());
+
+        if ($validator->fails()) {
+            throw ValidationException::withMessages(['message' => "add All Feilds"]);
+        }
+        if (Otp::where('otp', $request->otp)->where('email', $request->email)->count() != 1) {
+            throw ValidationException::withMessages(['message' => "Otp Is Incorrect"]);
+        } 
+        return $this->genericResponse(200, 'You can change your password.');
+     
+    }
+    protected function validator(array $data)
     {
-        throw ValidationException::withMessages(['email' => trans($response)]);
+        return  Validator::make($data,[
+            'otp' => 'required',
+            'email' => 'required|email'
+        ]);
     }
 }

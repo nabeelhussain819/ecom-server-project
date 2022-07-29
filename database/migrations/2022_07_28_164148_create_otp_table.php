@@ -13,9 +13,10 @@ class CreateOtpTable extends Migration
      */
     public function up()
     {
-        Schema::create('otp', function (Blueprint $table) {
+        Schema::create('otps', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
+            $table->string('email');
+            $table->string('name');
             $table->string("otp")->nullable();
             $table->timestamps();
         });
@@ -28,6 +29,6 @@ class CreateOtpTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('otp');
+        Schema::dropIfExists('otps');
     }
 }
