@@ -83,8 +83,9 @@ class RegisterController extends Controller
         ]);
 
         $accountLink = StripeHelper::createAccountLink($user);
+        
         $user->notify(new OnboardingRequired($accountLink));
-
+       
         return $user;
     }
 

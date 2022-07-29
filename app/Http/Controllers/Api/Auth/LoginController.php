@@ -71,7 +71,7 @@ class LoginController extends Controller
             $this->hasTooManyLoginAttempts($request)) {
             $this->fireLockoutEvent($request);
 
-            return $this->genericResponse(false, 'You attempt number of time your account ha been blocked',
+            return $this->genericResponse(false, 'You attempt number of time your account has been blocked',
                 null, ['errors' => [
                     "you've been locked"
                 ]]);

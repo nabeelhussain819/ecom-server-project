@@ -125,7 +125,7 @@ Route::group(['prefix' => '/stripe', ['middleware' => 'auth:api']], function () 
 });
 
 Route::get('products', [Api\ProductController::class, 'index']);
-Route::post('forgot-password', [Api\Auth\ForgotPasswordController::class, 'sendResetLinkEmail']);
+Route::post('forgot-password', [Api\Auth\ForgotPasswordController::class, 'Check']);
 Route::post('password/reset', [Api\Auth\ResetPasswordController::class, 'reset']);
 
 
