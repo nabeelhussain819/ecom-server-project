@@ -7,6 +7,8 @@ use App\Models\Offer;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\ShippingDetail;
+use App\Models\User;
+use App\Notifications\OrderPlaced;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -95,7 +97,7 @@ class OrderController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return Order
      */
     public function update(Order $order, Request $request)
     {
@@ -111,6 +113,13 @@ class OrderController extends Controller
         if ($shouldUpdate) {
             $order->fill($request->all());
             $order->update();
+
+            // @Todo: create a different controller action for order confirmation
+            if ($request->has('status')) {
+                /** @var User $user */
+                $user = Auth::user();
+                $user->notify(new OrderPlaced($order));
+            }
         }
 
         return $order;
