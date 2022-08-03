@@ -191,7 +191,10 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     {
         return $this->hasMany(Offer::class, 'user_id');
     }
-
+    public static function defaultSelect()
+    {
+        return ['id', 'name', 'profile_url'];
+    }
     public function withNotifications()
     {
         return $this->load('notifications');

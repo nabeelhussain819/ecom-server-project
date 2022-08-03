@@ -98,6 +98,7 @@ class Product extends Base implements IMediaInteraction
     protected $fillable = ['category_id', 'user_id', 'name', 'is_sold', 'shipping_size_id', 'has_shipping', 'description', 'status', 'price', 'sale_price', 'location', 'google_address', 'postal_address', 'longitude', 'latitude', 'active', 'guid', 'created_at', 'updated_at'];
 
     protected $appends = ['cover_image', 'is_owner'];
+    
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -119,7 +120,10 @@ class Product extends Base implements IMediaInteraction
     {
         return ['id', 'name', 'guid'];
     }
-
+    public static function getUser()
+    {
+        return ['id', 'name', 'profile_url'];
+    }
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

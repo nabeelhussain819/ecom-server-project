@@ -336,6 +336,8 @@ class ProductController extends Controller
         $user = Auth::user();
         return $user->buyingOffers()->with(["product" => function (BelongsTo $hasMany) {
             $hasMany->select(Product::defaultSelect());
+        }, "user" => function (BelongsTo $hasMany) {
+            $hasMany->select(Product::getUser());
         }])->get();
     }
 
@@ -344,6 +346,8 @@ class ProductController extends Controller
         $user = Auth::user();
         return $user->sellingOffers()->with(["product" => function (BelongsTo $hasMany) {
             $hasMany->select(Product::defaultSelect());
+        } , "requester" => function (BelongsTo $hasMany) {
+            $hasMany->select(User::defaultSelect());
         }])->get();
     }
 

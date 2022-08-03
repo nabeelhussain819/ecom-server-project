@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Core\Base;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
@@ -35,14 +36,20 @@ class Offer extends Base
      */
     protected $fillable = ['product_id', 'requester_id', 'user_id', 'price', 'status_id', 'status_name', 'created_at', 'updated_at', 'guid'];
 
+    protected $casts = [
+        'created_at' => 'date:M d, Y g:i A',
+       ];
     public static $STATUS_NEW_REQUEST = 'NEW_REQUEST';
-    public static $STATUS_REJECT = 'REJECT';
-    public static $STATUS_ACCEPT = 'ACCEPTED';
+    public static $STATUS_REJECT = 'Rejected';
+    public static $STATUS_ACCEPT = 'Accepted';
     public static $STATUS_SOLD = 'SOLD';
+
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
+
+
     public function requester()
     {
         return $this->belongsTo('App\Models\User', 'requester_id');
