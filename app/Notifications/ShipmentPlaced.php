@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use App\Mail\BaseMailable;
+use App\Models\ShippingDetail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -19,10 +20,9 @@ class ShipmentPlaced extends Notification
      *
      * @return void
      */
-    //@TODO Don't have a model of shipment yet, Use it here if created in future.
-    public function __construct()
+    public function __construct(ShippingDetail $shipment)
     {
-        //
+        $this->shipment = $shipment;
     }
 
     /**
