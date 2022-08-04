@@ -12,6 +12,8 @@ use App\Notifications\OrderPlaced;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Stripe\StripeClient;
 
 class OrderController extends Controller
@@ -21,9 +23,9 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+       
     }
 
     /**
@@ -78,7 +80,13 @@ class OrderController extends Controller
      */
     public function show($id)
     {
-        //
+        return Order::where('id', $id)->with(["product" => function (BelongsTo $hasMany) {
+            $hasMany->select(Product::defaultSelect());
+        } , "buyer" => function (BelongsTo $hasMany) {
+            $hasMany->select(User::defaultSelect());
+        }, "shippingDetail" => function (BelongsTo $hasMany) {
+            $hasMany->select(ShippingDetail::defaultSelect());
+        }])->get();
     }
 
     /**

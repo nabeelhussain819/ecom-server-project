@@ -61,7 +61,7 @@ class Order extends Model
 
     public function buyer()
     {
-        return $this->belongsTo('App\User', 'buyer_id');
+        return $this->belongsTo('App\Models\User', 'buyer_id');
     }
 
     /**
@@ -69,7 +69,7 @@ class Order extends Model
      */
     public function shippingDetail()
     {
-        return $this->belongsTo('App\Models\ShippingDetail');
+        return $this->belongsTo('App\Models\ShippingDetail','shipping_detail_id');
     }
 
     /**
@@ -79,4 +79,5 @@ class Order extends Model
     {
         return $this->belongsTo('App\Models\Product');
     }
+   
 }

@@ -77,6 +77,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::group(['prefix' => '/offer'], function () {
         Route::post('status/{offer:guid}', [Api\OfferController::class, 'statusHandler']);
+        Route::post('/{offer:guid}', [Api\OfferController::class, 'pendingOffer']);
     });
 
     Route::group(['prefix' => '/services'], function () {

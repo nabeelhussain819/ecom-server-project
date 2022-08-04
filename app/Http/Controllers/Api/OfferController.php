@@ -4,7 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Offer;
+use App\Models\User;
+use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class OfferController extends Controller
 {
@@ -47,7 +51,7 @@ class OfferController extends Controller
      */
     public function show($id)
     {
-        //
+     
     }
 
     /**
@@ -89,5 +93,15 @@ class OfferController extends Controller
         $status = $request->get('status') ? Offer::$STATUS_ACCEPT : Offer::$STATUS_REJECT;
         $offer->update(["status_name" => $status]);
         return $this->genericResponse(true, "request updated");
+    }
+
+    public function pendingOffer($id){
+        return Offer::where('id', $id)->with(["product" => function (BelongsTo $hasMany) {
+            $hasMany->select(Product::defaultSelect());
+        } , "requester" => function (BelongsTo $hasMany) {
+            $hasMany->select(User::defaultSelect());
+        }, "user" => function (BelongsTo $hasMany) {
+            $hasMany->select(Product::getUser());
+        }])->get();
     }
 }
