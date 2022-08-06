@@ -45,6 +45,8 @@ class RegistrationVerificationNotification extends Notification
         $verificationUrl = $this->verificationUrl($notifiable);
         $baseMailable = new BaseMailable();
 
+        dd($verificationUrl);
+
         return $baseMailable->to($notifiable->email)
             ->subject($notifiable->name . '- Registration Activation')
             ->markdown('emails.auth.registration-activation', [
@@ -60,7 +62,7 @@ class RegistrationVerificationNotification extends Notification
      */
     protected function verificationUrl($notifiable)
     {
-        $domain = env('FRONT_END_URL') . 'user/verify';
+        $domain = env('FRONT_END_URL') . '/user/verify';
         $envKey = env('APP_KEY');
         $expires = Carbon::now()->addMinutes(Config::get('auth.verification.expire', 60));
         $key = $notifiable->getKey();
