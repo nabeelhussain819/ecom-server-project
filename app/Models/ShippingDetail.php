@@ -46,8 +46,9 @@ class ShippingDetail extends Model
     {
         return $this->hasMany('App\Models\Order');
     }
+    
     public static function defaultSelect()
     {
-        return [ 'user_id', 'name', 'street_address', 'state', 'city', 'zip', 'created_at', 'updated_at'];
+        return [ 'id','user_id', 'name', 'street_address', 'state', 'city', 'zip', 'created_at', 'updated_at'];
     }
 }

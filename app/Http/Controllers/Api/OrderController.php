@@ -84,9 +84,9 @@ class OrderController extends Controller
             $hasMany->select(Product::defaultSelect());
         } , "buyer" => function (BelongsTo $hasMany) {
             $hasMany->select(User::defaultSelect());
-        }, "shippingDetail" => function (BelongsTo $hasMany) {
+        },'shippingDetail' => function (BelongsTo $hasMany) {
             $hasMany->select(ShippingDetail::defaultSelect());
-        }])->get();
+        } ])->get();
     }
 
     /**
