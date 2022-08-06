@@ -60,11 +60,14 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('/refresh/{user}', [Api\UserController::class, 'refreshOnboardingUrl']);
     });
 
+
     Route::group(['prefix' => '/products'], function () {
         Route::post('/', [Api\ProductController::class, 'store']);
         Route::patch('/{product:guid}', [Api\ProductController::class, 'update']);
         Route::get('/self/', [Api\ProductController::class, 'self']);
-        Route::post('upload/{:guid}', [Api\ProductController::class, 'upload']);
+        // HOTFIX
+        // @TODO check why /upload is not working maybe another route with the same name (GIVING 404 on /upload route) is declared.
+        Route::post('image-upload/{product:guid}', [Api\ProductController::class, 'upload']);
         Route::post('saved-users/{product:guid}', [Api\ProductController::class, 'saved']);
         Route::get('saved', [Api\ProductController::class, 'getSaved']);
         Route::post('/{product:guid}/offer', [Api\ProductController::class, 'offer']);
