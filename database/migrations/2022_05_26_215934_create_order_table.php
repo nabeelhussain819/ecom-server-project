@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\Order;
 
 class CreateOrderTable extends Migration
 {
@@ -21,7 +22,7 @@ class CreateOrderTable extends Migration
             $table->unsignedBigInteger('product_id')->nullable();
             $table->unsignedBigInteger('type_id')->nullable();
             $table->string('payment_intent')->comment('Stripe returns this after successful payment hold')->nullable();
-            $table->unsignedBigInteger('status')->nullable();
+            $table->enum('status', [Order::statuses()]);
 
             $table->foreign('seller_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('buyer_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');

@@ -79,5 +79,14 @@ class Order extends Model
     {
         return $this->belongsTo('App\Models\Product');
     }
-   
+
+    public static function statuses() {
+        return [
+            self::STATUS_UNCAPTURED,
+            self::STATUS_UNPAID,
+            self::STATUS_PAID,
+            self::STATUS_REFUNDED
+        ];
+    }
+
 }
