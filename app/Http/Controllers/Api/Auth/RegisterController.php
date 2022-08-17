@@ -81,9 +81,9 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
             'guid' => $data['guid'],
         ]);
-
         $accountLink = StripeHelper::createAccountLink($user);
         
+   
         $user->notify(new OnboardingRequired($accountLink));
        
         return $user;
@@ -95,7 +95,7 @@ class RegisterController extends Controller
      */
     public function register(RegistrationRequest $request)
     {
-
+        print_r(env('STRIPE_SK'));
         return DB::transaction(function () use ($request) {
             $validator = $this->validator($request->all());
             if (!$validator->fails()) {
