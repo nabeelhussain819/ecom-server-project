@@ -31,10 +31,10 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         // why Product Categories whynot products ? @todo refactor it make it simple
-//        return ProductsCategories::with('products', 'categories')
-//            ->whereHas('products', function ($query) {
-//                $query->where('active', true);
-//            })->get();
+        //        return ProductsCategories::with('products', 'categories')
+        //            ->whereHas('products', function ($query) {
+        //                $query->where('active', true);
+        //            })->get();
 
 
         return Product::where('active', true)
@@ -204,7 +204,9 @@ class ProductController extends Controller
             $media->save();
 
             Storage::putFileAs(
-                'public/' . $path, $request->file('file'), "{$guid}.{$extension}"
+                'public/' . $path,
+                $request->file('file'),
+                "{$guid}.{$extension}"
             );
 
             return [
@@ -219,8 +221,8 @@ class ProductController extends Controller
 
     public function search(Request $request)
     {
-        $products = Product::where('active','1')->where('name', 'LIKE', "%{$request->get('query')}%")
-        ->whereBetween('price',[$request->get('min_price'),$request->get('max_price')])
+        $products = Product::where('active', '1')->where('name', 'LIKE', "%{$request->get('query')}%")
+            ->whereBetween('price', [$request->get('min_price'), $request->get('max_price')])
             ->when($request->get('category_id'), function (Builder $builder, $category) use ($request) {
                 $builder->where('category_id', $category)
                     ->when(json_decode($request->get('filters'), true), function (Builder $builder, $filters) {
@@ -327,9 +329,7 @@ class ProductController extends Controller
         if (Auth::user()->id == $media->user_id) {
             Storage::delete($media->name);
             $media->delete();
-
         }
-
     }
 
     public function getBuyingOffers()
@@ -347,7 +347,7 @@ class ProductController extends Controller
         $user = Auth::user();
         return $user->sellingOffers()->with(["product" => function (BelongsTo $hasMany) {
             $hasMany->select(Product::defaultSelect());
-        } , "requester" => function (BelongsTo $hasMany) {
+        }, "requester" => function (BelongsTo $hasMany) {
             $hasMany->select(User::defaultSelect());
         }])->get();
     }
@@ -358,9 +358,11 @@ class ProductController extends Controller
         $paymentIntent = $stripe->paymentIntents->retrieve($request->get('payment_intent'));
 
         $days = $request->get('days');
-        if ($paymentIntent->id === $request->get('payment_intent') &&
+        if (
+            $paymentIntent->id === $request->get('payment_intent') &&
             $paymentIntent->status === 'succeeded' &&
-            $paymentIntent->amount === (Product::getFeaturedPrice($days) * 100)) {
+            $paymentIntent->amount === (Product::getFeaturedPrice($days) * 100)
+        ) {
             $product->featured = true;
             $product->featured_until = Carbon::today()->addDays($days);
             $product->update();
@@ -375,9 +377,11 @@ class ProductController extends Controller
         $paymentIntent = $stripe->paymentIntents->retrieve($request->get('payment_intent'));
 
         $days = $request->get('days');
-        if ($paymentIntent->id === $request->get('payment_intent') &&
+        if (
+            $paymentIntent->id === $request->get('payment_intent') &&
             $paymentIntent->status === 'succeeded' &&
-            $paymentIntent->amount === (Product::getHirePrice($days) * 100)) {
+            $paymentIntent->amount === (Product::getHirePrice($days) * 100)
+        ) {
             $product->hired = true;
             $product->hired_until = Carbon::today()->addDays($days);
             $product->update();
