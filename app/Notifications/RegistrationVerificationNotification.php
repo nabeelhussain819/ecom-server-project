@@ -45,8 +45,6 @@ class RegistrationVerificationNotification extends Notification
         $verificationUrl = $this->verificationUrl($notifiable);
         $baseMailable = new BaseMailable();
 
-        dd($verificationUrl);
-
         return $baseMailable->to($notifiable->email)
             ->subject($notifiable->name . '- Registration Activation')
             ->markdown('emails.auth.registration-activation', [
