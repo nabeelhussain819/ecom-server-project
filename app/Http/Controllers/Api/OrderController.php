@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Offer;
+use App\Models\Fedex;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\ShippingDetail;
@@ -15,6 +16,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Stripe\StripeClient;
+use Carbon\Carbon;
+
 
 class OrderController extends Controller
 {
@@ -49,15 +52,20 @@ class OrderController extends Controller
         return DB::transaction(function () use ($request) {
             $order = new Order();
             $shipping = new ShippingDetail();
+    //         $object = new Fedex();
+
+            
+
             $shipping->fill($request->get("shippingDetail"));
             $shipping->user_id = Auth::user()->id;
+            
             $shipping->save();
 
 
             $product = Product::getByGuid($request->get('product_id'));
             $offer = $product->offers()->where('requester_id', Auth::user()->id)
-                ->where('status_name', Offer::$STATUS_ACCEPT)
-                ->first();
+            ->where('status_name', Offer::$STATUS_ACCEPT)
+            ->first();
             $order->seller_id = $product->user_id;
             $order->buyer_id = Auth::user()->id;
             $order->product_id = $product->id;
@@ -67,7 +75,7 @@ class OrderController extends Controller
             $order->shipping_detail_id = $shipping->id;
             $order->status = Order::STATUS_UNPAID;
             $order->save();
-
+            
             return $order;
         });
     }
@@ -109,6 +117,7 @@ class OrderController extends Controller
      */
     public function update(Order $order, Request $request)
     {
+        
         $shouldUpdate = true;
         if ($request->has('status')) {
             $stripe = new StripeClient(env('STRIPE_SK'));
@@ -119,6 +128,76 @@ class OrderController extends Controller
         }
 
         if ($shouldUpdate) {
+            $buyer = User::where('id', $order->buyer_id)->first();
+            $seller = User::where('id', $order->seller_id)->first();
+            $buyer_shipping = ShippingDetail::where('id', $order->shipping_detail_id)->first();
+            $resp = array(
+                'labelResponseOptions' => "URL_ONLY",
+                'requestedShipment' => array(
+                  'shipper' => array(
+                    'contact' => array(
+                        "personName" => $seller->name,
+                        "phoneNumber"=> $seller->phone,
+                        // "companyName" => "Shipper Company Name"
+                    ),
+                    'address' => array(
+                        'streetLines' => array(
+                            "Shipper street address",
+                        ),
+                        "city" => "HARRISON",
+                        "stateOrProvinceCode" => "AR",
+                        "postalCode" => 72601,
+                        "countryCode" => "US"
+                    )
+                  ),
+                  'recipients' => array(
+                      array(
+                        'contact' => array(
+                            "personName" => $buyer->name,
+                            "phoneNumber"=> $buyer->phone,
+                            "companyName" => "Recipient Company Name"
+                        ),
+                        'address' => array(
+                            'streetLines' => array(
+                                $buyer_shipping->street_address,
+                            ),
+                            "city" => $buyer_shipping->city,//"Collierville",
+                            "stateOrProvinceCode" => $buyer_shipping->state,//"TN",
+                            "postalCode" => $buyer_shipping->zip,//38017,
+                            "countryCode" => "US"
+                        )
+                      ),
+                    ),
+                    'shippingChargesPayment' => array(
+                        "paymentType" => "SENDER"
+                    ),
+                    "shipDatestamp" => Carbon::today()->format('Y-m-d'),
+                    "serviceType" => "STANDARD_OVERNIGHT",
+                    "packagingType" => "FEDEX_PAK",
+                    "pickupType" => "USE_SCHEDULED_PICKUP",
+                    "blockInsightVisibility" => false,
+                    'labelSpecification' => array(
+                        "imageType" => "PDF",
+                        "labelStockType" => "PAPER_85X11_TOP_HALF_LABEL"
+                    ),
+                    'requestedPackageLineItems' => array(
+                        array(
+                          'weight' => array(
+                            "value" => 10,
+                            "units" => "LB"
+                          )
+                        ),
+                      ),
+                      
+                    
+                ),
+                'accountNumber' => array(
+                    "value" => "740561073"
+                ),
+            );
+              
+            $fedex_shipment = Fedex::createShipment($resp);
+
             $order->fill($request->all());
             $order->update();
 

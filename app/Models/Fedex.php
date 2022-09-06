@@ -17,11 +17,29 @@ class Fedex
         $headers = ['Content-Type' => 'application/x-www-form-urlencoded'];
         $body = [
             'grant_type' => 'client_credentials',
-            'client_id' => env('FEDEX_API_KEY'),
-            'client_secret' => env('FEDEX_SECRET_KEY'),
+            'client_id' => 'l712a1281e2d6d412f8081c5b756c2c390',//env('FEDEX_API_KEY'),
+            'client_secret' => 'bc0b0ed468e640c8a26ac3ce3959a93c'//env('FEDEX_SECRET_KEY'),
         ];
-
         return HttpHelper::request($url, $body, 'POST', $headers);
+    }
+
+
+    public static function createShipment(/*string $token,*/ $data) 
+    {
+      //dd($data);
+      if(!empty($data)){
+        $url = self::API . '/ship/v1/shipments';
+
+        $token = self::authorize();
+        
+        $headers = array();
+
+        $headers[] = 'Content-Type: application/json';
+        $headers[] = 'Authorization: Bearer '. $token["access_token"];
+        $headers[] = 'X-locale: en_US';
+        
+        return HttpHelper::request($url, $data, 'POST', $headers, true);
+      }
     }
 
 
