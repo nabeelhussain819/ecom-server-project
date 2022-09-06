@@ -18,7 +18,9 @@ class Cors
         $allowedOrigins = [
             'http://localhost:3000',
             'http://front.letsdeploy.us',
-            'https://front.letsdeploy.us'
+            'https://front.letsdeploy.us',
+            'https://flexemarket.com',
+            'https://api.flexemarket.com'
         ];
         $requestOrigin = $request->headers->get('origin');
 

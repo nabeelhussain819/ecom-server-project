@@ -4,6 +4,8 @@ namespace App\Notifications;
 
 use App\Mail\BaseMailable;
 use App\Models\Order;
+use App\Models\Product;
+use App\Models\ShippingDetail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -45,10 +47,11 @@ class OrderPlaced extends Notification
     public function toMail($notifiable)
     {
         $baseMailable = new BaseMailable();
-
+        $product = Product::where('id', $this->order->product_id)->with('user')->first();
+        $shipping = ShippingDetail::where('id', $this->order->shipping_detail_id)->get();
         return $baseMailable->to($notifiable->email)
             ->subject($notifiable->name . '- Order Placed')
-            ->markdown('emails.order.placed', ['user' => $notifiable, 'order' => $this->order]);
+            ->markdown('emails.order.placed', ['user' => $notifiable, 'order' => $this->order, 'product' => $product, 'shipping' => $shipping]);
     }
 
     /**

@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
+use App\Helpers\GuidHelper;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Carbon\Carbon;
 use Facebook\Facebook;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Tymon\JWTAuth\JWTAuth;
 
@@ -120,7 +124,13 @@ class LoginController extends Controller
         $fbUser = $response->getGraphUser();
         $internalUser = User::where('email', $fbUser->getEmail())->first();
         if ($internalUser === null) {
-            $internalUser = new User(['name' => $fbUser->getName(), 'email' => $fbUser->getEmail()]);
+            $internalUser = new User([
+                'name' => $fbUser->getName(),
+                'email' => $fbUser->getEmail(),
+                'password' => Hash::make(Str::random(8)),
+                'guid' => GuidHelper::getGuid(),
+                'email_verified_at' => Carbon::now()
+            ]);
             $internalUser->save();
         }
         Auth::login($internalUser);
@@ -140,7 +150,14 @@ class LoginController extends Controller
             $googleUser = $request->get('user');
             $internalUser = User::where('email', $googleUser['email'])->first();
             if ($internalUser === null) {
-                $internalUser = new User($googleUser);
+                $internalUser = new User(array_merge(
+                    $googleUser,
+                    [
+                        'password' => Hash::make(Str::random(8)),
+                        'guid' => GuidHelper::getGuid(),
+                        'email_verified_at' => Carbon::now()
+                    ]
+                ));
                 $internalUser->save();
             }
             Auth::login($internalUser);

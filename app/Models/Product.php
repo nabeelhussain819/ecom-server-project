@@ -118,7 +118,7 @@ class Product extends Base implements IMediaInteraction
 
     public static function defaultSelect()
     {
-        return ['id', 'name', 'guid'];
+        return ['id', 'name', 'guid','price'];
     }
     public static function getUser()
     {
