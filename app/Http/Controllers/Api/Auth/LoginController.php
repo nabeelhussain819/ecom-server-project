@@ -160,10 +160,13 @@ class LoginController extends Controller
                 ));
                 $internalUser->save();
             }
+
             Auth::login($internalUser);
 
+            $user = auth()->check() ? auth()->user() : $request->user();
+
             return $this->genericResponse(true, 'Successful login', 200, [
-                'data' => $request->user(),
+                'data' => $user,
                 'token' => $internalUser->createToken('Personal Access Token')->accessToken
             ]);
         }
