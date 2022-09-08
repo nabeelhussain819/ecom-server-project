@@ -35,7 +35,7 @@ class MessageReceived implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('messages.' . $this->user->id);
+        return new Channel('messages.' . $this->user->id);
     }
 
     public static function trigger(User $user)
