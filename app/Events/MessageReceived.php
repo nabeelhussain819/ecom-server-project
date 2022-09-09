@@ -2,11 +2,10 @@
 
 namespace App\Events;
 
+use App\Models\Message;
 use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -36,6 +35,14 @@ class MessageReceived implements ShouldBroadcast
     public function broadcastOn()
     {
         return new Channel('messages.' . $this->user->id);
+    }
+
+    public function broadcastWith()
+    {
+        return ['messages' => Message::where('sender_id', $this->user->id)
+            ->orWhere('recipient_id', $this->user->id)
+            ->orderBy('created_at', 'desc')
+            ->limit(50)];
     }
 
     public static function trigger(User $user)
