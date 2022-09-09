@@ -45,6 +45,11 @@ class MessageReceived implements ShouldBroadcast
             ->limit(50)];
     }
 
+    public function broadcastAs()
+    {
+        return 'MessageReceived';
+    }
+
     public static function trigger(User $user)
     {
         try {
