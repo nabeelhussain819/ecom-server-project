@@ -39,16 +39,10 @@ class MessageReceived implements ShouldBroadcast
 
     public function broadcastWith()
     {
-//        return ['messages' => Message::where('sender_id', $this->user->id)
-//            ->orWhere('recipient_id', $this->user->id)
-//            ->orderBy('created_at', 'desc')
-//            ->limit(50)];
-        return ['messages' => [new Message([
-            'sender_id' => 2,
-            'recipient_id' => 61,
-            'data' => 'Test message'
-        ])
-        ]];
+        return ['messages' => Message::where('sender_id', $this->user->id)
+            ->orWhere('recipient_id', $this->user->id)
+            ->orderBy('created_at', 'desc')
+            ->limit(50)];
     }
 
     public function broadcastAs()
