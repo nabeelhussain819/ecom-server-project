@@ -137,7 +137,8 @@ class OrderController extends Controller
                   'shipper' => array(
                     'contact' => array(
                         "personName" => $seller->name,
-                        "phoneNumber"=> $seller->phone,
+//                        "phoneNumber"=> $seller->phone,
+                        "phoneNumber"=> '1234567890',
                         // "companyName" => "Shipper Company Name"
                     ),
                     'address' => array(
@@ -154,7 +155,8 @@ class OrderController extends Controller
                       array(
                         'contact' => array(
                             "personName" => $buyer->name,
-                            "phoneNumber"=> $buyer->phone,
+//                            "phoneNumber"=> $buyer->phone,
+                            "phoneNumber"=> '1234567890',
                             "companyName" => "Recipient Company Name"
                         ),
                         'address' => array(
