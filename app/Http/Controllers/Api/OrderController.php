@@ -28,7 +28,7 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-       
+
     }
 
     /**
@@ -54,11 +54,11 @@ class OrderController extends Controller
             $shipping = new ShippingDetail();
     //         $object = new Fedex();
 
-            
+
 
             $shipping->fill($request->get("shippingDetail"));
             $shipping->user_id = Auth::user()->id;
-            
+
             $shipping->save();
 
 
@@ -75,7 +75,7 @@ class OrderController extends Controller
             $order->shipping_detail_id = $shipping->id;
             $order->status = Order::STATUS_UNPAID;
             $order->save();
-            
+
             return $order;
         });
     }
@@ -117,7 +117,7 @@ class OrderController extends Controller
      */
     public function update(Order $order, Request $request)
     {
-        
+
         $shouldUpdate = true;
         if ($request->has('status')) {
             $stripe = new StripeClient(env('STRIPE_SK'));
@@ -126,7 +126,7 @@ class OrderController extends Controller
             if ($paymentIntent->id !== $request->get('payment_intent') || $paymentIntent->status !== 'requires_capture')
                 $shouldUpdate = false;
         }
-        
+
         if ($shouldUpdate) {
             $buyer = User::where('id', $order->buyer_id)->first();
             $seller = User::where('id', $order->seller_id)->first();
@@ -188,35 +188,35 @@ class OrderController extends Controller
                           )
                         ),
                       ),
-                      
-                    
+
+
                 ),
                 'accountNumber' => array(
                     "value" => "740561073"
                 ),
             );
-            $fedex_shipment = Fedex::createShipment($resp);
-            $req = $request->all();
-            if(isset($fedex_shipment["errors"])){
-                throw new Exception("Error Processing Request", 1);
-            }
-            else if(isset($fedex_shipment["output"]["transactionShipments"][0]["masterTrackingNumber"])){
-                $req["tracking_id"] = $fedex_shipment["output"]["transactionShipments"][0]["masterTrackingNumber"];
-                // return $fedex_shipment;
-                $order->fill($req);
-                $order->update();
-                // $order["shipmentLabelUrl"] = $fedex_shipment["output"]["transactionShipments"][0]["shipmentDocuments"];
-    
-                // @Todo: create a different controller action for order confirmation
+//            $fedex_shipment = Fedex::createShipment($resp);
+//            $req = $request->all();
+//            if(isset($fedex_shipment["errors"])){
+//                throw new Exception("Error Processing Request", 1);
+//            }
+//            else if(isset($fedex_shipment["output"]["transactionShipments"][0]["masterTrackingNumber"])){
+//                $req["tracking_id"] = $fedex_shipment["output"]["transactionShipments"][0]["masterTrackingNumber"];
+//                // return $fedex_shipment;
+//                $order->fill($req);
+//                $order->update();
+//                // $order["shipmentLabelUrl"] = $fedex_shipment["output"]["transactionShipments"][0]["shipmentDocuments"];
+//
+//                // @Todo: create a different controller action for order confirmation
                 if ($request->has('status')) {
                     /** @var User $user */
                     $user = Auth::user();
                     $user->notify(new OrderPlaced($order));
                 }
-                return $order;
-            }
+//            }
         }
 
+        return $order;
         // return $fedex_shipment;//$order;
     }
 
