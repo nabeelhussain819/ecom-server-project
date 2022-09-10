@@ -199,7 +199,7 @@ class OrderController extends Controller
             $fedex_shipment = Fedex::createShipment($resp);
             $req = $request->all();
             if (isset($fedex_shipment["errors"])) {
-                throw new \Exception($fedex_shipment["errors"][0]['message'], 1);
+                return $order;
             } else if (isset($fedex_shipment["output"]["transactionShipments"][0]["masterTrackingNumber"])) {
                 $req["tracking_id"] = $fedex_shipment["output"]["transactionShipments"][0]["masterTrackingNumber"];
                 $order->fill($req);
