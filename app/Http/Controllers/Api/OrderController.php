@@ -195,29 +195,27 @@ class OrderController extends Controller
                     "value" => "740561073"
                 ),
             );
-//            $fedex_shipment = Fedex::createShipment($resp);
-//            $req = $request->all();
-//            if(isset($fedex_shipment["errors"])){
-//                throw new Exception("Error Processing Request", 1);
-//            }
-//            else if(isset($fedex_shipment["output"]["transactionShipments"][0]["masterTrackingNumber"])){
-//                $req["tracking_id"] = $fedex_shipment["output"]["transactionShipments"][0]["masterTrackingNumber"];
-//                // return $fedex_shipment;
-//                $order->fill($req);
-//                $order->update();
-//                // $order["shipmentLabelUrl"] = $fedex_shipment["output"]["transactionShipments"][0]["shipmentDocuments"];
-//
-//                // @Todo: create a different controller action for order confirmation
+            $fedex_shipment = Fedex::createShipment($resp);
+            $req = $request->all();
+            if(isset($fedex_shipment["errors"])){
+                throw new \Exception("Error Processing Request", 1);
+            }
+            else if(isset($fedex_shipment["output"]["transactionShipments"][0]["masterTrackingNumber"])){
+                $req["tracking_id"] = $fedex_shipment["output"]["transactionShipments"][0]["masterTrackingNumber"];
+                $order->fill($req);
+                $order->update();
+                // $order["shipmentLabelUrl"] = $fedex_shipment["output"]["transactionShipments"][0]["shipmentDocuments"];
+
+                // @Todo: create a different controller action for order confirmation
                 if ($request->has('status')) {
                     /** @var User $user */
                     $user = Auth::user();
                     $user->notify(new OrderPlaced($order));
                 }
-//            }
+            }
         }
 
         return $order;
-        // return $fedex_shipment;//$order;
     }
 
     /**
