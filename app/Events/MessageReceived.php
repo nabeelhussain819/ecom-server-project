@@ -52,10 +52,11 @@ class MessageReceived implements ShouldBroadcast
 
     public static function trigger(User $user)
     {
-        try {
-            event(new self($user));
-        } catch (\Exception $ex) {
-            Log::error(__CLASS__);
-        }
+        event(new self($user));
+//        try {
+//            event(new self($user));
+//        } catch (\Exception $ex) {
+//            Log::error(__CLASS__);
+//        }
     }
 }
