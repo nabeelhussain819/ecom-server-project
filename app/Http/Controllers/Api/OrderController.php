@@ -126,7 +126,7 @@ class OrderController extends Controller
             if ($paymentIntent->id !== $request->get('payment_intent') || $paymentIntent->status !== 'requires_capture')
                 $shouldUpdate = false;
         }
-
+        
         if ($shouldUpdate) {
             $buyer = User::where('id', $order->buyer_id)->first();
             $seller = User::where('id', $order->seller_id)->first();
@@ -159,11 +159,11 @@ class OrderController extends Controller
                         ),
                         'address' => array(
                             'streetLines' => array(
-                                $buyer_shipping->street_address,
+                                "Recipient street address",
                             ),
-                            "city" => $buyer_shipping->city,//"Collierville",
-                            "stateOrProvinceCode" => $buyer_shipping->state,//"TN",
-                            "postalCode" => $buyer_shipping->zip,//38017,
+                            "city" => "Collierville",//$buyer_shipping->city,
+                            "stateOrProvinceCode" => "TN",//$buyer_shipping->state,
+                            "postalCode" => 38017,//$buyer_shipping->zip,
                             "countryCode" => "US"
                         )
                       ),
@@ -195,21 +195,29 @@ class OrderController extends Controller
                     "value" => "740561073"
                 ),
             );
-              
             $fedex_shipment = Fedex::createShipment($resp);
-
-            $order->fill($request->all());
-            $order->update();
-
-            // @Todo: create a different controller action for order confirmation
-            if ($request->has('status')) {
-                /** @var User $user */
-                $user = Auth::user();
-                $user->notify(new OrderPlaced($order));
+            $req = $request->all();
+            if(isset($fedex_shipment["errors"])){
+                throw new Exception("Error Processing Request", 1);
+            }
+            else if(isset($fedex_shipment["output"]["transactionShipments"][0]["masterTrackingNumber"])){
+                $req["tracking_id"] = $fedex_shipment["output"]["transactionShipments"][0]["masterTrackingNumber"];
+                // return $fedex_shipment;
+                $order->fill($req);
+                $order->update();
+                // $order["shipmentLabelUrl"] = $fedex_shipment["output"]["transactionShipments"][0]["shipmentDocuments"];
+    
+                // @Todo: create a different controller action for order confirmation
+                if ($request->has('status')) {
+                    /** @var User $user */
+                    $user = Auth::user();
+                    $user->notify(new OrderPlaced($order));
+                }
+                return $order;
             }
         }
 
-        return $order;
+        // return $fedex_shipment;//$order;
     }
 
     /**
