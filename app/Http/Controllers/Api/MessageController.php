@@ -132,8 +132,18 @@ class MessageController extends Controller
     {
         $newMessage = $message->replicate(['guid', 'id', 'created_by', 'updated_by', 'created_at', 'updated_at']);
         $newMessage->data = $request->get("data");
-        
+
         $newMessage->save();
         return $newMessage;
+    }
+
+    public function getCount(Request $request)
+    {
+        return Message::getCount();
+    }
+
+    public function getNotifications(Request $request)
+    {
+        return Message::getNotifications();
     }
 }

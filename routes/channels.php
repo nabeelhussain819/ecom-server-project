@@ -20,3 +20,7 @@ Broadcast::channel('messages.{id}', function ($user, $id) {
 Broadcast::channel('offers.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 }, ['guards' => 'api']);
+
+Broadcast::channel('channel-test', function ($user, $id) {
+    return (int) $user->id === (int) $id;
+}, ['guards' => 'api']);

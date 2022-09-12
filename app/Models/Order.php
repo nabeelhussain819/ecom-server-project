@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property integer $status
  * @property string $created_at
  * @property string $updated_at
+ * @property string $tracking_id
  * @property User $seller
  * @property User $buyer
  * @property ShippingDetail $shippingDetail
@@ -48,7 +49,8 @@ class Order extends Model
         'updated_at',
         'offer_id',
         'price',
-        'actual_price'
+        'actual_price',
+        'tracking_id'
     ];
 
     /**

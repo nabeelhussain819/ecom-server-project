@@ -11,7 +11,7 @@ class Test extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'test';
 
     /**
      * The console command description.
@@ -37,6 +37,10 @@ class Test extends Command
      */
     public function handle()
     {
-        return 0;
+	   //\App\Models\User::all()->each(function (\App\Models\User $user) {
+          // event(new \App\Events\MessageReceived($user));
+        //});
+	$user = \App\Models\User::find(2);
+        event(new \App\Events\MessageReceived($user));
     }
 }

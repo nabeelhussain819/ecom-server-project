@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Offer;
+use App\Models\Fedex;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\ShippingDetail;
@@ -15,6 +16,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Stripe\StripeClient;
+use Carbon\Carbon;
+
 
 class OrderController extends Controller
 {
@@ -25,7 +28,7 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-       
+
     }
 
     /**
@@ -49,8 +52,12 @@ class OrderController extends Controller
         return DB::transaction(function () use ($request) {
             $order = new Order();
             $shipping = new ShippingDetail();
+            //         $object = new Fedex();
+
+
             $shipping->fill($request->get("shippingDetail"));
             $shipping->user_id = Auth::user()->id;
+
             $shipping->save();
 
 
@@ -82,11 +89,11 @@ class OrderController extends Controller
     {
         return Order::where('id', $id)->with(["product" => function (BelongsTo $hasMany) {
             $hasMany->select(Product::defaultSelect());
-        } , "buyer" => function (BelongsTo $hasMany) {
+        }, "buyer" => function (BelongsTo $hasMany) {
             $hasMany->select(User::defaultSelect());
-        },'shippingDetail' => function (BelongsTo $hasMany) {
+        }, 'shippingDetail' => function (BelongsTo $hasMany) {
             $hasMany->select(ShippingDetail::defaultSelect());
-        } ])->get();
+        }])->get();
     }
 
     /**
@@ -109,6 +116,7 @@ class OrderController extends Controller
      */
     public function update(Order $order, Request $request)
     {
+
         $shouldUpdate = true;
         if ($request->has('status')) {
             $stripe = new StripeClient(env('STRIPE_SK'));
@@ -119,14 +127,91 @@ class OrderController extends Controller
         }
 
         if ($shouldUpdate) {
-            $order->fill($request->all());
-            $order->update();
+            $buyer = User::where('id', $order->buyer_id)->first();
+            $seller = User::where('id', $order->seller_id)->first();
+            $buyer_shipping = ShippingDetail::where('id', $order->shipping_detail_id)->first();
+            $resp = array(
+                'labelResponseOptions' => "URL_ONLY",
+                'requestedShipment' => array(
+                    'shipper' => array(
+                        'contact' => array(
+                            "personName" => $seller->name,
+//                        "phoneNumber"=> $seller->phone,
+                            "phoneNumber" => '1234567890',
+                            // "companyName" => "Shipper Company Name"
+                        ),
+                        'address' => array(
+                            'streetLines' => array(
+                                "Shipper street address",
+                            ),
+                            "city" => "HARRISON",
+                            "stateOrProvinceCode" => "AR",
+                            "postalCode" => 72601,
+                            "countryCode" => "US"
+                        )
+                    ),
+                    'recipients' => array(
+                        array(
+                            'contact' => array(
+                                "personName" => $buyer->name,
+//                            "phoneNumber"=> $buyer->phone,
+                                "phoneNumber" => '1234567890',
+                                "companyName" => "Recipient Company Name"
+                            ),
+                            'address' => array(
+                                'streetLines' => array(
+                                    "Recipient street address",
+                                ),
+                                "city" => "Collierville",//$buyer_shipping->city,
+                                "stateOrProvinceCode" => "TN",//$buyer_shipping->state,
+                                "postalCode" => 38017,//$buyer_shipping->zip,
+                                "countryCode" => "US"
+                            )
+                        ),
+                    ),
+                    'shippingChargesPayment' => array(
+                        "paymentType" => "SENDER"
+                    ),
+                    "shipDatestamp" => Carbon::today()->format('Y-m-d'),
+                    "serviceType" => "STANDARD_OVERNIGHT",
+                    "packagingType" => "FEDEX_PAK",
+                    "pickupType" => "USE_SCHEDULED_PICKUP",
+                    "blockInsightVisibility" => false,
+                    'labelSpecification' => array(
+                        "imageType" => "PDF",
+                        "labelStockType" => "PAPER_85X11_TOP_HALF_LABEL"
+                    ),
+                    'requestedPackageLineItems' => array(
+                        array(
+                            'weight' => array(
+                                "value" => 10,
+                                "units" => "LB"
+                            )
+                        ),
+                    ),
 
-            // @Todo: create a different controller action for order confirmation
-            if ($request->has('status')) {
-                /** @var User $user */
-                $user = Auth::user();
-                $user->notify(new OrderPlaced($order));
+
+                ),
+                'accountNumber' => array(
+                    "value" => "740561073"
+                ),
+            );
+            $fedex_shipment = Fedex::createShipment($resp);
+            $req = $request->all();
+            if (isset($fedex_shipment["errors"])) {
+                throw new \Exception($fedex_shipment["errors"][0]['message'], 1);
+            } else if (isset($fedex_shipment["output"]["transactionShipments"][0]["masterTrackingNumber"])) {
+                $req["tracking_id"] = $fedex_shipment["output"]["transactionShipments"][0]["masterTrackingNumber"];
+                $order->fill($req);
+                $order->update();
+                // $order["shipmentLabelUrl"] = $fedex_shipment["output"]["transactionShipments"][0]["shipmentDocuments"];
+
+                // @Todo: create a different controller action for order confirmation
+                if ($request->has('status')) {
+                    /** @var User $user */
+                    $user = Auth::user();
+                    $user->notify(new OrderPlaced($order));
+                }
             }
         }
 
