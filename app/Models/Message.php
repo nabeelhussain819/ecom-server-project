@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Core\Base;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * @property integer $id
@@ -78,5 +79,20 @@ class Message extends Base
     public static function defaultSelect(): array
     {
         return ['id', 'recipient_id', 'sender_id', 'data', 'guid'];
+    }
+
+    public static function getCount(): int
+    {
+        return self::select(['id'])
+            ->where("recipient_id", Auth::user()->id)
+            ->whereNull("read_at")
+            ->count();
+    }
+
+    public static function getNotifications()
+    {
+        return self::select(['id', 'data'])->where("recipient_id", Auth::user()->id)
+            ->whereNull("read_at")
+            ->paginate();
     }
 }

@@ -92,6 +92,10 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::post('upload/{service:guid}', [Api\ServiceController::class, 'upload']);
     });
 
+    Route::group(['prefix' => '/message'], function () {
+        Route::get('/getCount', [Api\MessageController::class, 'getCount']);
+        Route::get('/getNotifications', [Api\MessageController::class, 'getNotifications']);
+    });
 
     Route::get('/message/conversations', [Api\MessageController::class, 'conversations']);
     Route::post('/message/saveAssociated/{message}', [Api\MessageController::class, 'saveAssociated']);
