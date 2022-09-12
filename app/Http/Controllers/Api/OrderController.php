@@ -136,8 +136,8 @@ class OrderController extends Controller
                 'requestedShipment' => array(
                   'shipper' => array(
                     'contact' => array(
-                        "personName" => $seller->name,
-                        "phoneNumber"=> $seller->phone,
+                        "personName" => "Shipper Name",
+                        "phoneNumber"=> 1234567890,
                         // "companyName" => "Shipper Company Name"
                     ),
                     'address' => array(
@@ -153,8 +153,8 @@ class OrderController extends Controller
                   'recipients' => array(
                       array(
                         'contact' => array(
-                            "personName" => $buyer->name,
-                            "phoneNumber"=> $buyer->phone,
+                            "personName" => "BUYER NAME",
+                            "phoneNumber"=> 1234567890,
                             "companyName" => "Recipient Company Name"
                         ),
                         'address' => array(
@@ -196,6 +196,7 @@ class OrderController extends Controller
                 ),
             );
             $fedex_shipment = Fedex::createShipment($resp);
+            // return $fedex_shipment;
             $req = $request->all();
             if(isset($fedex_shipment["errors"])){
                 throw new Exception("Error Processing Request", 1);
