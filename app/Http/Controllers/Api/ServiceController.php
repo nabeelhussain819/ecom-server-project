@@ -150,8 +150,8 @@ class ServiceController extends Controller
 
     public function search(Request $request)
     {
-        $services = Service::where('name', 'LIKE', "%{$request->get('query')}%")
-            ->where('active','1')
+        $services = Service::where('active','1')->where('name', 'LIKE', "%{$request->get('query')}%")
+        
             ->when($request->get('category_id'), function (Builder $builder, $category) use ($request) {
                 $builder->where('category_id', $category)
                     ->when(json_decode($request->get('filters'), true), function (Builder $builder, $filters) {

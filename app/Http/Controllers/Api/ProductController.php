@@ -222,7 +222,9 @@ class ProductController extends Controller
     public function search(Request $request)
     {
         $products = Product::where('active', '1')->where('name', 'LIKE', "%{$request->get('query')}%")
-            ->whereBetween('price', [$request->get('min_price'), $request->get('max_price')])
+            ->when($request->get('min_price'), function ($query) use ($request) {
+                $query->whereBetween('price',  [$request->get('query'), $request->get('query')]);
+            })
             ->when($request->get('category_id'), function (Builder $builder, $category) use ($request) {
                 $builder->where('category_id', $category)
                     ->when(json_decode($request->get('filters'), true), function (Builder $builder, $filters) {
