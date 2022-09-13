@@ -52,7 +52,9 @@ class Order extends Model
         'actual_price',
         'tracking_id'
     ];
-
+    protected $casts = [
+        'created_at'  => 'date:Y-m-d',
+    ];
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
