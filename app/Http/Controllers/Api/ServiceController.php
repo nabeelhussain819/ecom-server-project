@@ -150,8 +150,10 @@ class ServiceController extends Controller
 
     public function search(Request $request)
     {
-        $services = Service::where('active','1')->where('name', 'LIKE', "%{$request->get('query')}%")
-        
+        $services = Service::where('active', '1')->where('name', 'LIKE', "%{$request->get('query')}%")
+            ->when($request->has('min_price'), function ($query) use ($request) {
+                $query->whereBetween('price',  [$request->get('min_price'), $request->get('max_price')]);
+            })
             ->when($request->get('category_id'), function (Builder $builder, $category) use ($request) {
                 $builder->where('category_id', $category)
                     ->when(json_decode($request->get('filters'), true), function (Builder $builder, $filters) {
@@ -184,16 +186,17 @@ class ServiceController extends Controller
             ->distinct()
             ->get();
 
-        $categories = Category::when($request->get('category_id'), function (Builder $builder, $category) {
+        $category = Category::when($request->get('category_id'), function (Builder $builder, $category) {
             $builder->where('id', $category)
                 ->with('attributes');
         })
             ->where('type', Category::SERVICE)
             ->get();
-
+        $categories = Category::with('attributes')->where('type', Category::SERVICE)->get();
         return [
             'results' => $services,
-            'categories' => $categories
+            'categories' => $categories,
+            'category' => $category
         ];
     }
 
@@ -218,7 +221,9 @@ class ServiceController extends Controller
             $media->save();
 
             Storage::putFileAs(
-                'public/' . $path, $request->file('file'), "{$guid}.{$extension}"
+                'public/' . $path,
+                $request->file('file'),
+                "{$guid}.{$extension}"
             );
 
             return [

@@ -28,7 +28,13 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-
+        return Order::where('buyer_id', Auth::user()->id)->with(["product" => function (BelongsTo $hasMany) {
+            $hasMany->select(Product::defaultSelect());
+        }, "buyer" => function (BelongsTo $hasMany) {
+            $hasMany->select(User::defaultSelect());
+        }, 'shippingDetail' => function (BelongsTo $hasMany) {
+            $hasMany->select(ShippingDetail::defaultSelect());
+        }])->get();
     }
 
     /**
@@ -95,7 +101,6 @@ class OrderController extends Controller
             $hasMany->select(ShippingDetail::defaultSelect());
         }])->get();
     }
-
     /**
      * Show the form for editing the specified resource.
      *
