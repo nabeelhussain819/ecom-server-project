@@ -138,41 +138,39 @@ class OrderController extends Controller
             $resp = array(
                 'labelResponseOptions' => "URL_ONLY",
                 'requestedShipment' => array(
-                    'shipper' => array(
+                  'shipper' => array(
+                    'contact' => array(
+                        "personName" => "Shipper Name",
+                        "phoneNumber"=> 1234567890,
+                        // "companyName" => "Shipper Company Name"
+                    ),
+                    'address' => array(
+                        'streetLines' => array(
+                            "Shipper street address",
+                        ),
+                        "city" => "HARRISON",
+                        "stateOrProvinceCode" => "AR",
+                        "postalCode" => 72601,
+                        "countryCode" => "US"
+                    )
+                  ),
+                  'recipients' => array(
+                      array(
                         'contact' => array(
-                            "personName" => $seller->name,
-//                        "phoneNumber"=> $seller->phone,
-                            "phoneNumber" => '1234567890',
-                            // "companyName" => "Shipper Company Name"
+                            "personName" => "BUYER NAME",
+                            "phoneNumber"=> 1234567890,
+                            "companyName" => "Recipient Company Name"
                         ),
                         'address' => array(
                             'streetLines' => array(
-                                "Shipper street address",
+                                "Recipient street address",
                             ),
-                            "city" => "HARRISON",
-                            "stateOrProvinceCode" => "AR",
-                            "postalCode" => 72601,
+                            "city" => "Collierville",//$buyer_shipping->city,
+                            "stateOrProvinceCode" => "TN",//$buyer_shipping->state,
+                            "postalCode" => 38017,//$buyer_shipping->zip,
                             "countryCode" => "US"
                         )
-                    ),
-                    'recipients' => array(
-                        array(
-                            'contact' => array(
-                                "personName" => $buyer->name,
-//                            "phoneNumber"=> $buyer->phone,
-                                "phoneNumber" => '1234567890',
-                                "companyName" => "Recipient Company Name"
-                            ),
-                            'address' => array(
-                                'streetLines' => array(
-                                    "Recipient street address",
-                                ),
-                                "city" => "Collierville",//$buyer_shipping->city,
-                                "stateOrProvinceCode" => "TN",//$buyer_shipping->state,
-                                "postalCode" => 38017,//$buyer_shipping->zip,
-                                "countryCode" => "US"
-                            )
-                        ),
+                      ),
                     ),
                     'shippingChargesPayment' => array(
                         "paymentType" => "SENDER"
@@ -202,6 +200,7 @@ class OrderController extends Controller
                 ),
             );
             $fedex_shipment = Fedex::createShipment($resp);
+            // return $fedex_shipment;
             $req = $request->all();
             if (isset($fedex_shipment["errors"])) {
                 throw new \Exception($fedex_shipment["errors"][0]['message'], 1);
