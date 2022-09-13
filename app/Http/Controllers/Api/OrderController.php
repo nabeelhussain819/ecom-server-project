@@ -28,13 +28,21 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        return Order::where('buyer_id', Auth::user()->id)->with(["product" => function (BelongsTo $hasMany) {
-            $hasMany->select(Product::defaultSelect());
-        }, "buyer" => function (BelongsTo $hasMany) {
-            $hasMany->select(User::defaultSelect());
-        }, 'shippingDetail' => function (BelongsTo $hasMany) {
-            $hasMany->select(ShippingDetail::defaultSelect());
-        }])->get();
+        $order = Order::orderBy('id')->first();
+        $data['order'] = Order::orWhere(
+            'buyer_id',
+            Auth::user()->id
+        )->orWhere('seller_id', Auth::user()->id)
+            ->with(["product" => function (BelongsTo $hasMany) {
+                $hasMany->select(Product::defaultSelect());
+            }, "buyer" => function (BelongsTo $hasMany) {
+                $hasMany->select(User::defaultSelect());
+            }, 'shippingDetail' => function (BelongsTo $hasMany) {
+                $hasMany->select(ShippingDetail::defaultSelect());
+            }])->get();
+
+
+        return $data['order'];
     }
 
     /**
@@ -138,39 +146,39 @@ class OrderController extends Controller
             $resp = array(
                 'labelResponseOptions' => "URL_ONLY",
                 'requestedShipment' => array(
-                  'shipper' => array(
-                    'contact' => array(
-                        "personName" => "Shipper Name",
-                        "phoneNumber"=> 1234567890,
-                        // "companyName" => "Shipper Company Name"
-                    ),
-                    'address' => array(
-                        'streetLines' => array(
-                            "Shipper street address",
-                        ),
-                        "city" => "HARRISON",
-                        "stateOrProvinceCode" => "AR",
-                        "postalCode" => 72601,
-                        "countryCode" => "US"
-                    )
-                  ),
-                  'recipients' => array(
-                      array(
+                    'shipper' => array(
                         'contact' => array(
-                            "personName" => "BUYER NAME",
-                            "phoneNumber"=> 1234567890,
-                            "companyName" => "Recipient Company Name"
+                            "personName" => "Shipper Name",
+                            "phoneNumber" => 1234567890,
+                            // "companyName" => "Shipper Company Name"
                         ),
                         'address' => array(
                             'streetLines' => array(
-                                "Recipient street address",
+                                "Shipper street address",
                             ),
-                            "city" => "Collierville",//$buyer_shipping->city,
-                            "stateOrProvinceCode" => "TN",//$buyer_shipping->state,
-                            "postalCode" => 38017,//$buyer_shipping->zip,
+                            "city" => "HARRISON",
+                            "stateOrProvinceCode" => "AR",
+                            "postalCode" => 72601,
                             "countryCode" => "US"
                         )
-                      ),
+                    ),
+                    'recipients' => array(
+                        array(
+                            'contact' => array(
+                                "personName" => "BUYER NAME",
+                                "phoneNumber" => 1234567890,
+                                "companyName" => "Recipient Company Name"
+                            ),
+                            'address' => array(
+                                'streetLines' => array(
+                                    "Recipient street address",
+                                ),
+                                "city" => "Collierville", //$buyer_shipping->city,
+                                "stateOrProvinceCode" => "TN", //$buyer_shipping->state,
+                                "postalCode" => 38017, //$buyer_shipping->zip,
+                                "countryCode" => "US"
+                            )
+                        ),
                     ),
                     'shippingChargesPayment' => array(
                         "paymentType" => "SENDER"
