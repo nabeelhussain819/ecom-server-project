@@ -36,7 +36,7 @@ class ProductController extends Controller
         //                $query->where('active', true);
         //            })->get();
 
-
+            
         return Product::where('active', true)
             ->where($this->applyFilters($request))
             ->orderByDesc('featured')
