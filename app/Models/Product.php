@@ -256,4 +256,8 @@ class Product extends Base implements IMediaInteraction
     {
         return self::where("guid", $guid)->firstOrFail();
     }
+    public function order()
+    {
+        return $this->hasOne(Order::class, 'product_id');
+    }
 }
