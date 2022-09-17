@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Core\Base;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -34,13 +35,6 @@ class Message extends Base
      */
     protected $fillable = ['sender_id', 'recipient_id', 'created_by', 'updated_by', 'read_at', 'guid', 'data', 'created_at', 'updated_at', 'notifiable_type', 'notifiable_id'];
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function sender()
-    {
-        return $this->belongsTo(User::class, 'sender_id');
-    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -89,9 +83,21 @@ class Message extends Base
             ->count();
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function sender()
+    {
+        return $this->belongsTo(User::class, 'sender_id');
+    }
+
     public static function getNotifications()
     {
-        return self::select(['id', 'data'])->where("recipient_id", Auth::user()->id)
+        return self::select(['id', 'data', 'sender_id'])
+            ->with(['sender' => function (BelongsTo $belongsTo) {
+                $belongsTo->select(['id', 'name']);
+            }])
+            ->where("recipient_id", Auth::user()->id)
             ->whereNull("read_at")
             ->paginate();
     }
