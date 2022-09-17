@@ -7,8 +7,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Message;
 use App\Models\Product;
 use App\Models\User;
+
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class MessageController extends Controller
 {
@@ -130,11 +133,19 @@ class MessageController extends Controller
 
     public function saveAssociated(Request $request, Message $message)
     {
-        $newMessage = $message->replicate(['guid', 'id', 'created_by', 'updated_by', 'created_at', 'updated_at']);
-        $newMessage->data = $request->get("data");
+        $user = Auth::user();
+        return DB::transaction(function () use ($message, $request, $user) {
+            $newMessage = $message->replicate(['guid', 'id', 'created_by', 'updated_by', 'created_at', 'updated_at']);
+            $newMessage->data = $request->get("data");
 
-        $newMessage->save();
-        return $newMessage;
+            if ($newMessage->recipient_id === $user->id) {
+                $newMessage->recipient_id = $newMessage->sender_id;
+                $newMessage->sender_id = $user->id;
+            }
+
+            $newMessage->save();
+            return $newMessage;
+        });
     }
 
     public function getCount(Request $request)
