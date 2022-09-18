@@ -13,6 +13,7 @@ use App\Models\Product;
 use App\Models\ProductsAttribute;
 use App\Models\User;
 use App\Models\Message;
+use App\Models\Order;
 use App\Scopes\ActiveScope;
 use App\Scopes\SoldScope;
 use Carbon\Carbon;
@@ -35,10 +36,9 @@ class ProductController extends Controller
         //            ->whereHas('products', function ($query) {
         //                $query->where('active', true);
         //            })->get();
-
-            
         return Product::where('active', true)
             ->where($this->applyFilters($request))
+            ->with('order')
             ->orderByDesc('featured')
             ->paginate($this->pageSize);
     }
